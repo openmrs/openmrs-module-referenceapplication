@@ -33,9 +33,10 @@
 	</modules>
 	
 	<properties>
-		<openMRSVersion>1.10.0-SNAPSHOT</openMRSVersion>
+		<openMRSVersion>1.9.4-SNAPSHOT</openMRSVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<appframeworkVersion>2.0-SNAPSHOT</appframeworkVersion>
+		<uiframeworkVersion>2.5.1</uiframeworkVersion>
 	</properties>
 
 	<dependencyManagement>
@@ -102,6 +103,12 @@
 				<groupId>org.openmrs.module</groupId>
 				<artifactId>appframework-api</artifactId>
 				<version>${appframeworkVersion}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.openmrs.module</groupId>
+				<artifactId>uiframework-api</artifactId>
+				<version>${uiframeworkVersion}</version>
 			</dependency>
 						
 			<!-- End OpenMRS modules -->
