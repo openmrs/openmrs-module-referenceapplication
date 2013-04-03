@@ -13,9 +13,9 @@
  */
 package org.openmrs.module.referenceapplication.page.controller;
 
-import org.openmrs.api.context.Context;
-import org.openmrs.module.appframework.api.AppFrameworkService;
+import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.referenceapplication.ReferenceApplicationConstants;
+import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,8 +37,8 @@ public class HomePageController {
 	 * 
 	 * @param model
 	 */
-	public void controller(PageModel model) {
-		model.addAttribute("apps", Context.getService(AppFrameworkService.class).getAllApps());
+	public void controller(PageModel model, @SpringBean("appFrameworkService") AppFrameworkService appFrameworkService) {
+		model.addAttribute("apps", appFrameworkService.getAllApps());
 	}
 	
 }
