@@ -20,7 +20,6 @@ import org.openmrs.api.context.ContextAuthenticationException;
 import org.openmrs.module.referenceapplication.ReferenceApplicationConstants;
 import org.openmrs.module.referenceapplication.ReferenceApplicationWebConstants;
 import org.openmrs.ui.framework.UiUtils;
-import org.openmrs.ui.framework.page.PageModel;
 import org.openmrs.ui.framework.page.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +38,10 @@ public class LoginPageController {
 		return "forward:/" + ReferenceApplicationConstants.MODULE_ID + "/login.page";
 	}
 	
-	public String get(PageModel pageModel, UiUtils ui, PageRequest request) {
+	/**
+	 * @should redirect the user to the home page if they are already authenticated
+	 */
+	public String get(UiUtils ui, PageRequest request) {
 		
 		if (Context.isAuthenticated()) {
 			return "redirect:" + ui.pageLink(ReferenceApplicationConstants.MODULE_ID, "home");
