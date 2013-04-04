@@ -1,4 +1,6 @@
 <%
+	ui.setPageTitle(ui.message("referenceapplication.home.title"))
+	
 	def htmlSafeId = { app ->
         "${ app.id.replace(".", "-") }-app"
     }
@@ -6,6 +8,8 @@
 
 <div id="home-container">
 
+	<h3>${ui.message("referenceapplication.home.heading")}</h3>
+	
     <div id="apps">
         <% apps.each { app -> %>
 
@@ -13,7 +17,7 @@
                 <% if (app.iconUrl) { %>
                     <i class="${ app.iconUrl }"></i>
                 <% } %>
-                ${ app.label }
+                 ${ ui.message(app.label) }
             </a>
 
         <% } %>
