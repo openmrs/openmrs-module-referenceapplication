@@ -11,14 +11,12 @@
 	<h3>${ui.message("referenceapplication.home.heading")}</h3>
 	
     <div id="extensions">
-    <% appExtensionsMap.each { app, extensions -> %>
-        <% extensions.each { extension -> %>
-            <a id="${ htmlSafeId(extension) }" href="/${ contextPath }/${ extension.url }">
-                ${ ui.message(extension.label) }
+    <% extensions.each { ext -> %>
+            <a id="${ htmlSafeId(ext) }" href="/${ contextPath }/${ ext.url }">
+                ${ ui.message(ext.label) }
             </a>
             <br />
 		<% } %>
-	<% } %>
     </div>
 
 </div>

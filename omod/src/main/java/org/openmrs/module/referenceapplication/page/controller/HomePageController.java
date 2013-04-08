@@ -15,9 +15,7 @@ package org.openmrs.module.referenceapplication.page.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -60,7 +58,7 @@ public class HomePageController {
 	                       PageRequest request, UiUtils ui) throws IOException {
 		
 		//TODO this should actually group the extensions by extensionPointIds instead of a single List
-		Map<AppDescriptor, List<Extension>> appExtensionsMap = new HashMap<AppDescriptor, List<Extension>>();
+		List<Extension> extensions = new ArrayList<Extension>();
 		
 		//Shouldn't this be appFrameworkService.getAllEnabledApps();
 		List<AppDescriptor> apps = appFrameworkService.getAllApps();
@@ -68,14 +66,12 @@ public class HomePageController {
 		for (AppDescriptor app : apps) {
 			if (app.getExtensionPoints() != null) {
 				for (ExtensionPoint extPoint : app.getExtensionPoints()) {
-					if (appExtensionsMap.get(app) == null)
-						appExtensionsMap.put(app, new ArrayList<Extension>());
-					appExtensionsMap.get(app).addAll(appFrameworkService.getAllExtensions(app.getId(), extPoint.getId()));
+					extensions.addAll(appFrameworkService.getAllExtensions(app.getId(), extPoint.getId()));
 				}
 			}
 		}
 		
-		model.addAttribute("appExtensionsMap", appExtensionsMap);
+		model.addAttribute("extensions", extensions);
 	}
 	
 }
