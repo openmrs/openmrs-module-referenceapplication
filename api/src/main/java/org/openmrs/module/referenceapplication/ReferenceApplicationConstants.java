@@ -16,4 +16,6 @@ package org.openmrs.module.referenceapplication;
 public final class ReferenceApplicationConstants {
 	
 	public static final String MODULE_ID = "referenceapplication";
+	
+	public static final String HOME_PAGE_APP_ID = MODULE_ID + ".homepage";
 }

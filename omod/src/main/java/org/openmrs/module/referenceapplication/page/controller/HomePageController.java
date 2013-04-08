@@ -60,14 +60,17 @@ public class HomePageController {
 		//TODO this should actually group the extensions by extensionPointIds instead of a single List
 		List<Extension> extensions = new ArrayList<Extension>();
 		
-		//Shouldn't this be appFrameworkService.getAllEnabledApps();
+		//Is it necessary to check if the home page app is enabled?
 		List<AppDescriptor> apps = appFrameworkService.getAllApps();
 		
 		for (AppDescriptor app : apps) {
-			if (app.getExtensionPoints() != null) {
-				for (ExtensionPoint extPoint : app.getExtensionPoints()) {
-					extensions.addAll(appFrameworkService.getAllExtensions(app.getId(), extPoint.getId()));
+			if (ReferenceApplicationConstants.HOME_PAGE_APP_ID.equals(app.getId())) {
+				if (app.getExtensionPoints() != null) {
+					for (ExtensionPoint extPoint : app.getExtensionPoints()) {
+						extensions.addAll(appFrameworkService.getAllExtensions(app.getId(), extPoint.getId()));
+					}
 				}
+				break;
 			}
 		}
 		
