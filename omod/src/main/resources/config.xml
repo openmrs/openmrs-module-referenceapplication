@@ -26,6 +26,10 @@
 		<require_module version="${uiframeworkVersion}">
 			org.openmrs.module.uiframework
 		</require_module>
+																											
+		<require_module version="uiCommonsVersion">
+			org.openmrs.module.uicommons
+		</require_module>
 			
 	</require_modules>
 	<!-- / Required Modules -->
