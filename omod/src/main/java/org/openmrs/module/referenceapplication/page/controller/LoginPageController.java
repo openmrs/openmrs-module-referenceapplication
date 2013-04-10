@@ -40,6 +40,7 @@ public class LoginPageController {
 	
 	/**
 	 * @should redirect the user to the home page if they are already authenticated
+	 * @should show the user the login page if they are not authenticated
 	 */
 	public String get(UiUtils ui, PageRequest request) {
 		
