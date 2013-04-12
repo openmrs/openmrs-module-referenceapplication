@@ -16,7 +16,11 @@ package org.openmrs.module.referenceapplication.page.controller;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.doNothing;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.spy;
+import static org.powermock.api.support.membermodification.MemberMatcher.method;
+import static org.powermock.api.support.membermodification.MemberModifier.stub;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,6 +33,7 @@ import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.page.PageRequest;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.springframework.mock.web.MockHttpServletRequest;
 
 @PrepareForTest(Context.class)
 @RunWith(PowerMockRunner.class)
@@ -59,5 +64,44 @@ public class LoginPageControllerTest {
 	public void get_shouldShowTheUserTheLoginPageIfTheyAreNotAuthenticated() throws Exception {
 		when(Context.isAuthenticated()).thenReturn(false);
 		assertNull(new LoginPageController().get(new BasicUiUtils(), new PageRequest(null, null, null, null, null)));
+	}
+	
+	/**
+	 * @see {@link LoginPageController#post(String,String,UiUtils,PageRequest)}
+	 */
+	@Test
+	@Verifies(value = "should redirect the user back to the referer url if any", method = "post(String,String,UiUtils,PageRequest)")
+	public void post_shouldRedirectTheUserBackToTheRefererUrlIfAny() throws Exception {
+		stub(method(Context.class, "isAuthenticated")).toReturn(true);
+		spy(Context.class);
+		doNothing().when(Context.class);//do nothing when Context.authenticate is called in the controller
+		
+		final String contextPath = "/openmrs";
+		String referer = contextPath + "/referenceapplication/patient.page";
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		request.addHeader("Referer", referer);
+		
+		assertEquals("redirect:" + referer, new LoginPageController().post("admin", "test", new BasicUiUtils(),
+		    new PageRequest(null, null, request, null, null)));
+	}
+	
+	/**
+	 * @see {@link LoginPageController#post(String,String,UiUtils,PageRequest)}
+	 */
+	@Test
+	@Verifies(value = "should redirect the user to the home page if the referer is the login page", method = "post(String,String,UiUtils,PageRequest)")
+	public void post_shouldRedirectTheUserToTheHomePageIfTheRefererIsTheLoginPage() throws Exception {
+		stub(method(Context.class, "isAuthenticated")).toReturn(true);
+		spy(Context.class);
+		doNothing().when(Context.class);//do nothing when Context.authenticate is called in the controller
+		
+		String referer = new BasicUiUtils().pageLink(ReferenceApplicationConstants.MODULE_ID, "login");
+		String homeRedirect = "redirect:" + new BasicUiUtils().pageLink(ReferenceApplicationConstants.MODULE_ID, "home");
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		request.setContextPath("/openmrs");
+		request.addHeader("Referer", referer);
+		
+		assertEquals(homeRedirect, new LoginPageController().post("admin", "test", new BasicUiUtils(), new PageRequest(null,
+		        null, request, null, null)));
 	}
 }

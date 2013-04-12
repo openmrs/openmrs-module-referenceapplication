@@ -13,6 +13,7 @@
  */
 package org.openmrs.module.referenceapplication.page.controller;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
@@ -35,6 +36,7 @@ public class LoginPageController {
 	
 	@RequestMapping("/login.htm")
 	public String overrideLoginpage() {
+		//TODO The referer should actually be captured from here since we are doign a redirect
 		return "forward:/" + ReferenceApplicationConstants.MODULE_ID + "/login.page";
 	}
 	
@@ -51,14 +53,42 @@ public class LoginPageController {
 		return null;
 	}
 	
+	/**
+	 * Processes requests to authenticate a user
+	 * 
+	 * @param username
+	 * @param password
+	 * @param ui {@link UiUtils} object
+	 * @param request {@link PageRequest} object
+	 * @return
+	 * @should redirect the user back to the referer url if any
+	 * @should redirect the user to the home page if the referer is the login page
+	 */
 	public String post(@RequestParam(value = "username", required = false) String username,
 	                   @RequestParam(value = "password", required = false) String password, UiUtils ui, PageRequest request) {
 		
 		try {
+			
 			Context.authenticate(username, password);
+			
 			if (Context.isAuthenticated()) {
 				if (log.isDebugEnabled())
 					log.debug("User has successfully authenticated");
+				
+				String redirectUrl = request.getRequest().getHeader("Referer");
+				
+				if (StringUtils.isNotBlank(redirectUrl)) {
+					//don't redirect back to the login page on success nor an external url
+					if (!redirectUrl.contains("login.")) {
+						if (log.isDebugEnabled())
+							log.debug("Redirecting user to " + redirectUrl);
+						
+						return "redirect:" + redirectUrl;
+					} else {
+						if (log.isDebugEnabled())
+							log.debug("Redirect contains 'login.', redirecting to home page");
+					}
+				}
 				
 				return "redirect:" + ui.pageLink(ReferenceApplicationConstants.MODULE_ID, "home");
 			}
