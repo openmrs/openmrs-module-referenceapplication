@@ -37,7 +37,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<appframeworkVersion>2.0-SNAPSHOT</appframeworkVersion>
 		<uiframeworkVersion>2.5.1</uiframeworkVersion>
-	</properties>
+        <uicommonsModuleVersion>1.0-SNAPSHOT</uicommonsModuleVersion>
+    </properties>
 
 	<dependencyManagement>
 		<dependencies>
