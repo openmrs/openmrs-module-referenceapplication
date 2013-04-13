@@ -38,6 +38,8 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
                 </p>
 
             </fieldset>
+    
+    		<input type="hidden" name="redirectUrl" value="${redirectUrl}" />
 
         </form>
 
