@@ -54,7 +54,7 @@ public class LoginPageController {
 	 * @should set redirectUrl in the page model if any was specified in the session
 	 */
 	public String get(PageModel model, UiUtils ui, PageRequest pageRequest) {
-
+		
 		if (Context.isAuthenticated()) {
 			return "redirect:" + ui.pageLink(ReferenceApplicationConstants.MODULE_ID, "home");
 		}
@@ -125,7 +125,7 @@ public class LoginPageController {
 		}
 		
 		if (log.isDebugEnabled())
-			log.debug("Sending user back to login page with redirect:" + redirectUrl);
+			log.debug("Sending user back to login page");
 		
 		//TODO limit login attempts by IP Address
 		
