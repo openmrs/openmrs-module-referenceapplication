@@ -36,9 +36,9 @@
 		<openMRSVersion>1.9.4-SNAPSHOT</openMRSVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<appframeworkVersion>2.0-SNAPSHOT</appframeworkVersion>
-		<uiframeworkVersion>2.5.1</uiframeworkVersion>
-        <uicommonsModuleVersion>1.0-SNAPSHOT</uicommonsModuleVersion>
-    </properties>
+		<uiframeworkVersion>2.5.2-SNAPSHOT</uiframeworkVersion>
+		<uiCommonsVersion>1.0-SNAPSHOT</uiCommonsVersion>
+	</properties>
 
 	<dependencyManagement>
 		<dependencies>
@@ -169,7 +169,7 @@
 		<repository>
 			<id>openmrs-repo-modules</id>
 			<name>Modules</name>
-			<url>http://mavenrepo.openmrs.org/nexus/content/repositories/modules/</url>
+			<url>http://mavenrepo.openmrs.org/nexus/content/repositories/modules</url>
 		</repository>
         <snapshotRepository>
             <id>openmrs-repo-snapshots</id>

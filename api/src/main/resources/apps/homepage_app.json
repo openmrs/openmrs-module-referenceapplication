@@ -1,0 +1,11 @@
+[
+    {
+        "id": "referenceapplication.homepage",
+        "extensionPoints": [
+            {
+                "id": "org.openmrs.referenceapplication.homepageLink",
+                "description": "referenceapplication.homepageExt.description"
+            }
+        ]
+    }
+]

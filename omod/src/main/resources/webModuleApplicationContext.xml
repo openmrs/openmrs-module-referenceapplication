@@ -23,5 +23,19 @@
 	<bean class="org.openmrs.ui.framework.StandardModuleUiConfiguration">
         <property name="moduleId" value="${project.parent.artifactId}"/>
     </bean>
-		
+    
+    <!-- Includes the specified resources on every page in the module -->
+    <bean class="org.openmrs.ui.framework.page.GlobalResourceIncluder">
+		<property name="resources">
+			<list>
+				<bean class="org.openmrs.ui.framework.resource.Resource">
+                	<property name="category" value="js" />
+                  	<property name="providerName" value="${project.parent.artifactId}" />
+                  	<property name="resourcePath" value="scripts/jquery-1.9.1.min.js" />
+                  	<property name="priority" value="2147483647 " />
+              	</bean>
+         	</list>
+		</property>
+  </bean>
+
 </beans>
