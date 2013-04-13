@@ -6,7 +6,7 @@ css_dir = "../webapp/resources/styles"
 sass_dir = "sass"
 images_dir = "images"
 javascripts_dir = "javascripts"
-additional_import_paths = [ "external-lib" ]
+add_import_path ".external/uicommons-scss"
 
 # You can select your preferred output style here (can be overridden via the command line):
 # output_style = :expanded or :nested or :compact or :compressed

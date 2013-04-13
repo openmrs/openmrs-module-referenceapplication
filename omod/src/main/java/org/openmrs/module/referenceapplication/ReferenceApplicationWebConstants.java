@@ -13,9 +13,10 @@
  */
 package org.openmrs.module.referenceapplication;
 
-public final class ReferenceApplicationConstants {
+public final class ReferenceApplicationWebConstants {
 	
-	public static final String MODULE_ID = "referenceapplication";
+	public static final String SESSION_ATTRIBUTE_INFO_MESSAGE = "_REFERENCE_APPLICATION_INFO_MESSAGE_";
 	
-	public static final String HOME_PAGE_EXTENSION_POINT_ID = "org.openmrs.referenceapplication.homepageLink";
+	public static final String SESSION_ATTRIBUTE_ERROR_MESSAGE = "_REFERENCE_APPLICATION_ERROR_MESSAGE_";
+	
 }
