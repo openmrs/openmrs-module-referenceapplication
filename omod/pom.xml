@@ -230,13 +230,12 @@
                                 <artifactItem>
                                     <groupId>org.openmrs.module</groupId>
                                     <artifactId>uicommons-scss</artifactId>
-                                    <version>${uicommonsModuleVersion}</version>
+                                    <version>${uicommonsVersion}</version>
                                     <type>zip</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>src/main/css/external-lib/uicommons</outputDirectory>
+                                    <outputDirectory>src/main/compass/sass-external</outputDirectory>
                                 </artifactItem>
                             </artifactItems>
-                            <includes>*.zip</includes>
                         </configuration>
                     </execution>
                 </executions>

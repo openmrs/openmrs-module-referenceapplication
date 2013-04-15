@@ -10,3 +10,5 @@ target
 *.jar
 *.war
 *.ear
+
+.sass-cache
