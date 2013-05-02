@@ -2,7 +2,7 @@
 	ui.setPageTitle(ui.message("referenceapplication.home.title"))
 	
 	def htmlSafeId = { extension ->
-        "${ extension.appId.replace(".", "-") }-${ extension.id.replace(".", "-") }-extension"
+        "${ extension.id.replace(".", "-") }-${ extension.id.replace(".", "-") }-extension"
     }
 %>
 
