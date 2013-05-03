@@ -10,6 +10,14 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
 	});
 </script>
 
+<header>
+    <div class="logo">
+        <a href="${ui.pageLink("referenceapplication", "home")}">
+            <img src="${ui.resourceLink("referenceapplication", "images/openMrsLogo.png")}"/>
+        </a>
+    </div>
+</header>
+
 <div id="body-wrapper">
     <div id="content">
         <form id="login-form" method="post" autocomplete="off">
