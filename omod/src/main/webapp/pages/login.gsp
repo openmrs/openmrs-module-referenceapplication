@@ -1,5 +1,6 @@
 <%
 	ui.setPageTitle(ui.message("referenceapplication.login.title"))
+    ui.includeCss("referenceapplication", "login.css")
 %>
 
 ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
