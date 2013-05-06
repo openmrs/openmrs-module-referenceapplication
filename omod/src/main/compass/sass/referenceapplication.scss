@@ -1,2 +1,14 @@
 @import "customVariables";
 @import "reference";
+
+#login-form {
+  ul.select {
+    width: 850px;
+  }
+
+  p {
+    input[type=text], input[type=password] {
+      width: 405px;
+    }
+  }
+}
