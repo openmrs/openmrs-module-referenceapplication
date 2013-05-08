@@ -13,8 +13,6 @@
  */
 package org.openmrs.module.referenceapplication.page.controller;
 
-import java.io.IOException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
@@ -26,6 +24,8 @@ import org.openmrs.ui.framework.page.PageModel;
 import org.openmrs.ui.framework.page.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.io.IOException;
 
 /**
  * Spring MVC controller that takes over /index.htm and processes requests to show the home page so
@@ -50,15 +50,12 @@ public class HomePageController {
 	 * @param ui
 	 * @throws IOException
 	 */
-	public void controller(PageModel model, @SpringBean("appFrameworkService") AppFrameworkService appFrameworkService,
+	public void get(PageModel model, @SpringBean("appFrameworkService") AppFrameworkService appFrameworkService,
 	                       PageRequest request, UiUtils ui) throws IOException {
-		if (!Context.isAuthenticated()) {
-			request.getResponse().sendRedirect(ReferenceApplicationConstants.MODULE_ID + "/login.page");
-			return;
-		}
-		
+
 		model.addAttribute("extensions",
-		    appFrameworkService.getAllEnabledExtensions(ReferenceApplicationConstants.HOME_PAGE_EXTENSION_POINT_ID));
-	}
+		    appFrameworkService.getExtensionsForCurrentUser(ReferenceApplicationConstants.HOME_PAGE_EXTENSION_POINT_ID));
+        model.addAttribute("authenticatedUser", Context.getAuthenticatedUser());
+    }
 	
 }

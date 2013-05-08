@@ -25,6 +25,7 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
             <fieldset>
 
                 <legend>
+                    <i class="icon-lock small"></i>
                     ${ ui.message("referenceapplication.login.loginHeading") }
                 </legend>
 				

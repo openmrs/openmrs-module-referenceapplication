@@ -1,0 +1,21 @@
+[
+    {
+        "id": "legacy.admin",
+        "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
+        "type": "link",
+        "label": "referenceapplication.app.legacy.admin.label",
+        "url": "admin/index.htm",
+        "icon": "icon-cogs",
+        "order": 9,
+        "requiredPrivilege": "App: legacy.admin"
+    },
+    {
+        "id": "legacy.findPatient",
+        "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
+        "type": "link",
+        "label": "referenceapplication.app.legacy.findPatient.label",
+        "url": "findPatient.htm",
+        "icon": "icon-search",
+        "order": 1
+    }
+]
