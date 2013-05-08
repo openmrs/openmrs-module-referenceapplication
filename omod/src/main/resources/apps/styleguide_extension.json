@@ -1,0 +1,11 @@
+[
+    {
+        "id": "legacy.findPatient",
+        "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
+        "type": "link",
+        "label": "referenceapplication.app.styleguide.label",
+        "url": "uicommons/styleGuide.page",
+        "icon": "icon-magic",
+        "order": 20
+    }
+]

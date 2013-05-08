@@ -16,6 +16,7 @@
         "label": "referenceapplication.app.legacy.findPatient.label",
         "url": "findPatient.htm",
         "icon": "icon-search",
-        "order": 1
+        "order": 1,
+        "requiredPrivilege": "App: legacy.findPatient"
     }
 ]
