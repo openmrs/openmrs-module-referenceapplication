@@ -1,6 +1,6 @@
 [
     {
-        "id": "legacy.findPatient",
+        "id": "referenceapplication.styleGuide",
         "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
         "type": "link",
         "label": "referenceapplication.app.styleguide.label",
