@@ -134,7 +134,7 @@ public class LoginPageController {
 		return "redirect:" + ui.pageLink(ReferenceApplicationConstants.MODULE_ID, "login");
 	}
 	
-	private String getStringSessionAttributes(String attributeName, HttpServletRequest request) {
+	private String getStringSessionAttribute(String attributeName, HttpServletRequest request) {
 		String attributeValue = (String) request.getSession().getAttribute(attributeName);
 		request.getSession().removeAttribute(attributeName);
 		return attributeValue;
