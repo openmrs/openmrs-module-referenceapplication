@@ -80,7 +80,7 @@ public class LoginPageController {
 	 * @param username
 	 * @param password
 	 * @param ui {@link UiUtils} object
-	 * @param request {@link PageRequest} object
+	 * @param pageRequest {@link PageRequest} object
 	 * @return
 	 * @should redirect the user back to the redirectUrl if any
 	 * @should redirect the user to the home page if the redirectUrl is the login page
@@ -134,10 +134,10 @@ public class LoginPageController {
 		return "redirect:" + ui.pageLink(ReferenceApplicationConstants.MODULE_ID, "login");
 	}
 	
-	private String getStringSessionAttribute(String attributeName, HttpServletRequest request) {
-		String redirectUrl = (String) request.getSession().getAttribute(attributeName);
+	private String getStringSessionAttributes(String attributeName, HttpServletRequest request) {
+		String attributeValue = (String) request.getSession().getAttribute(attributeName);
 		request.getSession().removeAttribute(attributeName);
-		return redirectUrl;
+		return attributeValue;
 	}
 	
 	public String getRelativeUrl(String url, PageRequest pageRequest) {
