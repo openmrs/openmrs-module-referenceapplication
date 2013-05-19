@@ -1,14 +1,14 @@
 <%
 	ui.setPageTitle(ui.message("referenceapplication.home.title"))
-	
-	def htmlSafeId = { extension ->
+
+    def htmlSafeId = { extension ->
         "${ extension.id.replace(".", "-") }-${ extension.id.replace(".", "-") }-extension"
     }
 %>
 
 <div id="home-container">
 
-	<h3>${ui.message("referenceapplication.home.heading")}</h3>
+	<h1>${ui.message("referenceapplication.home.heading")}</h1>
 
     <% if (authenticatedUser) { %>
         <h4>
@@ -23,16 +23,15 @@
         </h4>
     <% } %>
 
-    <div id="extensions">
-    <% extensions.each { ext -> %>
-            <a id="${ htmlSafeId(ext) }" href="/${ contextPath }/${ ext.url }">
+    <div id="apps">
+        <% extensions.each { ext -> %>
+            <a id="${ htmlSafeId(ext) }" href="/${ contextPath }/${ ext.url }" class="button app big">
                 <% if (ext.icon) { %>
-                    <i class="${ ext.icon }"></i>
+                   <i class="${ ext.icon }"></i>
                 <% } %>
                 ${ ui.message(ext.label) }
             </a>
-            <br />
-		<% } %>
+        <% } %>
     </div>
 
 </div>
