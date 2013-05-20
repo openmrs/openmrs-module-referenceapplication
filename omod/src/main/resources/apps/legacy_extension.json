@@ -6,7 +6,7 @@
         "label": "referenceapplication.app.legacy.admin.label",
         "url": "admin/index.htm",
         "icon": "icon-cogs",
-        "order": 9,
+        "order": 99,
         "requiredPrivilege": "App: legacy.admin"
     },
     {
@@ -16,7 +16,7 @@
         "label": "referenceapplication.app.legacy.findPatient.label",
         "url": "findPatient.htm",
         "icon": "icon-search",
-        "order": 1,
+        "order": 100,
         "requiredPrivilege": "App: legacy.findPatient"
     }
 ]
