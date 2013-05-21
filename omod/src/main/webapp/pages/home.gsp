@@ -1,5 +1,6 @@
 <%
 	ui.setPageTitle(ui.message("referenceapplication.home.title"))
+    ui.decorateWith("appui", "standardEmrPage")
 
     def htmlSafeId = { extension ->
         "${ extension.id.replace(".", "-") }-${ extension.id.replace(".", "-") }-extension"
