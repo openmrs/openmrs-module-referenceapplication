@@ -38,6 +38,7 @@
 		<appframeworkVersion>2.0-SNAPSHOT</appframeworkVersion>
 		<uiframeworkVersion>2.5.2</uiframeworkVersion>
 		<uicommonsVersion>1.0-SNAPSHOT</uicommonsVersion>
+        <appuiVersion>1.0-SNAPSHOT</appuiVersion>
 	</properties>
 
 	<dependencyManagement>
@@ -115,6 +116,14 @@
 				<type>jar</type>
 				<scope>provided</scope>
 			</dependency>
+
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>appui-omod</artifactId>
+                <version>${appuiVersion}</version>
+                <type>jar</type>
+                <scope>provided</scope>
+            </dependency>
 						
 			<!-- End OpenMRS modules -->
 
