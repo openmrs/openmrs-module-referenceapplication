@@ -13,24 +13,27 @@
  */
 package org.openmrs.module.referenceapplication.page.controller;
 
-import static org.openmrs.module.referenceapplication.ReferenceApplicationWebConstants.REQUEST_PARAMETER_NAME_REDIRECT_URL;
-import static org.openmrs.module.referenceapplication.ReferenceApplicationWebConstants.SESSION_ATTRIBUTE_REDIRECT_URL;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Location;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.context.ContextAuthenticationException;
+import org.openmrs.module.appui.UiSessionContext;
 import org.openmrs.module.referenceapplication.ReferenceApplicationConstants;
 import org.openmrs.module.referenceapplication.ReferenceApplicationWebConstants;
 import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.page.PageModel;
 import org.openmrs.ui.framework.page.PageRequest;
+import org.openmrs.util.LocationUtility;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.servlet.http.HttpServletRequest;
+
+import static org.openmrs.module.referenceapplication.ReferenceApplicationWebConstants.REQUEST_PARAMETER_NAME_REDIRECT_URL;
+import static org.openmrs.module.referenceapplication.ReferenceApplicationWebConstants.SESSION_ATTRIBUTE_REDIRECT_URL;
 
 /**
  * Spring MVC controller that takes over /login.htm and processes requests to authenticate a user
@@ -87,7 +90,7 @@ public class LoginPageController {
 	 */
 	public String post(@RequestParam(value = "username", required = false) String username,
 	                   @RequestParam(value = "password", required = false) String password, UiUtils ui,
-	                   PageRequest pageRequest) {
+	                   PageRequest pageRequest, UiSessionContext sessionContext) {
 		
 		String redirectUrl = pageRequest.getRequest().getParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL);
 		redirectUrl = getRelativeUrl(redirectUrl, pageRequest);
@@ -99,6 +102,16 @@ public class LoginPageController {
 			if (Context.isAuthenticated()) {
 				if (log.isDebugEnabled())
 					log.debug("User has successfully authenticated");
+				
+				if (pageRequest.getSession().getAttribute(UiSessionContext.LOCATION_SESSION_ATTRIBUTE, Integer.class) == null) {
+					Location sessionLocation = LocationUtility.getDefaultLocation();
+					if (sessionLocation != null) {
+						pageRequest.getSession().setAttribute(UiSessionContext.LOCATION_SESSION_ATTRIBUTE,
+						    sessionLocation.getId());
+						
+						sessionContext.setSessionLocation(sessionLocation);
+					}
+				}
 				
 				if (StringUtils.isNotBlank(redirectUrl)) {
 					//don't redirect back to the login page on success nor an external url

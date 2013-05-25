@@ -13,6 +13,27 @@
  */
 package org.openmrs.module.referenceapplication.page.controller;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.openmrs.Location;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.referenceapplication.ReferenceApplicationConstants;
+import org.openmrs.test.Verifies;
+import org.openmrs.ui.framework.BasicUiUtils;
+import org.openmrs.ui.framework.UiUtils;
+import org.openmrs.ui.framework.page.PageModel;
+import org.openmrs.ui.framework.page.PageRequest;
+import org.openmrs.ui.framework.session.Session;
+import org.openmrs.util.LocationUtility;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpSession;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
@@ -24,25 +45,7 @@ import static org.powermock.api.mockito.PowerMockito.spy;
 import static org.powermock.api.support.membermodification.MemberMatcher.method;
 import static org.powermock.api.support.membermodification.MemberModifier.stub;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.openmrs.api.context.Context;
-import org.openmrs.module.referenceapplication.ReferenceApplicationConstants;
-import org.openmrs.test.Verifies;
-import org.openmrs.ui.framework.BasicUiUtils;
-import org.openmrs.ui.framework.UiUtils;
-import org.openmrs.ui.framework.page.PageModel;
-import org.openmrs.ui.framework.page.PageRequest;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpSession;
-
-@PrepareForTest(Context.class)
+@PrepareForTest({ Context.class, LocationUtility.class })
 @RunWith(PowerMockRunner.class)
 public class LoginPageControllerTest {
 	
@@ -54,7 +57,8 @@ public class LoginPageControllerTest {
 	}
 	
 	private PageRequest createPageRequest(HttpServletRequest httpRequest) {
-		return new PageRequest(null, null, (httpRequest != null) ? httpRequest : new MockHttpServletRequest(), null, null);
+		return new PageRequest(null, null, (httpRequest != null) ? httpRequest : new MockHttpServletRequest(), null,
+		        new Session(new MockHttpSession()));
 	}
 	
 	/**
@@ -79,7 +83,7 @@ public class LoginPageControllerTest {
 	}
 	
 	/**
-	 * @see {@link LoginPageController#post(String,String,UiUtils,PageRequest)}
+	 * @see {@link LoginPageController#post(String, String, org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest, org.openmrs.module.appui.UiSessionContext)}
 	 */
 	@Test
 	@Verifies(value = "should redirect the user back to the redirectUrl if any", method = "post(String,String,UiUtils,PageRequest)")
@@ -91,13 +95,13 @@ public class LoginPageControllerTest {
 		String redirectUrl = TEST_CONTEXT_PATH + "/referenceapplication/patient.page";
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.addParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL, redirectUrl);
-		
+
 		assertEquals("redirect:" + redirectUrl,
-		    new LoginPageController().post("admin", "test", new BasicUiUtils(), createPageRequest(request)));
+		    new LoginPageController().post("admin", "test", new BasicUiUtils(), createPageRequest(request), null));
 	}
 	
 	/**
-	 * @see {@link LoginPageController#post(String, String, UiUtils, PageRequest)}
+	 * @see {@link LoginPageController#post(String, String, org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest, org.openmrs.module.appui.UiSessionContext)}
 	 */
 	@Test
 	@Verifies(value = "should redirect the user to the home page if the redirectUrl is the login page", method = "post(String,String,UiUtils,PageRequest)")
@@ -113,7 +117,7 @@ public class LoginPageControllerTest {
 		request.setParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL, redirectUrl);
 		
 		assertEquals(homeRedirect,
-		    new LoginPageController().post("admin", "test", new BasicUiUtils(), createPageRequest(request)));
+		    new LoginPageController().post("admin", "test", new BasicUiUtils(), createPageRequest(request), null));
 	}
 	
 	/**
