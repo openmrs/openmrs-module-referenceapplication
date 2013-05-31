@@ -102,7 +102,7 @@ public class LoginPageController {
 			if (Context.isAuthenticated()) {
 				if (log.isDebugEnabled())
 					log.debug("User has successfully authenticated");
-				
+
 				if (pageRequest.getSession().getAttribute(UiSessionContext.LOCATION_SESSION_ATTRIBUTE, Integer.class) == null) {
 					Location sessionLocation = LocationUtility.getDefaultLocation();
 					if (sessionLocation != null) {

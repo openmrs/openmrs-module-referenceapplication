@@ -1,0 +1,13 @@
+[
+    {
+        "id": "referenceapplication.defaultEncounterTemplate",
+        "extensionPointId": "org.openmrs.referenceapplication.encounterTemplate",
+        "type": "fragment",
+        "extensionParams": {
+            "templateId": "defaultEncounterTemplate",
+            "templateFragmentProviderName": "coreapps",
+            "templateFragmentId": "patientdashboard/encountertemplate/defaultEncounterTemplate",
+            "supportedEncounterTypes": {}
+        }
+    }
+]
