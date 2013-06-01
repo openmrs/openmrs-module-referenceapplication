@@ -1,0 +1,46 @@
+[
+    {
+        "id": "referenceapplication.registrationapp.registerPatient",
+        "instanceOf": "registrationapp.registerPatient",
+        "label": "Register Patient",
+        "description": "Create a new Patient Record",
+        "extensions": [
+            {
+                "id": "referenceapplication.registrationapp.registerPatient.homepageLink",
+                "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
+                "type": "link",
+                "label": "referenceapplication.app.registerPatient.label",
+                "url": "registrationapp/registerPatient.page?appId=referenceapplication.registrationapp.registerPatient",
+                "icon": "icon-user",
+                "order": 1,
+                "requiredPrivilege": "App: registrationapp.registerPatient"
+            }
+        ],
+        "config": {
+            "afterCreatedUrl": "/coreapps/patientDashboard.page?patientId={{patientId}}",
+            "sections": [
+                {
+                    "id": "contactInfo",
+                    "label": "emr.patientDashBoard.contactinfo",
+                    "questions": [
+                        {
+                            "legend": "emr.person.telephoneNumber",
+                            "fields": [
+                                {
+                                    "type": "personAttribute",
+                                    "label": "registrationapp.patient.phone.label",
+                                    "formFieldName": "phoneNumber",
+                                    "uuid": "14d4f066-15f5-102d-96e4-000c29c2a5d7",
+                                    "widget": {
+                                        "providerName": "uicommons",
+                                        "fragmentId": "field/text"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+]

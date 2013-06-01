@@ -1,0 +1,10 @@
+[
+    {
+        "id": "referenceapplication.configureStandardHeader",
+        "extensionPointId": "org.openmrs.module.appui.header.config",
+        "type": "config",
+        "extensionParams": {
+            "logo-link-url": "/referenceapplication/home.page"
+        }
+    }
+]

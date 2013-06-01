@@ -39,6 +39,7 @@
 		<uiframeworkVersion>2.5.2</uiframeworkVersion>
 		<uicommonsVersion>1.0-SNAPSHOT</uicommonsVersion>
         <appuiVersion>1.0-SNAPSHOT</appuiVersion>
+        <registrationappVersion>1.0-SNAPSHOT</registrationappVersion>
 	</properties>
 
 	<dependencyManagement>
