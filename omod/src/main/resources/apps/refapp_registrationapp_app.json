@@ -17,7 +17,7 @@
             }
         ],
         "config": {
-            "afterCreatedUrl": "/coreapps/patientDashboard.page?patientId={{patientId}}",
+            "afterCreatedUrl": "/coreapps/patientdashboard/patientDashboard.page?patientId={{patientId}}",
             "sections": [
                 {
                     "id": "contactInfo",
