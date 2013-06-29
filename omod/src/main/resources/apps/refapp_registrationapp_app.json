@@ -42,9 +42,8 @@
                             "legend": "Person.address",
                             "fields": [
                                 {
-                                    "type": "address",
+                                    "type": "personAddress",
                                     "label": "registrationapp.patient.address.question",
-                                    "uuid": "c3b30140-ddad-11e2-af65-dc6f959e59e3",
                                     "widget": {
                                         "providerName": "uicommons",
                                         "fragmentId": "field/personAddress"
