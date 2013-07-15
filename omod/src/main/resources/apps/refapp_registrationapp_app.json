@@ -21,14 +21,14 @@
             "sections": [
                 {
                     "id": "contactInfo",
-                    "label": "emr.patientDashBoard.contactinfo",
+                    "label": "registrationapp.patient.contactInfo.label",
                     "questions": [
                         {
-                            "legend": "emr.person.telephoneNumber",
+                            "legend": "registrationapp.patient.phone.label",
                             "fields": [
                                 {
                                     "type": "personAttribute",
-                                    "label": "registrationapp.patient.phone.label",
+                                    "label": "registrationapp.patient.phone.question",
                                     "formFieldName": "phoneNumber",
                                     "uuid": "14d4f066-15f5-102d-96e4-000c29c2a5d7",
                                     "widget": {
