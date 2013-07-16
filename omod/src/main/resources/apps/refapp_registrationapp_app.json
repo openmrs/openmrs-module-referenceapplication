@@ -24,6 +24,19 @@
                     "label": "registrationapp.patient.contactInfo.label",
                     "questions": [
                         {
+                            "legend": "Person.address",
+                            "fields": [
+                                {
+                                    "type": "personAddress",
+                                    "label": "registrationapp.patient.address.question",
+                                    "widget": {
+                                        "providerName": "uicommons",
+                                        "fragmentId": "field/personAddress"
+                                    }
+                                }
+                            ]
+                        },
+                        {
                             "legend": "registrationapp.patient.phone.label",
                             "fields": [
                                 {
@@ -36,19 +49,6 @@
                                         "fragmentId": "field/text"
                                     },
                                     "cssClasses": ["number"]
-                                }
-                            ]
-                        },
-                        {
-                            "legend": "Person.address",
-                            "fields": [
-                                {
-                                    "type": "personAddress",
-                                    "label": "registrationapp.patient.address.question",
-                                    "widget": {
-                                        "providerName": "uicommons",
-                                        "fragmentId": "field/personAddress"
-                                    }
                                 }
                             ]
                         }
