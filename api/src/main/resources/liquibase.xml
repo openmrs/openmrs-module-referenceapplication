@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+                  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+    <!--
+        See http://www.liquibase.org/manual/home#available_database_refactorings
+        for a list of supported elements and attributes
+    -->
+    <changeSet id="referenceapplication-1" author="raff">
+		<comment>Set address template</comment>
+		<update tableName="global_property">
+            <column name="property_value">
+                <![CDATA[
+                        <org.openmrs.layout.web.address.AddressTemplate>
+     <nameMappings class="properties">
+       <property name="postalCode" value="Location.postalCode"/>
+       <property name="longitude" value="Location.longitude"/>
+       <property name="address2" value="Location.address2"/>
+       <property name="address1" value="Location.address1"/>
+       <property name="country" value="Location.country"/>
+       <property name="stateProvince" value="Location.stateProvince"/>
+       <property name="latitude" value="Location.latitude"/>
+       <property name="cityVillage" value="Location.cityVillage"/>
+     </nameMappings>
+     <sizeMappings class="properties">
+       <property name="postalCode" value="10"/>
+       <property name="longitude" value="10"/>
+       <property name="address2" value="40"/>
+       <property name="address1" value="40"/>
+       <property name="country" value="10"/>
+       <property name="stateProvince" value="10"/>
+       <property name="latitude" value="10"/>
+       <property name="cityVillage" value="10"/>
+     </sizeMappings>
+     <lineByLineFormat>
+       <string>address1</string>
+       <string>address2</string>
+       <string>cityVillage stateProvince country postalCode</string>
+       <string>latitude longitude</string>
+     </lineByLineFormat>
+   </org.openmrs.layout.web.address.AddressTemplate>
+                ]]>
+            </column>
+            <where>
+                property = "layout.address.format"
+            </where>
+        </update>
+	</changeSet>
+
+</databaseChangeLog>

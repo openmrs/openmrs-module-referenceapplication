@@ -7,11 +7,12 @@ import org.openmrs.module.appframework.AppTestUtil;
 import org.openmrs.module.appframework.domain.AppDescriptor;
 import org.openmrs.module.registrationapp.form.RegisterPatientFormBuilder;
 import org.openmrs.module.registrationapp.model.NavigableFormStructure;
+import org.openmrs.test.BaseModuleContextSensitiveTest;
 
 /**
  *
  */
-public class RegistrationAppTest {
+public class RegistrationAppTest extends BaseModuleContextSensitiveTest {
 
     @Test
     public void testConfigOfRegistrationApp() throws Exception {
