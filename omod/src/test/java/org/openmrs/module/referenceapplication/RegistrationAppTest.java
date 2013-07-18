@@ -12,7 +12,7 @@ import org.openmrs.test.BaseModuleContextSensitiveTest;
 /**
  *
  */
-public class RegistrationAppTest extends BaseModuleContextSensitiveTest {
+public class RegistrationAppTest {
 
     @Test
     public void testConfigOfRegistrationApp() throws Exception {
