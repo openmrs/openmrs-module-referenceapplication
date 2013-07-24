@@ -8,15 +8,5 @@
         "icon": "icon-cogs",
         "order": 99,
         "requiredPrivilege": "App: legacy.admin"
-    },
-    {
-        "id": "legacy.findPatient",
-        "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
-        "type": "link",
-        "label": "referenceapplication.app.legacy.findPatient.label",
-        "url": "findPatient.htm",
-        "icon": "icon-search",
-        "order": 100,
-        "requiredPrivilege": "App: legacy.findPatient"
     }
 ]
