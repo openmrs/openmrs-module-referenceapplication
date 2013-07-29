@@ -38,6 +38,7 @@
                         },
                         {
                             "legend": "registrationapp.patient.phone.label",
+                            "id": "phoneNumberLabel",
                             "fields": [
                                 {
                                     "type": "personAttribute",
