@@ -15,6 +15,7 @@ package org.openmrs.module.referenceapplication;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.GlobalProperty;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.ModuleActivator;
@@ -55,6 +56,9 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
 		log.info("Reference Application Module started");
 
         Context.getService(AppFrameworkService.class).disableApp("registrationapp.basicRegisterPatient");
+
+        Context.getAdministrationService().saveGlobalProperty(new GlobalProperty("registrationcore.patientNameSearch",
+                "registrationcore.ExistingPatientNameSearch"));
 	}
 	
 	/**
