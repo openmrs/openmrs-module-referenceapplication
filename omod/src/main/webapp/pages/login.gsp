@@ -1,14 +1,50 @@
 <%
 	ui.setPageTitle(ui.message("referenceapplication.login.title"))
+    ui.includeFragment("appui", "standardEmrIncludes")
     ui.includeCss("referenceapplication", "login.css")
 %>
 
 ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
 
 <script type="text/javascript">
-	\$(document).ready(function(){
-		\$('#username').focus();
+	jQuery(document).ready(function(){
+		jQuery('#username').focus();
 	});
+
+    updateSelectedOption = function() {
+        jQuery('#sessionLocation li').removeClass('selected');
+        jQuery('#sessionLocation li[value|=' + jQuery('#sessionLocationInput').val() + ']').addClass('selected');
+
+        var sessionLocationVal = jQuery('#sessionLocationInput').val();
+        if(parseInt(sessionLocationVal, 10) > 0){
+            jQuery('#login-button').removeClass('disabled');
+            jQuery('#login-button').removeAttr('disabled');
+        }else{
+            jQuery('#login-button').addClass('disabled');
+            jQuery('#login-button').attr('disabled','disabled');
+        }
+    };
+
+    jQuery(function() {
+        updateSelectedOption();
+
+        jQuery('#sessionLocation li').click( function() {
+            jQuery('#sessionLocationInput').val(jQuery(this).attr("value"));
+            updateSelectedOption();
+        });
+
+        var cannotLoginController = emr.setupConfirmationDialog({
+            selector: '#cannot-login-popup',
+            actions: {
+                confirm: function() {
+                    cannotLoginController.close();
+                }
+            }
+        });
+        jQuery('a#cant-login').click(function() {
+            cannotLoginController.show();
+        })
+    });
 </script>
 
 <header>
@@ -28,7 +64,7 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
                     <i class="icon-lock small"></i>
                     ${ ui.message("referenceapplication.login.loginHeading") }
                 </legend>
-				
+
                 <p class="left">
                     <label for="username">
                         ${ ui.message("referenceapplication.login.username") }:
@@ -42,16 +78,49 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
                     </label>
                     <input id="password" type="password" name="password" placeholder="${ ui.message("referenceapplication.login.password.placeholder") }"/>
                 </p>
+
+                <p class="clear">
+                    <label for="sessionLocation">
+                        ${ ui.message("referenceapplication.login.sessionLocation") }:
+                    </label>
+                    <ul id="sessionLocation" class="select">
+                        <% locations.sort { ui.format(it) }.each { %>
+                        <li id="${it.id}-${it.name}" value="${it.id}">${ui.format(it)}</li>
+                        <% } %>
+                    </ul>
+                </p>
+
+                <input type="hidden" id="sessionLocationInput" name="sessionLocation"
+                    <% if (lastSessionLocation != null) { %> value="${lastSessionLocation.id}" <% } %> />
+
                 <p></p>
                 <p>
                     <input id="login-button" class="confirm" type="submit" value="${ ui.message("referenceapplication.login.button") }"/>
                 </p>
+                <p>
+                    <a id="cant-login" href="javascript:void(0)">
+                        <i class="icon-question-sign small"></i>
+                        ${ ui.message("referenceapplication.login.cannotLogin") }
+                    </a>
+                </p>
 
             </fieldset>
-    
+
     		<input type="hidden" name="redirectUrl" value="${redirectUrl}" />
 
         </form>
 
+    </div>
+</div>
+
+<div id="cannot-login-popup" class="dialog" style="display: none">
+    <div class="dialog-header">
+        <i class="icon-info-sign"></i>
+        <h3>${ ui.message("referenceapplication.login.cannotLogin") }</h3>
+    </div>
+    <div class="dialog-content">
+        <p class="dialog-instructions">${ ui.message("referenceapplication.login.cannotLoginInstructions") }</p>
+
+        <button class="confirm">${ ui.message("referenceapplication.okay") }</button>
     </div>
 </div>
