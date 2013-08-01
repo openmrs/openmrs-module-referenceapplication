@@ -214,9 +214,13 @@ public class LoginPageController {
 		
 		//This is an absolute url, discard the protocal, domain name/host and port section
 		int indexOfContextPath = url.indexOf(pageRequest.getRequest().getContextPath());
-		url = url.substring(indexOfContextPath);
-		log.debug("Relative redirect:" + url);
-		
-		return url;
+        if (indexOfContextPath >= 0) {
+            url = url.substring(indexOfContextPath);
+            log.debug("Relative redirect:" + url);
+
+            return url;
+        }
+
+        return null;
 	}
 }
