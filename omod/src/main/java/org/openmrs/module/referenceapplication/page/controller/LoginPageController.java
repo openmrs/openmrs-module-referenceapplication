@@ -28,6 +28,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.api.context.ContextAuthenticationException;
 import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.appui.UiSessionContext;
+import org.openmrs.module.emrapi.EmrApiConstants;
 import org.openmrs.module.referenceapplication.ReferenceApplicationConstants;
 import org.openmrs.module.referenceapplication.ReferenceApplicationWebConstants;
 import org.openmrs.ui.framework.UiUtils;
@@ -45,15 +46,15 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 public class LoginPageController {
-	
+
 	protected final Log log = LogFactory.getLog(getClass());
-	
+
 	@RequestMapping("/login.htm")
 	public String overrideLoginpage() {
 		//TODO The referer should actually be captured from here since we are doing a redirect
 		return "forward:/" + ReferenceApplicationConstants.MODULE_ID + "/login.page";
 	}
-	
+
 	/**
 	 * @should redirect the user to the home page if they are already authenticated
 	 * @should show the user the login page if they are not authenticated
@@ -67,21 +68,21 @@ public class LoginPageController {
 	                  @CookieValue(value = COOKIE_NAME_LAST_SESSION_LOCATION, required = false) String lastSessionLocationId,
 	                  @SpringBean("locationService") LocationService locationService,
 	                  @SpringBean("appFrameworkService") AppFrameworkService appFrameworkService) {
-		
+
 		if (Context.isAuthenticated()) {
 			return "redirect:" + ui.pageLink(ReferenceApplicationConstants.MODULE_ID, "home");
 		}
-		
+
 		String redirectUrl = getStringSessionAttribute(SESSION_ATTRIBUTE_REDIRECT_URL, pageRequest.getRequest());
 		if (StringUtils.isBlank(redirectUrl))
 			redirectUrl = pageRequest.getRequest().getParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL);
-		
+
 		if (StringUtils.isBlank(redirectUrl))
 			redirectUrl = pageRequest.getRequest().getHeader("Referer");
-		
+
 		if (redirectUrl == null)
 			redirectUrl = "";
-		
+
 		model.addAttribute(REQUEST_PARAMETER_NAME_REDIRECT_URL, redirectUrl);
 		Location lastSessionLocation = null;
 		try {
@@ -95,15 +96,15 @@ public class LoginPageController {
 		finally {
 			Context.removeProxyPrivilege(PrivilegeConstants.VIEW_LOCATIONS);
 		}
-		
+
 		model.addAttribute("lastSessionLocation", lastSessionLocation);
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * Processes requests to authenticate a user
-	 * 
+	 *
 	 * @param username
 	 * @param password
 	 * @param sessionLocationId
@@ -122,7 +123,7 @@ public class LoginPageController {
 	                   @RequestParam(value = "sessionLocation", required = false) Integer sessionLocationId,
 	                   @SpringBean("locationService") LocationService locationService, UiUtils ui, PageRequest pageRequest,
 	                   UiSessionContext sessionContext) {
-		
+
 		String redirectUrl = pageRequest.getRequest().getParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL);
 		redirectUrl = getRelativeUrl(redirectUrl, pageRequest);
 		Location sessionLocation = null;
@@ -136,10 +137,9 @@ public class LoginPageController {
 				Context.removeProxyPrivilege(PrivilegeConstants.VIEW_LOCATIONS);
 			}
 		}
-		
+
 		//TODO uncomment this to replace the if clause after it
-		//if (sessionLocation != null && sessionLocation.hasTag(EmrApiConstants.LOCATION_TAG_SUPPORTS_LOGIN)) {
-		if (sessionLocation != null) {
+		if (sessionLocation != null && sessionLocation.hasTag(EmrApiConstants.LOCATION_TAG_SUPPORTS_LOGIN)) {
 			// Set a cookie, so next time someone logs in on this machine, we can default to that same location
 			pageRequest.setCookieValue(COOKIE_NAME_LAST_SESSION_LOCATION, sessionLocationId.toString());
 			

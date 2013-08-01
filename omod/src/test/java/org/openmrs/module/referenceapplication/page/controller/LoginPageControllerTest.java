@@ -30,7 +30,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -57,45 +56,45 @@ import org.springframework.mock.web.MockHttpSession;
 @PrepareForTest({ Context.class, LocationUtility.class })
 @RunWith(PowerMockRunner.class)
 public class LoginPageControllerTest {
-	
+
 	private static final String TEST_CONTEXT_PATH = "/openmrs";
-	
+
 	private static final String USERNAME = "admin";
-	
+
 	private static final String PASSWORD = "test";
-	
+
 	private static final Integer SESSION_LOCATION_ID = 2;
-	
+
 	private LocationService locationService;
-	
+
 	private final UiUtils uiUtils = new UiUtils() {
-		
+
 		@Override
 		public String pageLink(String providerName, String pageName) {
 			return new BasicUiUtils().pageLink(providerName, pageName);
 		}
-		
+
 		@Override
 		public String message(String code, Object... args) {
 			return null;
 		}
 	};
-	
+
 	private UiSessionContext sessionContext;
-	
+
 	@Before
 	public void setup() {
 		mockStatic(Context.class);
 		locationService = mock(LocationService.class);
 		sessionContext = mock(UiSessionContext.class);
 	}
-	
+
 	private PageRequest createPageRequest(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
 		HttpServletRequest request = (httpRequest != null) ? httpRequest : new MockHttpServletRequest();
 		HttpServletResponse response = (httpResponse != null) ? httpResponse : new MockHttpServletResponse();
 		return new PageRequest(null, null, request, response, new Session(new MockHttpSession()));
 	}
-	
+
 	/**
 	 * This should ony be called from test methods where authentication will be successful but wish
 	 * to test other things e.g if the session location or redirect are properly set
@@ -110,7 +109,7 @@ public class LoginPageControllerTest {
 		doNothing().when(Context.class, "removeProxyPrivilege", PrivilegeConstants.VIEW_LOCATIONS);
 		doNothing().when(Context.class, "authenticate", USERNAME, PASSWORD);
 	}
-	
+
 	/**
 	 * @see LoginPageController#get(org.openmrs.ui.framework.page.PageModel,
 	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest, String,
@@ -125,7 +124,7 @@ public class LoginPageControllerTest {
 		assertEquals(homeRedirect,
 		    new LoginPageController().get(null, uiUtils, createPageRequest(null, null), null, null, null));
 	}
-	
+
 	/**
 	 * @see LoginPageController#get(org.openmrs.ui.framework.page.PageModel,
 	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest, String,
@@ -138,7 +137,7 @@ public class LoginPageControllerTest {
 		when(Context.isAuthenticated()).thenReturn(false);
 		assertNull(new LoginPageController().get(new PageModel(), uiUtils, createPageRequest(null, null), null, null, null));
 	}
-	
+
 	/**
 	 * @see LoginPageController#get(org.openmrs.ui.framework.page.PageModel,
 	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest, String,
@@ -149,18 +148,18 @@ public class LoginPageControllerTest {
 	@Verifies(value = "should set redirectUrl in the page model if any was specified in the request", method = "get(PageModel,UiUtils,PageRequest)")
 	public void get_shouldSetRedirectUrlInThePageModelIfAnyWasSpecifiedInTheRequest() throws Exception {
 		when(Context.isAuthenticated()).thenReturn(false);
-		
+
 		String redirectUrl = TEST_CONTEXT_PATH + "/referenceapplication/patient.page";
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setContextPath(TEST_CONTEXT_PATH);
 		request.addParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL, redirectUrl);
 		PageModel pageModel = new PageModel();
-		
+
 		new LoginPageController().get(pageModel, uiUtils, createPageRequest(request, null), null, null, null);
-		
+
 		assertEquals(redirectUrl, pageModel.get(REQUEST_PARAMETER_NAME_REDIRECT_URL));
 	}
-	
+
 	/**
 	 * @see LoginPageController#get(org.openmrs.ui.framework.page.PageModel,
 	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest, String,
@@ -171,18 +170,18 @@ public class LoginPageControllerTest {
 	@Verifies(value = "should set the referer as the redirectUrl in the page model if no redirect param exists", method = "get(PageModel,UiUtils,PageRequest)")
 	public void get_shouldSetTheRefererAsTheRedirectUrlInThePageModelIfNoRedirectParamExists() throws Exception {
 		when(Context.isAuthenticated()).thenReturn(false);
-		
+
 		String refererUrl = TEST_CONTEXT_PATH + "/referenceapplication/patient.page";
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setContextPath(TEST_CONTEXT_PATH);
 		request.addHeader("Referer", refererUrl);
 		PageModel pageModel = new PageModel();
-		
+
 		new LoginPageController().get(pageModel, uiUtils, createPageRequest(request, null), null, null, null);
-		
+
 		assertEquals(refererUrl, pageModel.get(REQUEST_PARAMETER_NAME_REDIRECT_URL));
 	}
-	
+
 	/**
 	 * @see LoginPageController#get(org.openmrs.ui.framework.page.PageModel,
 	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest, String,
@@ -193,7 +192,7 @@ public class LoginPageControllerTest {
 	@Verifies(value = "should set redirectUrl in the page model if any was specified in the session", method = "get(PageModel,UiUtils,PageRequest)")
 	public void get_shouldSetRedirectUrlInThePageModelIfAnyWasSpecifiedInTheSession() throws Exception {
 		when(Context.isAuthenticated()).thenReturn(false);
-		
+
 		String redirectUrl = TEST_CONTEXT_PATH + "/referenceapplication/patient.page";
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setContextPath(TEST_CONTEXT_PATH);
@@ -201,13 +200,13 @@ public class LoginPageControllerTest {
 		HttpSession httpSession = new MockHttpSession();
 		httpSession.setAttribute(SESSION_ATTRIBUTE_REDIRECT_URL, redirectUrl);
 		request.setSession(httpSession);
-		
+
 		PageModel pageModel = new PageModel();
 		new LoginPageController().get(pageModel, uiUtils, pageRequest, null, null, null);
-		
+
 		assertEquals(redirectUrl, pageModel.get(REQUEST_PARAMETER_NAME_REDIRECT_URL));
 	}
-	
+
 	/**
 	 * @see LoginPageController#post(String, String, Integer, org.openmrs.api.LocationService,
 	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest,
@@ -217,19 +216,19 @@ public class LoginPageControllerTest {
 	@Verifies(value = "should redirect the user back to the redirectUrl if any", method = "post(String,String,UiUtils,PageRequest)")
 	public void post_shouldRedirectTheUserBackToTheRedirectUrlIfAny() throws Exception {
 		setupMocksForSuccessfulAuthentication(true);
-		
+
 		final String redirectUrl = TEST_CONTEXT_PATH + "/referenceapplication/patient.page";
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.addParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL, redirectUrl);
 		PageRequest pageRequest = createPageRequest(request, null);
-		
+
 		assertEquals("redirect:" + redirectUrl, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID,
 		    locationService, uiUtils, pageRequest, sessionContext));
-		
+
 		assertEquals(SESSION_LOCATION_ID,
 		    pageRequest.getSession().getAttribute(UiSessionContext.LOCATION_SESSION_ATTRIBUTE, Integer.class));
 	}
-	
+
 	/**
 	 * @see LoginPageController#post(String, String, Integer, org.openmrs.api.LocationService,
 	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest,
@@ -239,21 +238,21 @@ public class LoginPageControllerTest {
 	@Verifies(value = "should redirect the user to the home page if the redirectUrl is the login page", method = "post(String,String,UiUtils,PageRequest)")
 	public void post_shouldRedirectTheUserToTheHomePageIfTheRedirectUrlIsTheLoginPage() throws Exception {
 		setupMocksForSuccessfulAuthentication(true);
-		
+
 		final String redirectUrl = uiUtils.pageLink(ReferenceApplicationConstants.MODULE_ID, "login");
 		final String homeRedirect = "redirect:" + uiUtils.pageLink(ReferenceApplicationConstants.MODULE_ID, "home");
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setContextPath("/openmrs");
 		request.setParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL, redirectUrl);
 		PageRequest pageRequest = createPageRequest(request, null);
-		
+
 		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID, locationService,
 		    uiUtils, pageRequest, sessionContext));
-		
+
 		assertEquals(SESSION_LOCATION_ID,
 		    pageRequest.getSession().getAttribute(UiSessionContext.LOCATION_SESSION_ATTRIBUTE, Integer.class));
 	}
-	
+
 	/**
 	 * @verifies send the user back to the login page when authentication fails
 	 * @see LoginPageController#post(String, String, Integer, org.openmrs.api.LocationService,
@@ -268,7 +267,7 @@ public class LoginPageControllerTest {
 		    createPageRequest(request, null), sessionContext);
 		assertEquals("redirect:" + uiUtils.pageLink("referenceapplication", "login"), page);
 	}
-	
+
 	/**
 	 * @verifies send the user back to the login page if an invalid location is selected
 	 * @see LoginPageController#post(String, String, Integer, org.openmrs.api.LocationService,
@@ -276,7 +275,6 @@ public class LoginPageControllerTest {
 	 *      org.openmrs.module.appui.UiSessionContext)
 	 */
 	@Test
-    @Ignore
 	public void post_shouldSendTheUserBackToTheLoginPageIfAnInvalidLocationIsSelected() throws Exception {
 		setupMocksForSuccessfulAuthentication(false);
 		MockHttpServletRequest request = new MockHttpServletRequest();
