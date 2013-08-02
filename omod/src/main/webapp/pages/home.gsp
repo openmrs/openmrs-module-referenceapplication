@@ -13,10 +13,7 @@
 
     <% if (authenticatedUser) { %>
         <h4>
-            ${ ui.message("referenceapplication.home.currentUser", ui.format(authenticatedUser)) }
-            <% if (authenticatedUser) { %>
-                <a href="logout">${ ui.message("referenceapplication.home.logOut") }</a>
-            <% } %>
+            ${ ui.message("referenceapplication.home.currentUser", ui.format(authenticatedUser), ui.format(sessionContext.sessionLocation)) }
         </h4>
     <% } else { %>
         <h4>
