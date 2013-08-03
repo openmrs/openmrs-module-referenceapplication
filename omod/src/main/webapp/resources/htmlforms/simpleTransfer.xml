@@ -1,4 +1,4 @@
-<htmlform formUuid="b5f8ffd8-fbde-11e2-8ff2-fd54ab5fdb2a" formName="Discharge (Simple)" formEncounterType="181820aa-88c9-479b-9077-af92f5364329" formVersion="1.0">
+<htmlform formUuid="a007bbfe-fbe5-11e2-8ff2-fd54ab5fdb2a" formName="Transfer Within Hospital (Simple)" formEncounterType="7b68d557-85ef-4fc8-b767-4fa4f5eb5c23" formVersion="1.0">
 
     <script type="text/javascript">
         $(function() {
@@ -6,22 +6,22 @@
         });
     </script>
 
-    <h2><label><uimessage code="referenceapplication.simpleDischarge.title"/></label></h2>
+    <h2><label><uimessage code="referenceapplication.simpleTransfer.title"/></label></h2>
 
     <section id="discharge">
         <p>
-            <label><uimessage code="referenceapplication.simpleDischarge.dischargeDate"/></label>
+            <label><uimessage code="referenceapplication.simpleTransfer.transferDate"/></label>
             <encounterDate id="encounterDate" showTime="false" default="now"/>
         </p>
 
         <p>
-            <label><uimessage code="referenceapplication.simpleDischarge.dischargingClinician"/></label>
+            <label><uimessage code="referenceapplication.simpleTransfer.transferringClinician"/></label>
             <encounterProviderAndRole default="currentUser" encounterRole="1" required="true"/>
         </p>
 
         <p id="location-container">
-            <label><uimessage code="referenceapplication.simpleDischarge.dischargedFrom"/></label>
-            <encounterLocation required="true"/>
+            <label><uimessage code="referenceapplication.simpleTransfer.transferTo"/></label>
+            <encounterLocation required="true" tags="Transfer Location"/>
         </p>
     </section>
 

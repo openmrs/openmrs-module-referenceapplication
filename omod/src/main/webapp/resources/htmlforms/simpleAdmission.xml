@@ -2,11 +2,7 @@
 
     <script type="text/javascript">
         $(function() {
-            if ($('#location-container select').val() === '') {
-                $('#location-container select').focus();
-            } else {
-                $('.submitButton').focus();
-            }
+            $('#location-container select').focus();
         });
     </script>
 
@@ -31,6 +27,8 @@
 
     <submit submitClass="confirm right" submitCode="uicommons.saveForm" />
 
-    <button class="cancel"><uimessage code="uicommons.cancelForm"/></button>
+    <ifMode mode="VIEW" include="false">
+        <button class="cancel"><uimessage code="uicommons.cancelForm"/></button>
+    </ifMode>
 
 </htmlform>

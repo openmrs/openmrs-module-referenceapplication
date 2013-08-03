@@ -21,5 +21,17 @@
         "order": 50,
         "requiredPrivilege": "Task: referenceapplication.simpleDischarge",
         "require": "visit.active && visit.admitted"
+    },
+
+    { // real-time simple internal transfer form (not a full transfer note)
+        "id": "referenceapplication.realTime.simpleTransfer",
+        "extensionPointId": "patientDashboard.visitActions",
+        "type": "link",
+        "label": "referenceapplication.task.simpleTransfer.label",
+        "url": "htmlformentryui/htmlform/enterHtmlFormWithStandardUi.page?patientId={{patientId}}&visitId={{visit.id}}&definitionUiResource=referenceapplication:htmlforms/simpleTransfer.xml",
+        "icon": "icon-share",
+        "order": 51,
+        "requiredPrivilege": "Task: referenceapplication.simpleTransfer",
+        "require": "visit.active && visit.admitted"
     }
 ]
