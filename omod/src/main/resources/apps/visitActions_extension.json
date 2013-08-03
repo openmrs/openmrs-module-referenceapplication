@@ -29,7 +29,7 @@
         "type": "link",
         "label": "referenceapplication.task.simpleTransfer.label",
         "url": "htmlformentryui/htmlform/enterHtmlFormWithStandardUi.page?patientId={{patientId}}&visitId={{visit.id}}&definitionUiResource=referenceapplication:htmlforms/simpleTransfer.xml",
-        "icon": "icon-share",
+        "icon": "icon-random",
         "order": 51,
         "requiredPrivilege": "Task: referenceapplication.simpleTransfer",
         "require": "visit.active && visit.admitted"
