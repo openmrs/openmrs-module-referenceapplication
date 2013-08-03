@@ -1,0 +1,32 @@
+<htmlform formUuid="b5f8ffd8-fbde-11e2-8ff2-fd54ab5fdb2a" formName="Discharge (Simple)" formEncounterType="181820aa-88c9-479b-9077-af92f5364329" formVersion="1.0">
+
+    <script type="text/javascript">
+        $(function() {
+            $('.submitButton').focus();
+        });
+    </script>
+
+    <h2><label><uimessage code="referenceapplication.simpleDischarge.title"/></label></h2>
+
+    <section id="discharge">
+        <p>
+            <label><uimessage code="referenceapplication.simpleDischarge.dischargeDate"/></label>
+            <encounterDate id="encounterDate" showTime="false" default="now"/>
+        </p>
+
+        <p>
+            <label><uimessage code="referenceapplication.simpleDischarge.dischargingClinician"/></label>
+            <encounterProviderAndRole default="currentUser" encounterRole="1" required="true"/>
+        </p>
+
+        <p id="location-container">
+            <label><uimessage code="referenceapplication.simpleDischarge.dischargedFrom"/></label>
+            <encounterLocation required="true"/>
+        </p>
+    </section>
+
+    <submit submitClass="confirm right" submitCode="uicommons.saveForm" />
+
+    <button class="cancel"><uimessage code="uicommons.cancelForm"/></button>
+
+</htmlform>

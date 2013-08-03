@@ -2,25 +2,29 @@
 
     <script type="text/javascript">
         $(function() {
-            $('.submitButton').focus();
+            if ($('#location-container select').val() === '') {
+                $('#location-container select').focus();
+            } else {
+                $('.submitButton').focus();
+            }
         });
     </script>
 
-    <h2><label><uimessage code="referenceapplication.admission.title"/></label></h2>
+    <h2><label><uimessage code="referenceapplication.simpleAdmission.title"/></label></h2>
 
     <section id="admission">
         <p>
-            <label><uimessage code="referenceapplication.admission.admissionDate"/></label>
+            <label><uimessage code="referenceapplication.simpleAdmission.admissionDate"/></label>
             <encounterDate id="encounterDate" showTime="false" default="now"/>
         </p>
 
         <p>
-            <label><uimessage code="referenceapplication.admission.admittingClinician"/></label>
+            <label><uimessage code="referenceapplication.simpleAdmission.admittingClinician"/></label>
             <encounterProviderAndRole default="currentUser" encounterRole="1" required="true"/>
         </p>
 
-        <p>
-            <label><uimessage code="referenceapplication.admission.admittedTo"/></label>
+        <p id="location-container">
+            <label><uimessage code="referenceapplication.simpleAdmission.admittedTo"/></label>
             <encounterLocation required="true" tags="Admission Location"/>
         </p>
     </section>
