@@ -4,6 +4,20 @@
     ui.includeCss("referenceapplication", "login.css")
 %>
 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>${ ui.message("referenceapplication.login.title") }</title>
+    <link rel="shortcut icon" type="image/ico" href="/${ ui.contextPath() }/images/openmrs-favicon.ico"/>
+    <link rel="icon" type="image/png\" href="/${ ui.contextPath() }/images/openmrs-favicon.png"/>
+    ${ ui.resourceLinks() }
+</head>
+<body>
+<script type="text/javascript">
+    var OPENMRS_CONTEXT_PATH = '${ ui.contextPath() }';
+</script>
+
+
 ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
 
 <script type="text/javascript">
@@ -124,3 +138,6 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
         <button class="confirm">${ ui.message("referenceapplication.okay") }</button>
     </div>
 </div>
+
+</body>
+</html>
