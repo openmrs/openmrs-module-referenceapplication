@@ -1,5 +1,4 @@
 <%
-	ui.setPageTitle(ui.message("referenceapplication.login.title"))
     ui.includeFragment("appui", "standardEmrIncludes")
     ui.includeCss("referenceapplication", "login.css")
 %>
