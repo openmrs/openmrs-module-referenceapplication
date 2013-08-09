@@ -33,5 +33,17 @@
         "order": 51,
         "requiredPrivilege": "Task: referenceapplication.simpleTransfer",
         "require": "visit.active && visit.admitted"
+    },
+    
+    {
+        "id": "referenceapplication.vitals",
+        "extensionPointId": "patientDashboard.visitActions",
+        "type": "link",
+        "label": "referenceapplication.task.vitals.label",
+        "url": "htmlformentryui/htmlform/enterHtmlFormWithSimpleUi.page?patientId={{patientId}}&visitId={{visit.id}}&definitionUiResource=referenceapplication:htmlforms/vitals.xml",
+        "icon": "icon-vitals",
+        "order": 52,
+        "requiredPrivilege": "Task: referenceapplication.vitals",
+        "require": "visit.active"
     }
 ]
