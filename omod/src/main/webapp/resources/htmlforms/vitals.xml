@@ -215,7 +215,7 @@
             <h3><uimessage code="referenceapplication.vitals.heartRate.title"/></h3>
 
             <p>
-                <obs conceptId="SNOMED CT:PULSE" id="heart_rate" showUnits="referenceapplication.units.perMinute" unitsCssClass="append-to-value/>
+                <obs conceptId="SNOMED CT:PULSE" id="heart_rate" showUnits="referenceapplication.units.perMinute" unitsCssClass="append-to-value"/>
             </p>
         </fieldset>
 
