@@ -4,7 +4,7 @@
 	    "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
 	    "type": "link",
 	    "label": "referenceapplication.vitals.title",
-	    "url": "coreapps/findpatient/findPatient.page?app=coreapps.findPatient",
+	    "url": "coreapps/vitals/findPatient.page",
 	    "icon": "icon-vitals",
 	    "order": 3
 	}
