@@ -34,6 +34,14 @@
         <require_module version="${appuiVersion}">
             org.openmrs.module.appui
         </require_module>
+
+        <require_module version="${htmlformentryVersion}">
+            org.openmrs.module.htmlformentry
+        </require_module>
+
+        <require_module version="${htmlformentryuiVersion}">
+            org.openmrs.module.htmlformentryui
+        </require_module>
 			
 	</require_modules>
 	<!-- / Required Modules -->
