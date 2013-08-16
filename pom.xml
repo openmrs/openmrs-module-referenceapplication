@@ -47,7 +47,7 @@
         <namephoneticsVersion>1.3.7-SNAPSHOT</namephoneticsVersion>
         <registrationcoreVersion>1.0-SNAPSHOT</registrationcoreVersion>
         <idgenVersion>2.3</idgenVersion>
-        <htmlformentryVersion>2.1.4-SNAPSHOT</htmlformentryVersion>
+        <htmlformentryVersion>2.1.5</htmlformentryVersion>
         <htmlformentry19extVersion>1.3</htmlformentry19extVersion>
         <htmlformentryuiVersion>1.0-SNAPSHOT</htmlformentryuiVersion>
 	</properties>
