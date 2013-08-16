@@ -215,7 +215,7 @@
             <h3><uimessage code="referenceapplication.vitals.heartRate.title"/></h3>
 
             <p>
-                <obs conceptId="SNOMED CT:PULSE" id="heart_rate" showUnits="referenceapplication.units.perMinute" unitsCssClass="append-to-value"/>
+                <obs conceptId="CIEL:5087" id="heart_rate" showUnits="referenceapplication.units.perMinute" unitsCssClass="append-to-value"/>
             </p>
         </fieldset>
 
@@ -224,7 +224,7 @@
             <h3><uimessage code="referenceapplication.vitals.respiratoryRate.title"/></h3>
 
             <p>
-                <obs conceptId="SNOMED CT:RESPIRATORY RATE" id="respiratory_rate" showUnits="referenceapplication.units.perMinute" unitsCssClass="append-to-value"/>
+                <obs conceptId="CIEL:5242" id="respiratory_rate" showUnits="referenceapplication.units.perMinute" unitsCssClass="append-to-value"/>
             </p>
         </fieldset>
 
@@ -233,13 +233,13 @@
             <h3><uimessage code="referenceapplication.vitals.bloodPressure.title"/></h3>
 
             <p class="left">
-                <obs conceptId="SNOMED CT:SYSTOLIC BLOOD PRESSURE" id="bp_systolic"/>
+                <obs conceptId="CIEL:5085" id="bp_systolic"/>
             </p>
             <p class="left">
                 /
             </p>
             <p class="left">
-                <obs conceptId="SNOMED CT:DIASTOLIC BLOOD PRESSURE" id="bp_diastolic"/>
+                <obs conceptId="CIEL:5086" id="bp_diastolic"/>
             </p>
         </fieldset>
 
@@ -248,7 +248,7 @@
             <h3><uimessage code="referenceapplication.vitals.o2sat.title"/></h3>
 
             <p>
-                <obs conceptId="SNOMED CT:BLOOD OXYGEN SATURATION" id="o2_sat" showUnits="referenceapplication.units.percent" unitsCssClass="append-to-value"/>
+                <obs conceptId="CIEL:5092" id="o2_sat" showUnits="referenceapplication.units.percent" unitsCssClass="append-to-value"/>
             </p>
         </fieldset>
 
@@ -260,7 +260,7 @@
                 <h3><uimessage code="referenceapplication.vitals.muac.title"/></h3>
 
                 <p>
-                    <obs conceptId="SNOMED CT:MIDDLE UPPER ARM CIRCUMFERENCE (MM)" id="muac" showUnits="referenceapplication.units.millimeters" unitsCssClass="append-to-value"/>
+                    <obs conceptId="CIEL:1343" id="muac" showUnits="referenceapplication.units.millimeters" unitsCssClass="append-to-value"/>
                 </p>
             </fieldset>
         </includeIf>
