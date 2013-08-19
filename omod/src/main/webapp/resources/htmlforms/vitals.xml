@@ -143,7 +143,7 @@
                 <p class='left'>
                     <span class='obs-field'>
                         <input type="text" id="height" size="5" min="4" max="89" class="number numeric-range"/>
-                        <span class="append-to-value"><uimessage code="referenceapplication.units.centimeters"/></span>
+                        <span class="append-to-value"><uimessage code="uicommons.units.centimeters"/></span>
                         <span class="error field-error" style="display: none"></span>
                     </span>
                 </p>
@@ -161,7 +161,7 @@
                 <p class='left'>
                     <span class='obs-field'>
                         <input type="text" id="weight" size="5" min="0.3" max="550" class="number numeric-range"/>
-                        <span class="append-to-value"><uimessage code="referenceapplication.units.kilograms"/></span>
+                        <span class="append-to-value"><uimessage code="uicommons.units.kilograms"/></span>
                         <span class="error field-error" style="display: none"></span>
                     </span>
                 </p>
@@ -202,7 +202,7 @@
                 <p class='left'>
                     <span class='obs-field'>
                         <input type="text" id="temperature" size="5" min="77.0" max="109" class="number numeric-range"/>
-                        <span class="append-to-value"><uimessage code="referenceapplication.units.degreesCelsius"/></span>
+                        <span class="append-to-value"><uimessage code="uicommons.units.degreesCelsius"/></span>
                         <span class="error field-error" style="display: none"></span>
                     </span>
                 </p>
@@ -215,7 +215,7 @@
             <h3><uimessage code="referenceapplication.vitals.heartRate.title"/></h3>
 
             <p>
-                <obs conceptId="CIEL:5087" id="heart_rate" showUnits="referenceapplication.units.perMinute" unitsCssClass="append-to-value"/>
+                <obs conceptId="CIEL:5087" id="heart_rate" showUnits="uicommons.units.perMinute" unitsCssClass="append-to-value"/>
             </p>
         </fieldset>
 
@@ -224,7 +224,7 @@
             <h3><uimessage code="referenceapplication.vitals.respiratoryRate.title"/></h3>
 
             <p>
-                <obs conceptId="CIEL:5242" id="respiratory_rate" showUnits="referenceapplication.units.perMinute" unitsCssClass="append-to-value"/>
+                <obs conceptId="CIEL:5242" id="respiratory_rate" showUnits="uicommons.units.perMinute" unitsCssClass="append-to-value"/>
             </p>
         </fieldset>
 
@@ -248,7 +248,7 @@
             <h3><uimessage code="referenceapplication.vitals.o2sat.title"/></h3>
 
             <p>
-                <obs conceptId="CIEL:5092" id="o2_sat" showUnits="referenceapplication.units.percent" unitsCssClass="append-to-value"/>
+                <obs conceptId="CIEL:5092" id="o2_sat" showUnits="uicommons.units.percent" unitsCssClass="append-to-value"/>
             </p>
         </fieldset>
 
@@ -260,7 +260,7 @@
                 <h3><uimessage code="referenceapplication.vitals.muac.title"/></h3>
 
                 <p>
-                    <obs conceptId="CIEL:1343" id="muac" showUnits="referenceapplication.units.millimeters" unitsCssClass="append-to-value"/>
+                    <obs conceptId="CIEL:1343" id="muac" showUnits="uicommons.units.millimeters" unitsCssClass="append-to-value"/>
                 </p>
             </fieldset>
         </includeIf>

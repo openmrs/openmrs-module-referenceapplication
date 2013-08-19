@@ -127,7 +127,9 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
              FormService formService = Context.getFormService();
              HtmlFormEntryService htmlFormEntryService = Context.getService(HtmlFormEntryService.class);
 
-             List<String> htmlforms = Arrays.asList("referenceapplication:htmlforms/vitals.xml");
+ 			 List<String> htmlforms = Arrays.asList("referenceapplication:htmlforms/vitals.xml",
+			    "referenceapplication:htmlforms/consultNote.xml", "referenceapplication:htmlforms/simpleAdmission.xml",
+			    "referenceapplication:htmlforms/simpleDischarge.xml", "referenceapplication:htmlforms/simpleTransfer.xml");
 
              for (String htmlform : htmlforms) {
                  HtmlFormUtil.getHtmlFormFromUiResource(resourceFactory, formService, htmlFormEntryService, htmlform);
