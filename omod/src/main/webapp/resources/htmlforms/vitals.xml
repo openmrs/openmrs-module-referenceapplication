@@ -121,7 +121,7 @@
             <legend>Who?</legend>
             <label>Who?</label>
 
-            <encounterProviderAndRole default="currentUser" encounterRole="25fde80e-2ce3-43e6-9a5b-9dbe12497804" required="true"/>
+            <encounterProviderAndRole default="currentUser" encounterRole="240b26f9-dd88-4172-823d-4a8bfeb7841f" required="true"/>
         </fieldset>
 
         <fieldset>
