@@ -136,18 +136,10 @@
         <fieldset>
             <legend><uimessage code="referenceapplication.vitals.height.title"/></legend>
             <h3><uimessage code="referenceapplication.vitals.height.title"/></h3>
-
-            <!-- only show/handle the lbs field if we are in 'ENTER' mode -->
-            <!-- TODO: handle this is 'EDIT' mode as well -->
-            <ifMode mode="ENTER">
-                <p class='left'>
-                    <span class='obs-field'>
-                        <input type="text" id="height" size="5" min="4" max="89" class="number numeric-range"/>
-                        <span class="append-to-value"><uimessage code="uicommons.units.centimeters"/></span>
-                        <span class="error field-error" style="display: none"></span>
-                    </span>
-                </p>
-            </ifMode>
+            
+            <p class="left">
+                <obs conceptId="CIEL:5090" id="height" showUnits="uicommons.units.centimeters" unitsCssClass="append-to-value"/>
+            </p>
 
         </fieldset>
 
@@ -155,17 +147,9 @@
             <legend><uimessage code="referenceapplication.vitals.weight.title"/></legend>
             <h3><uimessage code="referenceapplication.vitals.weight.title"/></h3>
 
-            <!-- only show/handle the lbs field if we are in 'ENTER' mode -->
-            <!-- TODO: handle this is 'EDIT' mode as well -->
-            <ifMode mode="ENTER">
-                <p class='left'>
-                    <span class='obs-field'>
-                        <input type="text" id="weight" size="5" min="0.3" max="550" class="number numeric-range"/>
-                        <span class="append-to-value"><uimessage code="uicommons.units.kilograms"/></span>
-                        <span class="error field-error" style="display: none"></span>
-                    </span>
-                </p>
-            </ifMode>
+            <p class="left">
+                <obs conceptId="CIEL:5089" id="weight" showUnits="uicommons.units.kilograms" unitsCssClass="append-to-value"/>
+            </p>
 
         </fieldset>
 
@@ -195,18 +179,10 @@
         <fieldset>
             <legend><uimessage code="referenceapplication.vitals.temperature.title"/></legend>
             <h3><uimessage code="referenceapplication.vitals.temperature.title"/></h3>
-
-            <!-- only show/handle the fahrenheit field if we are in 'ENTER' mode -->
-            <!-- TODO: handle this is 'EDIT' mode as well -->
-            <ifMode mode="ENTER">
-                <p class='left'>
-                    <span class='obs-field'>
-                        <input type="text" id="temperature" size="5" min="77.0" max="109" class="number numeric-range"/>
-                        <span class="append-to-value"><uimessage code="uicommons.units.degreesCelsius"/></span>
-                        <span class="error field-error" style="display: none"></span>
-                    </span>
-                </p>
-            </ifMode>
+            
+            <p class="left">
+                <obs conceptId="CIEL:5088" id="temperature" showUnits="uicommons.units.degreesCelsius" unitsCssClass="append-to-value"/>
+            </p>
 
         </fieldset>
 

@@ -39,7 +39,7 @@
         "id": "referenceapplication.realTime.vitals",
         "extensionPointId": "patientDashboard.visitActions",
         "type": "link",
-        "label": "referenceapplication.task.vitals.label",
+        "label": "referenceapplication.app.capturevitals.title",
         "url": "htmlformentryui/htmlform/enterHtmlFormWithSimpleUi.page?patientId={{patientId}}&visitId={{visit.id}}&definitionUiResource=referenceapplication:htmlforms/vitals.xml",
         "icon": "icon-vitals",
         "order": 52,
