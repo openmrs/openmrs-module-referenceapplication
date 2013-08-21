@@ -1,0 +1,17 @@
+[
+    {
+        "id": "referenceapplication.vitalsapp",
+        "extensions": [
+            {
+                "id": "referenceapplication.vitals",
+			    "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
+			    "type": "link",
+			    "label": "referenceapplication.app.capturevitals.title",
+			    "url": "coreapps/vitals/findPatient.page",
+			    "icon": "icon-vitals",
+			    "order": 1,
+			    "requiredPrivilege": "Task: referenceapplication.vitals"
+            }
+        ]
+    }
+]
