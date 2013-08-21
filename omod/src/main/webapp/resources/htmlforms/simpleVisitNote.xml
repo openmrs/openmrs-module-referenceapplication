@@ -1,4 +1,4 @@
-<htmlform formUuid="c75f120a-04ec-11e3-8780-2b40bef9a44b" formName="Clinic Consult" formEncounterType="92fd09b4-5335-4f7e-9f63-b2a663fd09a6" formVersion="1.0">
+<htmlform formUuid="c75f120a-04ec-11e3-8780-2b40bef9a44b" formName="Visit Note" formEncounterType="d7151f82-c1f3-4152-a605-2f9ea7414a79" formVersion="1.0">
 
     <style type="text/css">
         #who-when-where {
@@ -13,10 +13,6 @@
 
         #where > input[type=text] {
             display: inline-block;
-        }
-
-        .narrow {
-            width: 200px;
         }
 
         .field-error {
@@ -42,33 +38,22 @@
                 margin-bottom: 20px;
             }
         </ifMode>
-
-        <ifMode mode="EDIT">
-            #disposition small {
-                font-size: 100%;
-                display: block;
-            }
-
-            #disposition span {
-                padding-left: 15px;
-            }
-        </ifMode>
     </style>
 
     <ifMode mode="VIEW" include="false">
-        <h2><uimessage code="referenceapplicaton.clinic.consult.title"/></h2>
+        <h2><uimessage code="referenceapplication.visitNote.title"/></h2>
 
         <div id="who-when-where">
             <p id="who">
-                <label><uimessage code="Provider.title"/></label>
+                <label><uimessage code="coreapps.patientDashBoard.provider"/></label>
                 <span><encounterProvider default="currentUser" required="true"  /></span>
             </p>
             <p id="when">
-                <label><uimessage code="Location.title"/></label>
+                <label><uimessage code="coreapps.patientDashBoard.location"/></label>
                 <span><encounterLocation default="SessionAttribute:sessionContext.sessionLocationId"/></span>
             </p>
             <p id="where">
-                <label><uimessage code="emr.patientDashBoard.date"/></label>
+                <label><uimessage code="coreapps.patientDashBoard.date"/></label>
                 <span><encounterDate id="encounterDate" default="now" /></span>
             </p>
         </div>
@@ -78,14 +63,9 @@
 
         <encounterDiagnoses required="true" selectedDiagnosesTarget="#encounter-diagnoses-target"/>
 
-        <p class="narrow">
-            <label><lookup expression="fn.getConcept('PIH:RETURN VISIT DATE').name"/></label>
-            <obs conceptId="PIH:RETURN VISIT DATE" allowFutureDates="true"/>
-        </p>
-
         <p>
             <label><uimessage code="emr.consult.freeTextComments"/></label>
-            <obs conceptId="org.openmrs.module.emr:Consult Free Text Comments" style="textarea" rows="5"/>
+            <obs conceptId="CIEL:159395" style="textarea" rows="5"/>
         </p>
 
     </div>

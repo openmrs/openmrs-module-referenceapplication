@@ -1,4 +1,16 @@
 [
+    { // real-time simple visit note
+        "id": "referenceapplication.realTime.simpleVisitNote",
+        "extensionPointId": "patientDashboard.visitActions",
+        "type": "link",
+        "label": "referenceapplication.visitNote.title",
+        "url": "htmlformentryui/htmlform/enterHtmlFormWithStandardUi.page?patientId={{patientId}}&visitId={{visit.id}}&definitionUiResource=referenceapplication:htmlforms/simpleVisitNote.xml",
+        "icon": "icon-stethoscope",
+        "order": 30,
+        "requiredPrivilege": "Task: referenceapplication.simpleVisitNote",
+        "require": "visit.active"
+    },
+
     { // real-time simple admission form (not a full admission note)
         "id": "referenceapplication.realTime.simpleAdmission",
         "extensionPointId": "patientDashboard.visitActions",
@@ -34,7 +46,7 @@
         "requiredPrivilege": "Task: referenceapplication.simpleTransfer",
         "require": "visit.active && visit.admitted"
     },
-    
+
     {
         "id": "referenceapplication.realTime.vitals",
         "extensionPointId": "patientDashboard.visitActions",

@@ -13,9 +13,6 @@
  */
 package org.openmrs.module.referenceapplication;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.GlobalProperty;
@@ -34,6 +31,9 @@ import org.openmrs.module.namephonetics.NamePhoneticsConstants;
 import org.openmrs.module.referencemetadata.ReferenceMetadataProperties;
 import org.openmrs.module.registrationcore.RegistrationCoreConstants;
 import org.openmrs.ui.framework.resource.ResourceFactory;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * This class contains the logic that is run every time this module is either started or stopped.
@@ -128,7 +128,7 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
              HtmlFormEntryService htmlFormEntryService = Context.getService(HtmlFormEntryService.class);
 
  			 List<String> htmlforms = Arrays.asList("referenceapplication:htmlforms/vitals.xml",
-			    "referenceapplication:htmlforms/consultNote.xml", "referenceapplication:htmlforms/simpleAdmission.xml",
+			    "referenceapplication:htmlforms/simpleVisitNote.xml", "referenceapplication:htmlforms/simpleAdmission.xml",
 			    "referenceapplication:htmlforms/simpleDischarge.xml", "referenceapplication:htmlforms/simpleTransfer.xml");
 
              for (String htmlform : htmlforms) {
