@@ -134,8 +134,8 @@
 
     <section id="vitals" sectionTag="section" headerStyle="title" headerCode="referenceapplication.vitals.title">
         <fieldset>
-            <legend><uimessage code="referenceapplication.vitals.height.title"/></legend>
-            <h3><uimessage code="referenceapplication.vitals.height.title"/></h3>
+            <legend><lookup expression="fn.getConcept('CIEL:5090').name"/></legend>
+            <h3><lookup expression="fn.getConcept('CIEL:5090').name"/></h3>
             
             <p class="left">
                 <obs conceptId="CIEL:5090" id="height" showUnits="uicommons.units.centimeters" unitsCssClass="append-to-value"/>
@@ -144,8 +144,8 @@
         </fieldset>
 
         <fieldset>
-            <legend><uimessage code="referenceapplication.vitals.weight.title"/></legend>
-            <h3><uimessage code="referenceapplication.vitals.weight.title"/></h3>
+            <legend><lookup expression="fn.getConcept('CIEL:5089').name"/></legend>
+            <h3><lookup expression="fn.getConcept('CIEL:5089').name"/></h3>
 
             <p class="left">
                 <obs conceptId="CIEL:5089" id="weight" showUnits="uicommons.units.kilograms" unitsCssClass="append-to-value"/>
@@ -177,8 +177,8 @@
         </includeIf>
 
         <fieldset>
-            <legend><uimessage code="referenceapplication.vitals.temperature.title"/></legend>
-            <h3><uimessage code="referenceapplication.vitals.temperature.title"/></h3>
+            <legend><lookup expression="fn.getConcept('CIEL:5088').name"/></legend>
+            <h3><lookup expression="fn.getConcept('CIEL:5088').name"/></h3>
             
             <p class="left">
                 <obs conceptId="CIEL:5088" id="temperature" showUnits="uicommons.units.degreesCelsius" unitsCssClass="append-to-value"/>
@@ -187,8 +187,8 @@
         </fieldset>
 
         <fieldset>
-            <legend><uimessage code="referenceapplication.vitals.heartRate.title"/></legend>
-            <h3><uimessage code="referenceapplication.vitals.heartRate.title"/></h3>
+            <legend><lookup expression="fn.getConcept('CIEL:5087').name"/></legend>
+            <h3><lookup expression="fn.getConcept('CIEL:5087').name"/></h3>
 
             <p>
                 <obs conceptId="CIEL:5087" id="heart_rate" showUnits="uicommons.units.perMinute" unitsCssClass="append-to-value"/>
@@ -196,8 +196,8 @@
         </fieldset>
 
         <fieldset>
-            <legend><uimessage code="referenceapplication.vitals.respiratoryRate.title"/></legend>
-            <h3><uimessage code="referenceapplication.vitals.respiratoryRate.title"/></h3>
+            <legend><lookup expression="fn.getConcept('CIEL:5242').name"/></legend>
+            <h3><lookup expression="fn.getConcept('CIEL:5242').name"/></h3>
 
             <p>
                 <obs conceptId="CIEL:5242" id="respiratory_rate" showUnits="uicommons.units.perMinute" unitsCssClass="append-to-value"/>
@@ -220,8 +220,8 @@
         </fieldset>
 
         <fieldset>
-            <legend><uimessage code="referenceapplication.vitals.o2sat.title"/></legend>
-            <h3><uimessage code="referenceapplication.vitals.o2sat.title"/></h3>
+            <legend><lookup expression="fn.getConcept('CIEL:5092').name"/></legend>
+            <h3><lookup expression="fn.getConcept('CIEL:5092').name"/></h3>
 
             <p>
                 <obs conceptId="CIEL:5092" id="o2_sat" showUnits="uicommons.units.percent" unitsCssClass="append-to-value"/>
@@ -232,8 +232,8 @@
         <!-- only show BMI if patient is less than 13 years old (on the encounterDate) -->
         <includeIf velocityTest="13 > $patient.getAge($encounter.getEncounterDatetime())">
             <fieldset>
-                <legend><uimessage code="referenceapplication.vitals.muac.navigation.title"/></legend>
-                <h3><uimessage code="referenceapplication.vitals.muac.title"/></h3>
+                <legend><lookup expression="fn.getConcept('CIEL:1343').name"/></legend>
+                <h3><lookup expression="fn.getConcept('CIEL:1343').name"/></h3>
 
                 <p>
                     <obs conceptId="CIEL:1343" id="muac" showUnits="uicommons.units.millimeters" unitsCssClass="append-to-value"/>
