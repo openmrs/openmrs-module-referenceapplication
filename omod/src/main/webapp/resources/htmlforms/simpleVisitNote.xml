@@ -64,7 +64,7 @@
         <encounterDiagnoses required="true" selectedDiagnosesTarget="#encounter-diagnoses-target"/>
 
         <p>
-            <label><uimessage code="emr.consult.freeTextComments"/></label>
+            <label><uimessage code="coreapps.consult.freeTextComments"/></label>
             <obs conceptId="CIEL:159395" style="textarea" rows="5"/>
         </p>
 
