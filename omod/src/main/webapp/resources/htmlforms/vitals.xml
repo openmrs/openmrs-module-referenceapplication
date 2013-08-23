@@ -66,6 +66,14 @@
 
                     updateBmi();
                 });
+                
+                jq(function() {
+				    jq('#bp_systolic input[type=text]').attr('min', '50');
+				});
+				
+				jq(function() {
+				    jq('#bp_diastolic input[type=text]').attr('min', '30');
+				});
             </script>
         </ifMode>
 
