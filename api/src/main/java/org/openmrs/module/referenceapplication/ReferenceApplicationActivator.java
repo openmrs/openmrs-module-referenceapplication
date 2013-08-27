@@ -79,6 +79,7 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
 	        setupEmrApiGlobalProperties(administrationService);
 	        setupNamePhoneticsGlobalProperties(administrationService);
 	        setupRegistrationcoreGlobalProperties(administrationService);
+	        setupConceptManagementAppsGlobalProperties(administrationService);
 	        setupHtmlForms();
 		} 
 		catch (Exception e) {
@@ -88,6 +89,11 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
         }
 
         log.info("Reference Application Module started");
+	}
+	
+	public void setupConceptManagementAppsGlobalProperties(AdministrationService administrationService) {
+		setGlobalProperty(administrationService, "conceptmanagementapps.snomedCtConceptSource",
+		    "1ADDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 	}
 
     public void setupEmrApiGlobalProperties(AdministrationService administrationService) {
