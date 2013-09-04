@@ -57,5 +57,17 @@
         "order": 52,
         "requiredPrivilege": "Task: referenceapplication.vitals",
         "require": "visit.active"
+    },
+
+    {
+        "id": "referenceapplication.realTime.endVisit",
+        "extensionPointId": "patientDashboard.visitActions",
+        "type": "script",
+        "label": "coreapps.task.endVisit.label",
+        "script": "visit.showEndVisitDialog({{visit.id}})",
+        "icon": "icon-off",
+        "require": "visit.active",
+        "order": 20,
+        "requiredPrivilege": "Task: coreapps.endVisit"
     }
 ]
