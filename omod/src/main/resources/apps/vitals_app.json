@@ -16,7 +16,8 @@
         ],
         "config": {
             "afterSelectedUrl": "/coreapps/vitals/patient.page?patientId={{patientId}}",
-            "label": "referenceapplication.app.capturevitals.title"
+            "label": "referenceapplication.app.capturevitals.title",
+            "heading": "referenceapplication.app.capturevitalsforpatient.label"
         }
     }
 ]
