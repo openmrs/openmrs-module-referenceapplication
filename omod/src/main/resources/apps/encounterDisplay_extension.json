@@ -7,7 +7,28 @@
             "templateId": "defaultEncounterTemplate",
             "templateFragmentProviderName": "coreapps",
             "templateFragmentId": "patientdashboard/encountertemplate/defaultEncounterTemplate",
-            "supportedEncounterTypes": {}
+            "supportedEncounterTypes": {
+                "d7151f82-c1f3-4152-a605-2f9ea7414a79": { // Visit Note
+                    "icon": "icon-stethoscope",
+                    "editable": true
+                },
+                "67a71486-1a54-468f-ac3e-7091a9a79584": { // Vitals
+                    "icon": "icon-vitals",
+                    "editable": true
+                },
+                "e22e39fd-7db2-45e7-80f1-60fa0d5a4378": { // Admission
+                    "icon": "icon-signin",
+                    "editable": true
+                },
+                "181820aa-88c9-479b-9077-af92f5364329": { // Discharge
+                    "icon": "icon-signout",
+                    "editable": true
+                },
+                "7b68d557-85ef-4fc8-b767-4fa4f5eb5c23": { // Transfer
+                    "icon": "icon-random",
+                    "editable": true
+                }
+            }
         }
     }
 ]
