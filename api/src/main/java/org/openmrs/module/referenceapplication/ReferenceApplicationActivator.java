@@ -103,6 +103,8 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
         setGlobalProperty(administrationService, EmrApiConstants.GP_CHECK_IN_ENCOUNTER_TYPE, ReferenceMetadataProperties.CHECK_IN_ENCOUNTER_TYPE_UUID);
 
         setGlobalProperty(administrationService, EmrApiConstants.GP_AT_FACILITY_VISIT_TYPE, ReferenceMetadataProperties.FACILITY_VISIT_TYPE_UUID);
+
+        setGlobalProperty(administrationService, EmrApiConstants.GP_DIAGNOSIS_SET_OF_SETS, ReferenceMetadataProperties.ICPC_DIAGNOSIS_CATEGORIES_CONCEPT_UUID);
     }
 
     private void setupNamePhoneticsGlobalProperties(AdministrationService administrationService) {
