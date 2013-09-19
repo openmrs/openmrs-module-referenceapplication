@@ -50,7 +50,7 @@
             </p>
             <p id="when">
                 <label><uimessage code="coreapps.patientDashBoard.location"/></label>
-                <span><encounterLocation default="SessionAttribute:sessionContext.sessionLocationId"/></span>
+                <span><encounterLocation default="SessionAttribute:emrContext.sessionLocationId"/></span>
             </p>
             <p id="where">
                 <label><uimessage code="coreapps.patientDashBoard.date"/></label>
