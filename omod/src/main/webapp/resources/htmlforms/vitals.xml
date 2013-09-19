@@ -172,7 +172,9 @@
                     <uimessage code="referenceapplication.vitals.bmi.instructions"/>
                 </span>
                 <span id="calculated-bmi-wrapper">
-                    <uimessage code="referenceapplication.vitals.bmi.display"/>
+                    <ifMode mode="VIEW" include="false">
+                        <uimessage code="referenceapplication.vitals.bmi.display"/>
+                    </ifMode>
                     <span id='calculated-bmi'></span>
                 </span>
 
