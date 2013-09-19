@@ -16,13 +16,17 @@ package org.openmrs.module.referenceapplication;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.GlobalProperty;
+import org.openmrs.Location;
+import org.openmrs.LocationTag;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.FormService;
+import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.Module;
 import org.openmrs.module.ModuleActivator;
 import org.openmrs.module.ModuleFactory;
+import org.openmrs.module.appframework.AppFrameworkConstants;
 import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.emrapi.EmrApiConstants;
 import org.openmrs.module.htmlformentry.HtmlFormEntryService;
@@ -80,6 +84,7 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
 	        setupNamePhoneticsGlobalProperties(administrationService);
 	        setupRegistrationcoreGlobalProperties(administrationService);
 	        setupConceptManagementAppsGlobalProperties(administrationService);
+            setupLoginLocation();
 	        setupHtmlForms();
 		} 
 		catch (Exception e) {
@@ -127,6 +132,30 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
         }
         gp.setPropertyValue(propertyValue);
         administrationService.saveGlobalProperty(gp);
+    }
+
+    private void setupLoginLocation() {
+        LocationService ls = Context.getLocationService();
+        LocationTag loginTag = ls.getLocationTagByUuid(AppFrameworkConstants.LOCATION_TAG_SUPPORTS_LOGIN_UUID);
+        if (loginTag != null) {
+            List<Location> loginLocations = ls.getLocationsByTag(loginTag);
+            if (loginLocations.isEmpty()) {
+                Location loginLocation = ls.getLocationByUuid("8d6c993e-c2cc-11de-8d13-0010c6dffd0f");
+                if (loginLocation == null) {
+                    loginLocation = ls.getLocation("Unknown Location");
+                    if (loginLocation == null) {
+                        List<Location> locations = ls.getAllLocations(false);
+                        if (!locations.isEmpty()) {
+                            loginLocation = locations.get(0);
+                        }
+                    }
+                }
+                if (loginLocation != null) {
+                    loginLocation.addTag(loginTag);
+                    ls.saveLocation(loginLocation);
+                }
+            }
+        }
     }
     
     private void setupHtmlForms() throws Exception {
