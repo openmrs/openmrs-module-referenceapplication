@@ -8,6 +8,7 @@ import org.openmrs.api.LocationService;
 import org.openmrs.module.appframework.AppFrameworkConstants;
 import org.openmrs.module.emrapi.EmrApiProperties;
 import org.openmrs.module.emrapi.utils.MetadataUtil;
+import org.openmrs.module.referencemetadata.ReferenceMetadataConstants;
 import org.openmrs.module.referencemetadata.ReferenceMetadataProperties;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +80,7 @@ public class ReferenceApplicationActivatorComponentTest extends BaseModuleContex
         assertNull(unknownLocation);
         final String tag = "Login Location";
         LocationTag loginTag = locationService.getLocationTagByUuid(AppFrameworkConstants.LOCATION_TAG_SUPPORTS_LOGIN_UUID);
-        assertNull(locationService.getLocation("8d6c993e-c2cc-11de-8d13-0010c6dffd0f"));
+        assertNull(locationService.getLocationByUuid(ReferenceMetadataConstants.UNKNOWN_LOCATION_UUID));
         assertEquals(0, locationService.getLocationsByTag(loginTag).size());
         new ReferenceApplicationActivator().started();
         assertEquals(1, locationService.getLocationsByTag(loginTag).size());

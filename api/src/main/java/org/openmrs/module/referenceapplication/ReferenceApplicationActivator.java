@@ -32,6 +32,7 @@ import org.openmrs.module.emrapi.EmrApiConstants;
 import org.openmrs.module.htmlformentry.HtmlFormEntryService;
 import org.openmrs.module.htmlformentryui.HtmlFormUtil;
 import org.openmrs.module.namephonetics.NamePhoneticsConstants;
+import org.openmrs.module.referencemetadata.ReferenceMetadataConstants;
 import org.openmrs.module.referencemetadata.ReferenceMetadataProperties;
 import org.openmrs.module.registrationcore.RegistrationCoreConstants;
 import org.openmrs.ui.framework.resource.ResourceFactory;
@@ -140,7 +141,7 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
         if (loginTag != null) {
             List<Location> loginLocations = ls.getLocationsByTag(loginTag);
             if (loginLocations.isEmpty()) {
-                Location loginLocation = ls.getLocationByUuid("8d6c993e-c2cc-11de-8d13-0010c6dffd0f");
+                Location loginLocation = ls.getLocationByUuid(ReferenceMetadataConstants.UNKNOWN_LOCATION_UUID);
                 if (loginLocation == null) {
                     loginLocation = ls.getLocation("Unknown Location");
                     if (loginLocation == null) {
