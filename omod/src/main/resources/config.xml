@@ -63,5 +63,15 @@
 	</messages>
 	<!-- /Internationalization -->
 
+	<privilege>
+		<name>App: referenceapplication.vitals</name>
+		<description>Able to access the vitals app</description>
+	</privilege>
+
+	<privilege>
+		<name>App: referenceapplication.legacyAdmin</name>
+		<description>Able to access the advanced administration app</description>
+	</privilege>
+
 </module>
 

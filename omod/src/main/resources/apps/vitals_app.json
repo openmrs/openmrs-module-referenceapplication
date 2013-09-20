@@ -1,6 +1,6 @@
 [
     {
-        "id": "referenceapplication.vitalsapp",
+        "id": "referenceapplication.vitals",
         "instanceOf": "coreapps.template.findPatient",
         "extensions": [
             {
@@ -11,7 +11,7 @@
 			    "url": "coreapps/findpatient/findPatient.page?app=referenceapplication.vitalsapp",
 			    "icon": "icon-vitals",
 			    "order": 1,
-			    "requiredPrivilege": "Task: referenceapplication.vitals"
+			    "requiredPrivilege": "App: referenceapplication.vitals"
             }
         ],
         "config": {

@@ -1,12 +1,12 @@
 [
     {
-        "id": "legacy.admin",
+        "id": "referenceapplication.legacyAdmin",
         "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
         "type": "link",
         "label": "referenceapplication.app.legacy.admin.label",
         "url": "admin/index.htm",
         "icon": "icon-cogs",
         "order": 99,
-        "requiredPrivilege": "App: legacy.admin"
+        "requiredPrivilege": "App: referenceapplication.legacyAdmin"
     }
 ]
