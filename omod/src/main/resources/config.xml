@@ -73,5 +73,10 @@
 		<description>Able to access the advanced administration app</description>
 	</privilege>
 
+	<privilege>
+		<name>App: referenceapplication.styleGuide</name>
+		<description>Able to access the style guide app</description>
+	</privilege>
+
 </module>
 

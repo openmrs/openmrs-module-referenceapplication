@@ -6,6 +6,7 @@
         "label": "referenceapplication.app.styleguide.label",
         "url": "uicommons/styleGuide.page",
         "icon": "icon-magic",
+		"requiredPrivilege": "App: referenceapplication.styleGuide",
         "order": 95
     }
 ]
