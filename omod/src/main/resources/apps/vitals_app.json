@@ -8,7 +8,7 @@
 			    "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
 			    "type": "link",
 			    "label": "referenceapplication.app.capturevitals.title",
-			    "url": "coreapps/findpatient/findPatient.page?app=referenceapplication.vitalsapp",
+			    "url": "coreapps/findpatient/findPatient.page?app=referenceapplication.vitals",
 			    "icon": "icon-vitals",
 			    "order": 1,
 			    "requiredPrivilege": "App: referenceapplication.vitals"
