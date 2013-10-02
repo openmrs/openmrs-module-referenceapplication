@@ -38,7 +38,7 @@
         <referencemetadataVersion>1.0-SNAPSHOT</referencemetadataVersion>
 		<appframeworkVersion>2.0</appframeworkVersion>
 		<uiframeworkVersion>3.0</uiframeworkVersion>
-		<uicommonsVersion>1.0-SNAPSHOT</uicommonsVersion>
+		<uicommonsVersion>1.0</uicommonsVersion>
         <appuiVersion>1.0-SNAPSHOT</appuiVersion>
         <registrationappVersion>1.0-SNAPSHOT</registrationappVersion>
         <emrapiVersion>1.0-SNAPSHOT</emrapiVersion>
