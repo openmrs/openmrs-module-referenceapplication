@@ -65,7 +65,7 @@
 
         <p>
             <label><uimessage code="coreapps.consult.freeTextComments"/></label>
-            <obs conceptId="CIEL:159395" style="textarea" rows="5"/>
+            <obs conceptId="CIEL:162169" style="textarea" rows="5"/>
         </p>
 
     </div>
