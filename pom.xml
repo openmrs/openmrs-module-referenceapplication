@@ -22,9 +22,9 @@
 	</organization>
 
 	<scm>
-		<connection>scm:git:git@github.com:openmrs/openmrs-module-referenceapplication.git</connection>
-		<developerConnection>scm:git:git@github.com:openmrs/openmrs-module-referenceapplication.git</developerConnection>
-		<url>scm:git:git@github.com:openmrs/openmrs-module-referenceapplication.git</url>
+		<connection>scm:git:https://github.com/openmrs/openmrs-module-referenceapplication</connection>
+		<developerConnection>scm:git:https://github.com/openmrs/openmrs-module-referenceapplication</developerConnection>
+		<url>scm:git:https://github.com/openmrs/openmrs-module-referenceapplication</url>
 	</scm>
 
 	<modules>
@@ -198,6 +198,17 @@
 	<build>
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>2.4.1</version>
+					<configuration>
+						<preparationGoals>clean install</preparationGoals>
+						<autoVersionSubmodules>true</autoVersionSubmodules>
+						<useReleaseProfile>false</useReleaseProfile>
+						<arguments>-Prelease</arguments>
+					</configuration>
+				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
