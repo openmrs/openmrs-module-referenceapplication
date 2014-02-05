@@ -26,7 +26,6 @@ import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.Module;
 import org.openmrs.module.ModuleActivator;
 import org.openmrs.module.ModuleFactory;
-import org.openmrs.module.appframework.AppFrameworkConstants;
 import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.emrapi.EmrApiConstants;
 import org.openmrs.module.htmlformentry.HtmlFormEntryService;
@@ -85,7 +84,10 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
 	        setupNamePhoneticsGlobalProperties(administrationService);
 	        setupRegistrationcoreGlobalProperties(administrationService);
 	        setupConceptManagementAppsGlobalProperties(administrationService);
-            setupLoginLocation();
+            setupTagLocation(ReferenceMetadataConstants.LOGIN_LOCATION_TAG_UUID);
+            setupTagLocation(ReferenceMetadataConstants.ADMISSION_LOCATION_TAG_UUID);
+            setupTagLocation(ReferenceMetadataConstants.TRANSFER_LOCATION_TAG_UUID);
+            setupTagLocation(ReferenceMetadataConstants.VISIT_LOCATION_TAG_UUID);
 	        setupHtmlForms();
 		} 
 		catch (Exception e) {
@@ -135,25 +137,25 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
         administrationService.saveGlobalProperty(gp);
     }
 
-    private void setupLoginLocation() {
+    private void setupTagLocation(String locationTagUuid) {
         LocationService ls = Context.getLocationService();
-        LocationTag loginTag = ls.getLocationTagByUuid(AppFrameworkConstants.LOCATION_TAG_SUPPORTS_LOGIN_UUID);
-        if (loginTag != null) {
-            List<Location> loginLocations = ls.getLocationsByTag(loginTag);
-            if (loginLocations.isEmpty()) {
-                Location loginLocation = ls.getLocationByUuid(ReferenceMetadataConstants.UNKNOWN_LOCATION_UUID);
-                if (loginLocation == null) {
-                    loginLocation = ls.getLocation("Unknown Location");
-                    if (loginLocation == null) {
+        LocationTag tag = ls.getLocationTagByUuid(locationTagUuid);
+        if (tag != null) {
+            List<Location> taggedLocations = ls.getLocationsByTag(tag);
+            if (taggedLocations.isEmpty()) {
+                Location location = ls.getLocationByUuid(ReferenceMetadataConstants.UNKNOWN_LOCATION_UUID);
+                if (location == null) {
+                    location = ls.getLocation("Unknown Location");
+                    if (location == null) {
                         List<Location> locations = ls.getAllLocations(false);
                         if (!locations.isEmpty()) {
-                            loginLocation = locations.get(0);
+                            location = locations.get(0);
                         }
                     }
                 }
-                if (loginLocation != null) {
-                    loginLocation.addTag(loginTag);
-                    ls.saveLocation(loginLocation);
+                if (location != null) {
+                    location.addTag(tag);
+                    ls.saveLocation(location);
                 }
             }
         }
