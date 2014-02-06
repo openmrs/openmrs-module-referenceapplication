@@ -24,8 +24,8 @@
 		<connection>scm:git:https://github.com/openmrs/openmrs-module-referenceapplication</connection>
 		<developerConnection>scm:git:https://github.com/openmrs/openmrs-module-referenceapplication</developerConnection>
 		<url>scm:git:https://github.com/openmrs/openmrs-module-referenceapplication</url>
-	  <tag>HEAD</tag>
-  </scm>
+		<tag>HEAD</tag>
+	</scm>
 
 	<modules>
 		<module>api</module>
