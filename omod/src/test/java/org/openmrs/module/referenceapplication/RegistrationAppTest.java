@@ -1,6 +1,6 @@
 package org.openmrs.module.referenceapplication;
 
-import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -49,8 +49,9 @@ public class RegistrationAppTest {
             allAppTemplates.add(appTemplates);
             List<AppDescriptor> appDescriptors = appFrameworkFactory.getAppDescriptors();
             allAppDescriptors.add(appDescriptors);
+            // This throws an exception for referenceapplication.vitals if coreapps module is not present.
 			allAppDescriptors.setAppTemplatesOnInstances(allAppTemplates);
 		}
-
+		assertNotNull(allAppDescriptors.getAppDescriptor("referenceapplication.vitals"));
 	}
 }
