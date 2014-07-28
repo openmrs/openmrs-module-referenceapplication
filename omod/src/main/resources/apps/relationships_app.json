@@ -1,0 +1,27 @@
+[
+    {
+        "id": "referenceapplication.personalRelationships",
+        "instanceOf": "coreapps.template.relationships",
+        "description": "Lists personal relationships (excluding clinical ones from the reference application)",
+        "order": 23,
+        "config": {
+            "excludeRelationshipTypes": [
+                "8d919b58-c2cc-11de-8d13-0010c6dffd0f", //Doctor/Patient
+                "2a5f4ff4-a179-4b8a-aa4c-40f71956ebbc" // Supervisor/Supervisee
+            ]
+        },
+        "extensions": [
+            {
+                "id": "${project.parent.groupId}.${project.parent.artifactId}.relationships",
+                "extensionPointId": "patientDashboard.overallActions",
+                "type": "link",
+                "label": "coreapps.task.relationships.label",
+                "url": "coreapps/relationships/list.page?app=referenceapplication.personalRelationships&patientId={{patientId}}",
+                "icon": "icon-group",
+                "order": 23,
+                "requiredPrivilege": "Task: referenceapplication.personalRelationships"
+            }
+        ],
+        "requiredPrivilege": "Task: referenceapplication.personalRelationships"
+    }
+]
