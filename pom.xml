@@ -50,6 +50,7 @@
         <htmlformentryVersion>2.2</htmlformentryVersion>
         <htmlformentry19extVersion>1.4</htmlformentry19extVersion>
         <htmlformentryuiVersion>1.0</htmlformentryuiVersion>
+        <coreappsVersion>1.3-SNAPSHOT</coreappsVersion>
 	</properties>
 
     <dependencies>

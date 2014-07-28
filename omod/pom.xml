@@ -44,7 +44,7 @@
             <groupId>org.openmrs.module</groupId>
             <artifactId>coreapps-omod</artifactId>
             <scope>provided</scope>
-            <version>1.2</version>
+            <version>${coreappsVersion}</version>
          </dependency>
         
 	</dependencies>
