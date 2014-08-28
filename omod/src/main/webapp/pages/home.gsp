@@ -8,8 +8,6 @@
 
 <div id="home-container">
 
-	<h1>${ui.message("referenceapplication.home.heading")}</h1>
-
     <% if (authenticatedUser) { %>
         <h4>
             ${ ui.message("referenceapplication.home.currentUser", ui.format(authenticatedUser), ui.format(sessionContext.sessionLocation)) }
