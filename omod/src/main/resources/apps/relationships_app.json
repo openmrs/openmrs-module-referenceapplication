@@ -16,7 +16,7 @@
                 "extensionPointId": "patientDashboard.overallActions",
                 "type": "link",
                 "label": "coreapps.task.relationships.label",
-                "url": "coreapps/relationships/list.page?app=referenceapplication.personalRelationships&patientId={{patientId}}",
+                "url": "coreapps/relationships/list.page?app=referenceapplication.personalRelationships&patientId={{patient.uuid}}",
                 "icon": "icon-group",
                 "order": 23,
                 "requiredPrivilege": "Task: referenceapplication.personalRelationships"
