@@ -51,6 +51,7 @@
         <htmlformentry19extVersion>1.4</htmlformentry19extVersion>
         <htmlformentryuiVersion>1.0</htmlformentryuiVersion>
         <coreappsVersion>1.3-SNAPSHOT</coreappsVersion>
+        <formentryappVersion>1.0-SNAPSHOT</formentryappVersion>
 	</properties>
 
     <dependencies>
