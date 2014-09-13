@@ -76,6 +76,7 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
 	        AppFrameworkService appFrameworkService = Context.getService(AppFrameworkService.class);
 	
 	        appFrameworkService.disableApp("registrationapp.basicRegisterPatient");
+	        appFrameworkService.disableApp("coreapps.awaitingAdmission");
 	
 	        administrationService.saveGlobalProperty(new GlobalProperty("registrationcore.patientNameSearch",
 	                "registrationcore.ExistingPatientNameSearch"));
