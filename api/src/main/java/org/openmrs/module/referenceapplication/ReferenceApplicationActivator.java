@@ -34,9 +34,13 @@ import org.openmrs.module.namephonetics.NamePhoneticsConstants;
 import org.openmrs.module.referencemetadata.ReferenceMetadataConstants;
 import org.openmrs.module.referencemetadata.ReferenceMetadataProperties;
 import org.openmrs.module.registrationcore.RegistrationCoreConstants;
+import org.openmrs.scheduler.SchedulerService;
+import org.openmrs.scheduler.TaskDefinition;
+import org.openmrs.scheduler.tasks.ProcessHL7InQueueTask;
 import org.openmrs.ui.framework.resource.ResourceFactory;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -74,6 +78,7 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
 		try {
 	        AdministrationService administrationService = Context.getAdministrationService();
 	        AppFrameworkService appFrameworkService = Context.getService(AppFrameworkService.class);
+	        SchedulerService schedulerService = Context.getSchedulerService();
 	
 	        appFrameworkService.disableApp("registrationapp.basicRegisterPatient");
 	        appFrameworkService.disableApp("coreapps.awaitingAdmission");
@@ -90,6 +95,7 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
             setupTagLocation(ReferenceMetadataConstants.TRANSFER_LOCATION_TAG_UUID);
             setupTagLocation(ReferenceMetadataConstants.VISIT_LOCATION_TAG_UUID);
 	        setupHtmlForms();
+	        setupHL7ProcessingTask(schedulerService);
 		} 
 		catch (Exception e) {
             Module mod = ModuleFactory.getModuleById(ReferenceApplicationConstants.MODULE_ID);
@@ -186,6 +192,27 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
              }
         }
      }
+    
+	public void setupHL7ProcessingTask(SchedulerService schedulerService) {
+		boolean processHL7taskSet = false;
+		Collection<TaskDefinition> registeredTasks = schedulerService.getRegisteredTasks();
+		for (TaskDefinition registeredTask : registeredTasks) {
+			if (ProcessHL7InQueueTask.class.getName().equals(registeredTask.getTaskClass())) {
+				processHL7taskSet = true;
+				break;
+			}
+		}
+		
+		if (!processHL7taskSet) {
+			TaskDefinition processHL7Task = new TaskDefinition();
+			processHL7Task.setTaskClass(ProcessHL7InQueueTask.class.getName());
+			processHL7Task.setName(ReferenceApplicationConstants.PROCESS_HL7_TASK_NAME);
+			processHL7Task.setStartOnStartup(true);
+			processHL7Task.setRepeatInterval(ReferenceApplicationConstants.PROCESS_HL7_TASK_INTERVAL);
+			
+			schedulerService.saveTask(processHL7Task);
+		}
+	}
 
     /**
 	 * @see ModuleActivator#willStop()
