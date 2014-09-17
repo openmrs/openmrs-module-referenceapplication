@@ -1,5 +1,8 @@
 package org.openmrs.module.referenceapplication;
 
+import java.util.Collection;
+
+import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.Location;
 import org.openmrs.LocationTag;
@@ -10,6 +13,9 @@ import org.openmrs.module.emrapi.EmrApiProperties;
 import org.openmrs.module.emrapi.utils.MetadataUtil;
 import org.openmrs.module.referencemetadata.ReferenceMetadataConstants;
 import org.openmrs.module.referencemetadata.ReferenceMetadataProperties;
+import org.openmrs.scheduler.SchedulerService;
+import org.openmrs.scheduler.TaskDefinition;
+import org.openmrs.scheduler.tasks.ProcessHL7InQueueTask;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,6 +41,9 @@ public class ReferenceApplicationActivatorComponentTest extends BaseModuleContex
 
     @Autowired
     private LocationService locationService;
+    
+    @Autowired
+    private SchedulerService schedulerService;
 
     @Test
     public void testSetUpAdtGlobalProperties() throws Exception {
@@ -85,5 +94,23 @@ public class ReferenceApplicationActivatorComponentTest extends BaseModuleContex
         new ReferenceApplicationActivator().started();
         assertEquals(1, locationService.getLocationsByTag(loginTag).size());
     }
+    
+    /**
+     * Tests that if process hl7 task is set up correctly
+     *
+     * @throws Exception
+     */
+	@Test
+	public void testSetupOfProcessHL7Task() throws Exception {
+		new ReferenceApplicationActivator().started();
+		Collection<TaskDefinition> registeredTasks = schedulerService.getRegisteredTasks();
+		TaskDefinition processHL7Task = null;
+		for (TaskDefinition registeredTask : registeredTasks) {
+			if (ProcessHL7InQueueTask.class.getName().equals(registeredTask.getTaskClass())) {
+				processHL7Task = registeredTask;
+			}
+		}
+		Assert.assertNotNull(processHL7Task);
+	}
 
 }
