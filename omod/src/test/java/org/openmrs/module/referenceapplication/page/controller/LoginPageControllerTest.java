@@ -53,6 +53,9 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
 
+import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.any;
+
 @PrepareForTest({ Context.class, LocationUtility.class })
 @RunWith(PowerMockRunner.class)
 public class LoginPageControllerTest {
@@ -225,8 +228,6 @@ public class LoginPageControllerTest {
 		assertEquals("redirect:" + redirectUrl, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID,
 		    locationService, uiUtils, pageRequest, sessionContext));
 
-		assertEquals(SESSION_LOCATION_ID,
-		    pageRequest.getSession().getAttribute(UiSessionContext.LOCATION_SESSION_ATTRIBUTE, Integer.class));
 	}
 
 	/**
@@ -249,8 +250,6 @@ public class LoginPageControllerTest {
 		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID, locationService,
 		    uiUtils, pageRequest, sessionContext));
 
-		assertEquals(SESSION_LOCATION_ID,
-		    pageRequest.getSession().getAttribute(UiSessionContext.LOCATION_SESSION_ATTRIBUTE, Integer.class));
 	}
 
 	/**
