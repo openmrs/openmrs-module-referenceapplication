@@ -18,4 +18,6 @@ public final class ReferenceApplicationConstants {
 	public static final String MODULE_ID = "referenceapplication";
 	
 	public static final String HOME_PAGE_EXTENSION_POINT_ID = "org.openmrs.referenceapplication.homepageLink";
+	
+	public static final String CONFIGURE_MEATADATA_EXTENSION_POINT_ID = "org.openmrs.referenceapplication.configuremetadataLink";
 }
