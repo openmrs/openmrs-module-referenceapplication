@@ -150,9 +150,6 @@ public class LoginPageController {
 					if (log.isDebugEnabled())
 						log.debug("User has successfully authenticated");
 					
-					pageRequest.getSession().setAttribute(UiSessionContext.LOCATION_SESSION_ATTRIBUTE,
-					    sessionLocation.getId());
-					
 					sessionContext.setSessionLocation(sessionLocation);
 					
 					if (StringUtils.isNotBlank(redirectUrl)) {
