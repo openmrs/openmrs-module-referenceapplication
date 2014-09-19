@@ -1,7 +1,7 @@
 [
     {
         "id": "referenceapplication.styleGuide",
-        "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
+        "extensionPointId": "systemAdministration.apps",
         "type": "link",
         "label": "referenceapplication.app.styleguide.label",
         "url": "uicommons/styleGuide.page",

@@ -1,7 +1,7 @@
 [
     {
         "id": "referenceapplication.legacyAdmin",
-        "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
+        "extensionPointId": "systemAdministration.apps",
         "type": "link",
         "label": "referenceapplication.app.legacy.admin.label",
         "url": "admin/index.htm",

@@ -1,0 +1,22 @@
+[
+    {
+        "id": "formentryapp.forms",
+        "instanceOf": "formentryapp.template.forms",
+        "extensions": [
+            {
+                "id": "formentryapp.forms.homepageLink",
+                "extensionPointId": "org.openmrs.referenceapplication.configuremetadataLink",
+                "type": "link",
+                "label": "formentryapp.manageforms",
+                "url": "formentryapp/forms.page?app=formentryapp.forms",
+                "icon": "icon-paste",
+                "requiredPrivilege": "App: formentryapp.forms"
+            }
+        ],
+        "config": {
+            "builtInForms": ["d2c7532c-fb01-11e2-8ff2-fd54ab5fdb2a", "b5f8ffd8-fbde-11e2-8ff2-fd54ab5fdb2a",
+                "a007bbfe-fbe5-11e2-8ff2-fd54ab5fdb2a", "c75f120a-04ec-11e3-8780-2b40bef9a44b",
+                "a000cb34-9ec1-4344-a1c8-f692232f6edd"]
+        }
+    }
+]
