@@ -4,6 +4,7 @@
         "instanceOf": "coreapps.template.relationships",
         "description": "Lists personal relationships (excluding clinical ones from the reference application)",
         "order": 23,
+        "featureToggle": "referenceapplication.personalRelationships",
         "config": {
             "excludeRelationshipTypes": [
                 "8d919b58-c2cc-11de-8d13-0010c6dffd0f", //Doctor/Patient
