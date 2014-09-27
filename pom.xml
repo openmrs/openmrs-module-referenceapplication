@@ -21,9 +21,9 @@
 	</organization>
 
 	<scm>
-		<connection>scm:git:https://github.com/openmrs/openmrs-module-referenceapplication</connection>
-		<developerConnection>scm:git:https://github.com/openmrs/openmrs-module-referenceapplication</developerConnection>
-		<url>scm:git:https://github.com/openmrs/openmrs-module-referenceapplication</url>
+		<connection>scm:git:git@github.com:openmrs/openmrs-module-referenceapplication.git</connection>
+		<developerConnection>scm:git:git@github.com:openmrs/openmrs-module-referenceapplication.git</developerConnection>
+		<url>https://github.com/openmrs/openmrs-module-referenceapplication</url>
 		<tag>HEAD</tag>
 	</scm>
 
@@ -209,6 +209,8 @@
 						<autoVersionSubmodules>true</autoVersionSubmodules>
 						<useReleaseProfile>false</useReleaseProfile>
 						<arguments>-Prelease</arguments>
+						<!-- refapp distro contains SNAPSHOT dependencies -->
+                  		<allowTimestampedSnapshots>true</allowTimestampedSnapshots>
 					</configuration>
 				</plugin>
 				<plugin>
