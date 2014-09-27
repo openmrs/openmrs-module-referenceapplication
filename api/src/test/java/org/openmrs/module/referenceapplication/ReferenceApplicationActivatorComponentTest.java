@@ -90,8 +90,9 @@ public class ReferenceApplicationActivatorComponentTest extends BaseModuleContex
         locationService.saveLocation(unknownLocation);
         unknownLocation = locationService.getLocation(previousLocationName);
         assertNull(unknownLocation);
-        LocationTag loginTag = locationService.getLocationTagByUuid(AppFrameworkConstants.LOCATION_TAG_SUPPORTS_LOGIN_UUID);
         assertEquals(newLocationName, locationService.getLocationByUuid(ReferenceMetadataConstants.UNKNOWN_LOCATION_UUID).getName());
+
+        LocationTag loginTag = locationService.getLocationTagByUuid(AppFrameworkConstants.LOCATION_TAG_SUPPORTS_LOGIN_UUID);
         assertEquals(0, locationService.getLocationsByTag(loginTag).size());
         new ReferenceApplicationActivator().started();
         assertEquals(1, locationService.getLocationsByTag(loginTag).size());
