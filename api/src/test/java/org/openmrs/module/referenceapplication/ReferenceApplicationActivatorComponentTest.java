@@ -1,7 +1,5 @@
 package org.openmrs.module.referenceapplication;
 
-import java.util.Collection;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.Location;
@@ -19,6 +17,8 @@ import org.openmrs.scheduler.tasks.ProcessHL7InQueueTask;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
+import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -81,15 +81,17 @@ public class ReferenceApplicationActivatorComponentTest extends BaseModuleContex
      */
     @Test
     public void testAddLoginLocationTagToAtleastOneLocationIfThereAreNoLoginLocations() throws Exception {
+        final String newLocationName = "new name";
+        final String previousLocationName = "Unknown Location";
+
         MetadataUtil.setupSpecificMetadata(getClass().getClassLoader(), "Reference_Application_Location_Tags");
-        Location unknownLocation = locationService.getLocation("Unknown Location");
-        unknownLocation.setName("new name");
+        Location unknownLocation = locationService.getLocation(previousLocationName);
+        unknownLocation.setName(newLocationName);
         locationService.saveLocation(unknownLocation);
-        unknownLocation = locationService.getLocation("Unknown Location");
+        unknownLocation = locationService.getLocation(previousLocationName);
         assertNull(unknownLocation);
-        final String tag = "Login Location";
         LocationTag loginTag = locationService.getLocationTagByUuid(AppFrameworkConstants.LOCATION_TAG_SUPPORTS_LOGIN_UUID);
-        assertNull(locationService.getLocationByUuid(ReferenceMetadataConstants.UNKNOWN_LOCATION_UUID));
+        assertEquals(newLocationName, locationService.getLocationByUuid(ReferenceMetadataConstants.UNKNOWN_LOCATION_UUID).getName());
         assertEquals(0, locationService.getLocationsByTag(loginTag).size());
         new ReferenceApplicationActivator().started();
         assertEquals(1, locationService.getLocationsByTag(loginTag).size());

@@ -17,13 +17,12 @@
             <groupId>${project.parent.groupId}</groupId>
             <artifactId>${project.parent.artifactId}-api</artifactId>
             <version>${project.parent.version}</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.openmrs.module</groupId>
             <artifactId>registrationapp-omod</artifactId>
-            <scope>test</scope>
-            <version>${registrationappVersion}</version>
         </dependency>
 						
         <dependency>
@@ -43,15 +42,11 @@
          <dependency>
             <groupId>org.openmrs.module</groupId>
             <artifactId>coreapps-omod</artifactId>
-            <scope>provided</scope>
-            <version>${coreappsVersion}</version>
          </dependency>
          
          <dependency>
             <groupId>org.openmrs.module</groupId>
             <artifactId>formentryapp-omod</artifactId>
-            <scope>provided</scope>
-            <version>${formentryappVersion}</version>
          </dependency>
         
 	</dependencies>
