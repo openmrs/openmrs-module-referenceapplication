@@ -69,6 +69,8 @@ public class LoginPageControllerTest {
 	private static final Integer SESSION_LOCATION_ID = 2;
 
 	private LocationService locationService;
+	
+	private static final String GET_LOCATIONS = "Get Locations";
 
 	private final UiUtils uiUtils = new UiUtils() {
 
@@ -110,6 +112,8 @@ public class LoginPageControllerTest {
 		spy(Context.class);
 		doNothing().when(Context.class, "addProxyPrivilege", PrivilegeConstants.VIEW_LOCATIONS);
 		doNothing().when(Context.class, "removeProxyPrivilege", PrivilegeConstants.VIEW_LOCATIONS);
+		doNothing().when(Context.class, "addProxyPrivilege", GET_LOCATIONS);
+		doNothing().when(Context.class, "removeProxyPrivilege", GET_LOCATIONS);
 		doNothing().when(Context.class, "authenticate", USERNAME, PASSWORD);
 	}
 
