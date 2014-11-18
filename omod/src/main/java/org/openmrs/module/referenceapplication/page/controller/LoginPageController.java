@@ -47,6 +47,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class LoginPageController {
 
+	//see TRUNK-4536 for details why we need this
+	private static final String GET_LOCATIONS = "Get Locations";
+	
 	protected final Log log = LogFactory.getLog(getClass());
 
 	@RequestMapping("/login.htm")
@@ -87,6 +90,7 @@ public class LoginPageController {
 		Location lastSessionLocation = null;
 		try {
 			Context.addProxyPrivilege(PrivilegeConstants.VIEW_LOCATIONS);
+			Context.addProxyPrivilege(GET_LOCATIONS);
 			model.addAttribute("locations", appFrameworkService.getLoginLocations());
 			lastSessionLocation = locationService.getLocation(Integer.valueOf(lastSessionLocationId));
 		}
@@ -95,6 +99,7 @@ public class LoginPageController {
 		}
 		finally {
 			Context.removeProxyPrivilege(PrivilegeConstants.VIEW_LOCATIONS);
+			Context.removeProxyPrivilege(GET_LOCATIONS);
 		}
 
 		model.addAttribute("lastSessionLocation", lastSessionLocation);
@@ -131,10 +136,12 @@ public class LoginPageController {
 			try {
 				// TODO as above, grant this privilege to Anonymous instead of using a proxy privilege
 				Context.addProxyPrivilege(PrivilegeConstants.VIEW_LOCATIONS);
+				Context.addProxyPrivilege(GET_LOCATIONS);
 				sessionLocation = locationService.getLocation(sessionLocationId);
 			}
 			finally {
 				Context.removeProxyPrivilege(PrivilegeConstants.VIEW_LOCATIONS);
+				Context.removeProxyPrivilege(GET_LOCATIONS);
 			}
 		}
 
