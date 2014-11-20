@@ -16,16 +16,15 @@ package org.openmrs.module.referenceapplication.page.controller;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.appframework.context.AppContextModel;
 import org.openmrs.module.appframework.service.AppFrameworkService;
+import org.openmrs.module.appui.UiSessionContext;
 import org.openmrs.module.referenceapplication.ReferenceApplicationConstants;
-import org.openmrs.ui.framework.UiUtils;
+import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
-import org.openmrs.ui.framework.page.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.io.IOException;
 
 /**
  * Spring MVC controller that takes over /index.htm and processes requests to show the home page so
@@ -40,22 +39,28 @@ public class HomePageController {
 	public String overrideHomepage() {
 		return "forward:/" + ReferenceApplicationConstants.MODULE_ID + "/home.page";
 	}
-	
-	/**
-	 * Process requests to show the home page
-	 * 
-	 * @param model
-	 * @param appFrameworkService
-	 * @param request
-	 * @param ui
-	 * @throws IOException
-	 */
-	public void get(PageModel model, @SpringBean("appFrameworkService") AppFrameworkService appFrameworkService,
-	                       PageRequest request, UiUtils ui) throws IOException {
 
-		model.addAttribute("extensions",
-		    appFrameworkService.getExtensionsForCurrentUser(ReferenceApplicationConstants.HOME_PAGE_EXTENSION_POINT_ID));
+    /**
+     * @should limit which apps are shown on the homepage based on location
+     */
+    public Object controller(PageModel model,
+                             @SpringBean("appFrameworkService") AppFrameworkService appFrameworkService,
+                             UiSessionContext sessionContext) {
+
+        AppContextModel contextModel = new AppContextModel();
+        SimpleObject map = new SimpleObject();
+
+        map.put("currentUser", sessionContext.getCurrentUser());
+        map.put("currentProvider", sessionContext.getCurrentProvider());
+        map.put("sessionLocation", sessionContext.getSessionLocation());
+
+        contextModel = contextModel.with("sessionContext", map);
+
+        model.addAttribute("extensions",
+                appFrameworkService.getExtensionsForCurrentUser(ReferenceApplicationConstants.HOME_PAGE_EXTENSION_POINT_ID, contextModel));
         model.addAttribute("authenticatedUser", Context.getAuthenticatedUser());
+
+        return null;
     }
-	
+
 }
