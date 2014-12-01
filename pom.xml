@@ -36,7 +36,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <distro.groupId>org.openmrs.distro</distro.groupId>
         <distro.artifactId>referenceapplication</distro.artifactId>
-        <distro.version>2.2-SNAPSHOT</distro.version>
+        <distro.version>LATEST</distro.version>
         <webservicesRestModuleVersion>2.6</webservicesRestModuleVersion>
 	</properties>
 
