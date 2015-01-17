@@ -78,5 +78,10 @@
 		<description>Able to access the style guide app</description>
 	</privilege>
 
+    <privilege>
+        <name>App: referenceapplication.manageApps</name>
+        <description>Able to manage app definitions</description>
+    </privilege>
+
 </module>
 

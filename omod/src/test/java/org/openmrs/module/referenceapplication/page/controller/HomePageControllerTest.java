@@ -19,12 +19,13 @@ import org.openmrs.Location;
 import org.openmrs.LocationTag;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.context.UserContext;
-import org.openmrs.module.appframework.config.CustomAppFrameworkConfig;
+import org.openmrs.module.appframework.config.AppFrameworkConfig;
 import org.openmrs.module.appframework.domain.AppDescriptor;
 import org.openmrs.module.appframework.domain.Extension;
 import org.openmrs.module.appframework.repository.AllAppDescriptors;
 import org.openmrs.module.appframework.repository.AllComponentsState;
 import org.openmrs.module.appframework.repository.AllFreeStandingExtensions;
+import org.openmrs.module.appframework.repository.AllUserApps;
 import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.appframework.service.AppFrameworkServiceImpl;
 import org.openmrs.module.appui.UiSessionContext;
@@ -64,7 +65,7 @@ public class HomePageControllerTest {
         when(Context.isAuthenticated()).thenReturn(true);
         when(Context.getUserContext()).thenReturn(userContext);
 
-        CustomAppFrameworkConfig appFrameworkConfig = mock(CustomAppFrameworkConfig.class);
+        AppFrameworkConfig appFrameworkConfig = mock(AppFrameworkConfig.class);
 
         PageModel pageModel = new PageModel();
 
@@ -109,7 +110,9 @@ public class HomePageControllerTest {
         AllAppDescriptors appDescriptors = mock(AllAppDescriptors.class);
         when(appDescriptors.getAppDescriptors()).thenReturn(new ArrayList<AppDescriptor>());
 
-        AppFrameworkService frameworkService = new AppFrameworkServiceImpl(null, appDescriptors, freeStandingExtensions, componentsState, null, null, appFrameworkConfig);
+        AllUserApps userApps = mock(AllUserApps.class);
+
+        AppFrameworkService frameworkService = new AppFrameworkServiceImpl(null, appDescriptors, freeStandingExtensions, componentsState, null, null, appFrameworkConfig, userApps);
 
         UiSessionContext sessionContext = new UiSessionContext();
 

@@ -1,0 +1,12 @@
+[
+    {
+        "id": "${project.parent.artifactId}.manageApps",
+        "extensionPointId": "systemAdministration.apps",
+        "type": "link",
+        "label": "${project.parent.artifactId}.app.manageApps.title",
+        "url": "${project.parent.artifactId}/manageApps.page",
+        "icon": "icon-briefcase",//TODO Change icon
+        "order": 99,
+        "requiredPrivilege": "App: ${project.parent.artifactId}.manageApps"
+    }
+]

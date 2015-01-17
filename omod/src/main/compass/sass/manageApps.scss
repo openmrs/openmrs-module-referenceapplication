@@ -1,0 +1,23 @@
+.play-action {
+  position: relative;
+  display: inline;
+  text-decoration: none;
+  color: #bbbbbb;
+  font-size: 1em;
+  cursor: pointer;
+}
+.play-action:hover {
+  color: #00cc00;
+}
+
+.stop-action {
+  position: relative;
+  display: inline;
+  text-decoration: none;
+  color: #bbbbbb;
+  font-size: 1em;
+  cursor: pointer;
+}
+.stop-action:hover {
+  color: #ff6666;
+}
