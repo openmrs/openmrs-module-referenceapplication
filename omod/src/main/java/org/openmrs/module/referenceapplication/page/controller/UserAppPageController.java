@@ -17,26 +17,31 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.openmrs.module.appframework.domain.AppDescriptor;
 import org.openmrs.module.appframework.domain.UserApp;
 import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.uicommons.UiCommonsConstants;
 import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
+import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
-import org.openmrs.ui.framework.page.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class UserAppPageController {
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
-	public void get(PageModel model, @RequestParam(value = "appId", required = false) UserApp userApp, PageRequest request,
-	                @SpringBean("appFrameworkService") AppFrameworkService service) {
+	private ObjectMapper mapper = new ObjectMapper();
+	
+	public void get(PageModel model, @RequestParam(value = "appId", required = false) UserApp userApp) {
 		
 		if (userApp == null) {
 			userApp = new UserApp();
@@ -45,15 +50,25 @@ public class UserAppPageController {
 	}
 	
 	public String post(PageModel model, @ModelAttribute(value = "appId") @BindParams UserApp userApp,
+	                   @RequestParam("action") String action,
 	                   @SpringBean("appFrameworkService") AppFrameworkService service, HttpSession session, UiUtils ui) {
 		
 		try {
-			service.saveUserApp(userApp);
-			
-			InfoErrorMessageUtil.flashInfoMessage(session,
-			    ui.message("referenceapplication.app.userApp.save.success", userApp.getAppId()));
-			
-			return "redirect:/referenceapplication/manageApps.page";
+			AppDescriptor descriptor = mapper.readValue(userApp.getJson(), AppDescriptor.class);
+			if (!userApp.getAppId().equals(descriptor.getId())) {
+				session.setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
+				    ui.message("referenceapplication.app.errors.IdsShouldMatch"));
+			} else if ("add".equals(action) && service.getUserApp(userApp.getAppId()) != null) {
+				session.setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
+				    ui.message("referenceapplication.app.errors.duplicateAppId"));
+			} else {
+				service.saveUserApp(userApp);
+				
+				InfoErrorMessageUtil.flashInfoMessage(session,
+				    ui.message("referenceapplication.app.userApp.save.success", userApp.getAppId()));
+				
+				return "redirect:/referenceapplication/manageApps.page";
+			}
 		}
 		catch (Exception e) {
 			session.setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
@@ -63,5 +78,21 @@ public class UserAppPageController {
 		model.addAttribute("userApp", userApp);
 		
 		return null;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/referenceapplication/verifyJson")
+	public SimpleObject verifyJson(@RequestParam("json") String json) {
+		SimpleObject so = new SimpleObject();
+		try {
+			mapper.readValue(json, AppDescriptor.class);
+			so.add("isValid", true);
+		}
+		catch (Exception e) {
+			log.warn("Invalid json:", e);
+			so.add("isValid", false);
+		}
+		
+		return so;
 	}
 }
