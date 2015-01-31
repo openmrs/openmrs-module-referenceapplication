@@ -1,7 +1,7 @@
 [main]
 host = https://www.transifex.com/
 
-[OpenMRS.reference-application-module]
+[OpenMRS.referenceapplication-module]
 source_file = api/src/main/resources/messages.properties
 source_lang = en
 trans.fr = api/src/main/resources/messages_fr.properties
