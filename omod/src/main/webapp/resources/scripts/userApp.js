@@ -51,7 +51,7 @@ function validate(){
         return;
     }
 
-    jq.post("/openmrs/referenceapplication/verifyJson.htm",
+    jq.post("verifyJson.htm",
         {"json": json},
         function(data){
             jq('#server-error-msg').hide();
