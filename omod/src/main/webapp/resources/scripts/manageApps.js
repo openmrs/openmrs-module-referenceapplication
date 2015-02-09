@@ -8,7 +8,7 @@ jq(function(){
 
 function showDeleteUserAppDialog(appId){
     var deleteUserAppDialog = emr.setupConfirmationDialog({
-        selector: "#referenceapplication-delete-userApp-dialog-"+appId,
+        selector: "#referenceapplication-delete-userApp-dialog-" + appId.replace('.', '\\.'),
         actions: {
             cancel: function() {
                 deleteUserAppDialog.close();
