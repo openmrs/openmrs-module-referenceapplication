@@ -20,3 +20,7 @@ omod/src/main/webapp/resources/styles/home.css
 omod/src/main/webapp/resources/styles/login.css
 omod/src/main/webapp/resources/styles/customVariables.css
 omod/src/main/webapp/resources/styles/referenceapplication.css
+
+# Rubygems build directories #
+omod/.rubygems
+omod/.rubygems-provided
