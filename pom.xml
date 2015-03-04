@@ -38,7 +38,7 @@
         <distro.artifactId>referenceapplication</distro.artifactId>
         <distro.version>LATEST</distro.version>
         <webservicesRestModuleVersion>2.6</webservicesRestModuleVersion>
-        <appframeworkVersion>2.3-SNAPSHOT</appframeworkVersion>
+        <appframeworkVersion>2.4-SNAPSHOT</appframeworkVersion>
         <uicommonsVersion>1.4-SNAPSHOT</uicommonsVersion>
 	</properties>
 
