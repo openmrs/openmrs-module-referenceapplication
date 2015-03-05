@@ -13,12 +13,6 @@
  */
 package org.openmrs.module.referenceapplication.page.controller;
 
-import static org.openmrs.module.referenceapplication.ReferenceApplicationWebConstants.COOKIE_NAME_LAST_SESSION_LOCATION;
-import static org.openmrs.module.referenceapplication.ReferenceApplicationWebConstants.REQUEST_PARAMETER_NAME_REDIRECT_URL;
-import static org.openmrs.module.referenceapplication.ReferenceApplicationWebConstants.SESSION_ATTRIBUTE_REDIRECT_URL;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -35,11 +29,16 @@ import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
 import org.openmrs.ui.framework.page.PageRequest;
-import org.openmrs.util.PrivilegeConstants;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.servlet.http.HttpServletRequest;
+
+import static org.openmrs.module.referenceapplication.ReferenceApplicationWebConstants.COOKIE_NAME_LAST_SESSION_LOCATION;
+import static org.openmrs.module.referenceapplication.ReferenceApplicationWebConstants.REQUEST_PARAMETER_NAME_REDIRECT_URL;
+import static org.openmrs.module.referenceapplication.ReferenceApplicationWebConstants.SESSION_ATTRIBUTE_REDIRECT_URL;
 
 /**
  * Spring MVC controller that takes over /login.htm and processes requests to authenticate a user
@@ -49,6 +48,9 @@ public class LoginPageController {
 
 	//see TRUNK-4536 for details why we need this
 	private static final String GET_LOCATIONS = "Get Locations";
+
+    // RA-592: don't use PrivilegeConstants.VIEW_LOCATIONS
+    private static final String VIEW_LOCATIONS = "View Locations";
 	
 	protected final Log log = LogFactory.getLog(getClass());
 
@@ -89,7 +91,7 @@ public class LoginPageController {
 		model.addAttribute(REQUEST_PARAMETER_NAME_REDIRECT_URL, redirectUrl);
 		Location lastSessionLocation = null;
 		try {
-			Context.addProxyPrivilege(PrivilegeConstants.VIEW_LOCATIONS);
+			Context.addProxyPrivilege(VIEW_LOCATIONS);
 			Context.addProxyPrivilege(GET_LOCATIONS);
 			model.addAttribute("locations", appFrameworkService.getLoginLocations());
 			lastSessionLocation = locationService.getLocation(Integer.valueOf(lastSessionLocationId));
@@ -98,7 +100,7 @@ public class LoginPageController {
 			// pass
 		}
 		finally {
-			Context.removeProxyPrivilege(PrivilegeConstants.VIEW_LOCATIONS);
+			Context.removeProxyPrivilege(VIEW_LOCATIONS);
 			Context.removeProxyPrivilege(GET_LOCATIONS);
 		}
 
@@ -135,12 +137,12 @@ public class LoginPageController {
 		if (sessionLocationId != null) {
 			try {
 				// TODO as above, grant this privilege to Anonymous instead of using a proxy privilege
-				Context.addProxyPrivilege(PrivilegeConstants.VIEW_LOCATIONS);
+				Context.addProxyPrivilege(VIEW_LOCATIONS);
 				Context.addProxyPrivilege(GET_LOCATIONS);
 				sessionLocation = locationService.getLocation(sessionLocationId);
 			}
 			finally {
-				Context.removeProxyPrivilege(PrivilegeConstants.VIEW_LOCATIONS);
+				Context.removeProxyPrivilege(VIEW_LOCATIONS);
 				Context.removeProxyPrivilege(GET_LOCATIONS);
 			}
 		}
