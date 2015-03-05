@@ -15,7 +15,7 @@
         "extensionPointId": "patientDashboard.overallActions",
         "type": "link",
         "icon": "icon-calendar",
-        "url": "appointmentschedulingui/manageAppointments.page?patientId={{patient.uuid}}&returnProvider=coreapps&returnPage=patientdashboard/patientDashboard",
+        "url": "appointmentschedulingui/manageAppointments.page?patientId={{patient.uuid}}",
         "label": "appointmentschedulingui.scheduleAppointment.title",
         "requiredPrivilege": "Task: appointmentschedulingui.bookAppointments"
     },
@@ -24,7 +24,7 @@
         "extensionPointId": "patientDashboard.overallActions",
         "type": "link",
         "icon": "icon-calendar",
-        "url": "appointmentschedulingui/requestAppointment.page?patientId={{patient.uuid}}&returnProvider=coreapps&returnPage=patientdashboard/patientDashboard",
+        "url": "appointmentschedulingui/requestAppointment.page?patientId={{patient.uuid}}",
         "label": "appointmentschedulingui.requestAppointment.label",
         "requiredPrivilege": "Task: appointmentschedulingui.requestAppointments"
     }
