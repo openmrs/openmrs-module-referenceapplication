@@ -36,6 +36,7 @@ import org.mockito.Mockito;
 import org.openmrs.Location;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.appui.UiSessionContext;
 import org.openmrs.module.emrapi.EmrApiConstants;
 import org.openmrs.module.referenceapplication.ReferenceApplicationConstants;
@@ -87,12 +88,15 @@ public class LoginPageControllerTest {
 
 	private UiSessionContext sessionContext;
 
+    private AppFrameworkService appFrameworkService;
+
 	@Before
 	public void setup() {
 		mockStatic(Context.class);
 		locationService = mock(LocationService.class);
 		sessionContext = mock(UiSessionContext.class);
-	}
+        appFrameworkService = mock(AppFrameworkService.class);
+    }
 
 	private PageRequest createPageRequest(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
 		HttpServletRequest request = (httpRequest != null) ? httpRequest : new MockHttpServletRequest();
@@ -129,7 +133,7 @@ public class LoginPageControllerTest {
 		when(Context.isAuthenticated()).thenReturn(true);
 		String homeRedirect = "redirect:" + uiUtils.pageLink(ReferenceApplicationConstants.MODULE_ID, "home");
 		assertEquals(homeRedirect,
-		    new LoginPageController().get(null, uiUtils, createPageRequest(null, null), null, null, null));
+		    new LoginPageController().get(null, uiUtils, createPageRequest(null, null), null, null, appFrameworkService));
 	}
 
 	/**
@@ -142,7 +146,7 @@ public class LoginPageControllerTest {
 	@Verifies(value = "should show the user the login page if they are not authenticated", method = "get(PageModel,UiUtils,PageRequest)")
 	public void get_shouldShowTheUserTheLoginPageIfTheyAreNotAuthenticated() throws Exception {
 		when(Context.isAuthenticated()).thenReturn(false);
-		assertNull(new LoginPageController().get(new PageModel(), uiUtils, createPageRequest(null, null), null, null, null));
+		assertNull(new LoginPageController().get(new PageModel(), uiUtils, createPageRequest(null, null), null, null, appFrameworkService));
 	}
 
 	/**
@@ -162,7 +166,7 @@ public class LoginPageControllerTest {
 		request.addParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL, redirectUrl);
 		PageModel pageModel = new PageModel();
 
-		new LoginPageController().get(pageModel, uiUtils, createPageRequest(request, null), null, null, null);
+		new LoginPageController().get(pageModel, uiUtils, createPageRequest(request, null), null, null, appFrameworkService);
 
 		assertEquals(redirectUrl, pageModel.get(REQUEST_PARAMETER_NAME_REDIRECT_URL));
 	}
@@ -184,7 +188,7 @@ public class LoginPageControllerTest {
 		request.addHeader("Referer", refererUrl);
 		PageModel pageModel = new PageModel();
 
-		new LoginPageController().get(pageModel, uiUtils, createPageRequest(request, null), null, null, null);
+		new LoginPageController().get(pageModel, uiUtils, createPageRequest(request, null), null, null, appFrameworkService);
 
 		assertEquals(refererUrl, pageModel.get(REQUEST_PARAMETER_NAME_REDIRECT_URL));
 	}
@@ -209,7 +213,7 @@ public class LoginPageControllerTest {
 		request.setSession(httpSession);
 
 		PageModel pageModel = new PageModel();
-		new LoginPageController().get(pageModel, uiUtils, pageRequest, null, null, null);
+		new LoginPageController().get(pageModel, uiUtils, pageRequest, null, null, appFrameworkService);
 
 		assertEquals(redirectUrl, pageModel.get(REQUEST_PARAMETER_NAME_REDIRECT_URL));
 	}
