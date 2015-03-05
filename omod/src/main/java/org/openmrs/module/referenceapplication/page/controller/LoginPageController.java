@@ -94,7 +94,7 @@ public class LoginPageController {
 			model.addAttribute("locations", appFrameworkService.getLoginLocations());
 			lastSessionLocation = locationService.getLocation(Integer.valueOf(lastSessionLocationId));
 		}
-		catch (Exception ex) {
+		catch (NumberFormatException ex) {
 			// pass
 		}
 		finally {
