@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.databene.commons.StringUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -296,4 +297,41 @@ public class LoginPageControllerTest {
 		    createPageRequest(request, null), sessionContext);
 		assertEquals("redirect:" + uiUtils.pageLink("referenceapplication", "login"), page);
 	}
+
+	/**
+     * @see LoginPageController#get(PageModel,UiUtils,PageRequest,String,LocationService,AppFrameworkService)
+     * @verifies not set the referer as the redirectUrl in the page model if referer url is outside context path
+     */
+    @Test
+    public void get_shouldNotSetTheRefererAsTheRedirectUrlInThePageModelIfRefererUrlIsOutsideContextPath() throws Exception {
+    	when(Context.isAuthenticated()).thenReturn(false);
+    	
+    	String refererUrl = "http://openmrs.org/demo/";
+    	MockHttpServletRequest request = new MockHttpServletRequest();
+		request.setContextPath(TEST_CONTEXT_PATH);
+		request.addHeader("Referer", refererUrl);
+		PageModel pageModel = new PageModel();
+		new LoginPageController().get(pageModel, uiUtils, createPageRequest(request, null), null, null, appFrameworkService);
+		
+		assertEquals("", pageModel.get(REQUEST_PARAMETER_NAME_REDIRECT_URL));
+    }
+
+	/**
+     * @see LoginPageController#get(PageModel,UiUtils,PageRequest,String,LocationService,AppFrameworkService)
+     * @verifies set the referer as the redirectUrl in the page model if referer url is within context path
+     */
+    @Test
+    public void get_shouldSetTheRefererAsTheRedirectUrlInThePageModelIfRefererUrlIsWithinContextPath() throws Exception {
+    	when(Context.isAuthenticated()).thenReturn(false);
+    	
+    	String redirectUrl = TEST_CONTEXT_PATH +"/demo/";
+		String refererUrl = "http://openmrs.org" + redirectUrl;    	
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		request.setContextPath(TEST_CONTEXT_PATH);
+		request.addHeader("Referer", refererUrl);
+		PageModel pageModel = new PageModel();
+		new LoginPageController().get(pageModel, uiUtils, createPageRequest(request, null), null, null, appFrameworkService);
+		
+		assertEquals(redirectUrl, pageModel.get(REQUEST_PARAMETER_NAME_REDIRECT_URL));
+    }
 }
