@@ -49,7 +49,7 @@
                                         "providerName": "uicommons",
                                         "fragmentId": "field/text"
                                     },
-                                    "cssClasses": ["number"]
+                                    "cssClasses": ["phone"]
                                 }
                             ]
                         }
