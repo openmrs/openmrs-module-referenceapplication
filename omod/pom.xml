@@ -65,14 +65,12 @@
         <dependency>
             <groupId>org.openmrs.module</groupId>
             <artifactId>appframework-api</artifactId>
-            <version>${appframeworkVersion}</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.openmrs.module</groupId>
             <artifactId>uicommons-omod</artifactId>
-            <version>${uicommonsVersion}</version>
             <scope>provided</scope>
         </dependency>
         
@@ -219,7 +217,6 @@
                                 <artifactItem>
                                     <groupId>org.openmrs.module</groupId>
                                     <artifactId>uicommons-scss</artifactId>
-                                    <version>${uicommonsVersion}</version>
                                     <type>zip</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>src/main/compass/sass-external</outputDirectory>
