@@ -13,6 +13,9 @@
  */
 package org.openmrs.module.referenceapplication.page.controller;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -66,6 +69,8 @@ public class LoginPageController {
 	 * @should set redirectUrl in the page model if any was specified in the request
 	 * @should set the referer as the redirectUrl in the page model if no redirect param exists
 	 * @should set redirectUrl in the page model if any was specified in the session
+	 * @should not set the referer as the redirectUrl in the page model if referer url is outside context path
+	 * @should set the referer as the redirectUrl in the page model if referer url is within context path 
 	 */
 	public String get(PageModel model,
 	                  UiUtils ui,
@@ -82,8 +87,9 @@ public class LoginPageController {
 		if (StringUtils.isBlank(redirectUrl))
 			redirectUrl = pageRequest.getRequest().getParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL);
 
-		if (StringUtils.isBlank(redirectUrl))
-			redirectUrl = pageRequest.getRequest().getHeader("Referer");
+		if (StringUtils.isBlank(redirectUrl)) {
+			redirectUrl = getRedirectUrlFromReferer(pageRequest);
+		}
 
 		if (redirectUrl == null)
 			redirectUrl = "";
@@ -108,6 +114,29 @@ public class LoginPageController {
 
 		return null;
 	}
+
+	private String getRedirectUrlFromReferer(PageRequest pageRequest) {
+	    String referer = pageRequest.getRequest().getHeader("Referer");
+	    String redirectUrl = "";
+		if (referer != null) {
+			if (referer.contains("http://") || referer.contains("https://")) {
+				try {
+					URL refererUrl = new URL(referer);
+					String refererPath = refererUrl.getPath();
+					String refererContextPath = refererPath.substring(0, refererPath.indexOf('/', 1));
+					if (StringUtils.equals(pageRequest.getRequest().getContextPath(), refererContextPath)) {
+						redirectUrl = refererPath;
+					}
+				}
+				catch (MalformedURLException e) {
+					log.error(e.getMessage());
+				}
+			} else {
+				redirectUrl = pageRequest.getRequest().getHeader("Referer");
+			}
+		}
+	    return redirectUrl;
+    }
 
 	/**
 	 * Processes requests to authenticate a user
