@@ -21,7 +21,7 @@
 
         <p id="location-container">
             <label><uimessage code="referenceapplication.simpleDischarge.dischargedFrom"/></label>
-            <encounterLocation required="true"/>
+            <encounterLocation required="true" tags="Admission Location,Transfer Location"/>
         </p>
     </section>
 
