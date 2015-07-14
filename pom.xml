@@ -286,7 +286,6 @@
 						<compilerTargetPlatform>${javaCompilerVersion}</compilerTargetPlatform>
 						<configFile>eclipse/OpenMRSFormatter.xml</configFile>
 						<overrideConfigCompilerVersion>true</overrideConfigCompilerVersion>
-						<lineEnding>CRLF</lineEnding>
 					</configuration>
 					<dependencies>
 						<dependency>
