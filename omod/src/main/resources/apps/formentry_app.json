@@ -5,11 +5,13 @@
         "extensions": [
             {
                 "id": "formentryapp.forms.homepageLink",
-                "extensionPointId": "org.openmrs.referenceapplication.configuremetadataLink",
+ 				"extensionPointId": "org.openmrs.module.adminui.adminLinks",
                 "type": "link",
-                "label": "formentryapp.manageforms",
+                "label": "referenceapplication.formentryapp.manageform.label",
                 "url": "formentryapp/forms.page?app=formentryapp.forms",
-                "icon": "icon-paste",
+		        "extensionParams":{
+		            "group": "org.openmrs.module.adminui.manageforms.group"
+		        },
                 "requiredPrivilege": "App: formentryapp.forms"
             }
         ],
