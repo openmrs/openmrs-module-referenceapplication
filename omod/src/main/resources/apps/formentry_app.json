@@ -7,7 +7,7 @@
                 "id": "formentryapp.forms.homepageLink",
  				"extensionPointId": "org.openmrs.module.adminui.adminLinks",
                 "type": "link",
-                "label": "referenceapplication.formentryapp.manageform.label",
+                "label": "referenceapplication.formentryapp.manageforms.label",
                 "url": "formentryapp/forms.page?app=formentryapp.forms",
 		        "extensionParams":{
 		            "group": "org.openmrs.module.adminui.manageforms.group"
