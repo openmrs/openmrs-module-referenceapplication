@@ -3,7 +3,7 @@
 
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>referenceapplication</artifactId>
-	<version>2.3-SNAPSHOT</version>
+	<version>2.3</version>
 	<packaging>pom</packaging>
 	<name>Reference Application Module</name>
 	<description>Provides basic web features</description>
@@ -24,7 +24,7 @@
 		<connection>scm:git:git@github.com:openmrs/openmrs-module-referenceapplication.git</connection>
 		<developerConnection>scm:git:git@github.com:openmrs/openmrs-module-referenceapplication.git</developerConnection>
 		<url>https://github.com/openmrs/openmrs-module-referenceapplication</url>
-		<tag>HEAD</tag>
+		<tag>referenceapplication-2.3</tag>
 	</scm>
 
 	<modules>
