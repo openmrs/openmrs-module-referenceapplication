@@ -27,11 +27,11 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
 	
 	        var sessionLocationVal = jQuery('#sessionLocationInput').val();
 	        if(parseInt(sessionLocationVal, 10) > 0){
-	            jQuery('#login-button').removeClass('disabled');
-	            jQuery('#login-button').removeAttr('disabled');
+	            jQuery('#loginButton').removeClass('disabled');
+	            jQuery('#loginButton').removeAttr('disabled');
 	        }else{
-	            jQuery('#login-button').addClass('disabled');
-	            jQuery('#login-button').attr('disabled','disabled');
+	            jQuery('#loginButton').addClass('disabled');
+	            jQuery('#loginButton').attr('disabled','disabled');
 	        }
     	};
     
@@ -45,7 +45,7 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
         jQuery('#username').focus();
 
         var cannotLoginController = emr.setupConfirmationDialog({
-            selector: '#cannot-login-popup',
+            selector: '#cannotLoginPopup',
             actions: {
                 confirm: function() {
                     cannotLoginController.close();
@@ -53,7 +53,7 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
             }
         });
         
-        jQuery('a#cant-login').click(function() {
+        jQuery('a#cantLogin').click(function() {
             cannotLoginController.show();
         });
         
@@ -109,10 +109,10 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
 
                 <p></p>
                 <p>
-                    <input id="login-button" class="confirm" type="submit" value="${ ui.message("referenceapplication.login.button") }"/>
+                    <input id="loginButton" class="confirm" type="submit" value="${ ui.message("referenceapplication.login.button") }"/>
                 </p>
                 <p>
-                    <a id="cant-login" href="javascript:void(0)">
+                    <a id="cantLogin" href="javascript:void(0)">
                         <i class="icon-question-sign small"></i>
                         ${ ui.message("referenceapplication.login.cannotLogin") }
                     </a>
@@ -127,7 +127,7 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
     </div>
 </div>
 
-<div id="cannot-login-popup" class="dialog" style="display: none">
+<div id="cannotLoginPopup" class="dialog" style="display: none">
     <div class="dialog-header">
         <i class="icon-info-sign"></i>
         <h3>${ ui.message("referenceapplication.login.cannotLogin") }</h3>
