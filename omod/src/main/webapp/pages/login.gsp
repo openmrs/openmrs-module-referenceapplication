@@ -26,7 +26,7 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
 	        jQuery('#sessionLocation li[value|=' + jQuery('#sessionLocationInput').val() + ']').addClass('selected');
 	
 	        var sessionLocationVal = jQuery('#sessionLocationInput').val();
-	        if(parseInt(sessionLocationVal, 10) > 0){
+	        if(sessionLocationVal != null && sessionLocationVal != ""){
 	            jQuery('#loginButton').removeClass('disabled');
 	            jQuery('#loginButton').removeAttr('disabled');
 	        }else{
