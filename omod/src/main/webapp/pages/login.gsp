@@ -55,7 +55,7 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
         
         jQuery('a#cant-login').click(function() {
             cannotLoginController.show();
-        })
+        });
         
         jQuery('#login-button').show();
     });
