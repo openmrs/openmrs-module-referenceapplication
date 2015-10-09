@@ -20,31 +20,29 @@
 ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
 
 <script type="text/javascript">
-	jQuery(document).ready(function(){
-		jQuery('#username').focus();
-	});
-
-    updateSelectedOption = function() {
-        jQuery('#sessionLocation li').removeClass('selected');
-        jQuery('#sessionLocation li[value|=' + jQuery('#sessionLocationInput').val() + ']').addClass('selected');
-
-        var sessionLocationVal = jQuery('#sessionLocationInput').val();
-        if(parseInt(sessionLocationVal, 10) > 0){
-            jQuery('#login-button').removeClass('disabled');
-            jQuery('#login-button').removeAttr('disabled');
-        }else{
-            jQuery('#login-button').addClass('disabled');
-            jQuery('#login-button').attr('disabled','disabled');
-        }
-    };
-
     jQuery(function() {
+    	updateSelectedOption = function() {
+	        jQuery('#sessionLocation li').removeClass('selected');
+	        jQuery('#sessionLocation li[value|=' + jQuery('#sessionLocationInput').val() + ']').addClass('selected');
+	
+	        var sessionLocationVal = jQuery('#sessionLocationInput').val();
+	        if(parseInt(sessionLocationVal, 10) > 0){
+	            jQuery('#login-button').removeClass('disabled');
+	            jQuery('#login-button').removeAttr('disabled');
+	        }else{
+	            jQuery('#login-button').addClass('disabled');
+	            jQuery('#login-button').attr('disabled','disabled');
+	        }
+    	};
+    
         updateSelectedOption();
 
         jQuery('#sessionLocation li').click( function() {
             jQuery('#sessionLocationInput').val(jQuery(this).attr("value"));
             updateSelectedOption();
         });
+        
+        jQuery('#username').focus();
 
         var cannotLoginController = emr.setupConfirmationDialog({
             selector: '#cannot-login-popup',
@@ -54,9 +52,12 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
                 }
             }
         });
+        
         jQuery('a#cant-login').click(function() {
             cannotLoginController.show();
         })
+        
+        jQuery('#login-button').show();
     });
 </script>
 
@@ -108,7 +109,7 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
 
                 <p></p>
                 <p>
-                    <input id="login-button" class="confirm" type="submit" value="${ ui.message("referenceapplication.login.button") }"/>
+                    <input id="login-button" style="display: none;" class="confirm" type="submit" value="${ ui.message("referenceapplication.login.button") }"/>
                 </p>
                 <p>
                     <a id="cant-login" href="javascript:void(0)">
