@@ -23,10 +23,9 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
     jQuery(function() {
     	updateSelectedOption = function() {
 	        jQuery('#sessionLocation li').removeClass('selected');
-	        jQuery('#sessionLocation li[value|=' + jQuery('#sessionLocationInput').val() + ']').addClass('selected');
-	
 	        var sessionLocationVal = jQuery('#sessionLocationInput').val();
 	        if(sessionLocationVal != null && sessionLocationVal != "" && sessionLocationVal != 0){
+	            jQuery('#sessionLocation li[value|=' + sessionLocationVal + ']').addClass('selected');
 	            jQuery('#loginButton').removeClass('disabled');
 	            jQuery('#loginButton').removeAttr('disabled');
 	        }else{
