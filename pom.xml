@@ -116,6 +116,12 @@
             <artifactId>appui-omod</artifactId>
             <type>jar</type>
         </dependency>
+        
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>emrapi-api</artifactId>
+            <type>jar</type>
+        </dependency>
 
         <dependency>
             <groupId>org.openmrs.module</groupId>
