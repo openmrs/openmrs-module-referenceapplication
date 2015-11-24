@@ -5,6 +5,7 @@
 target
 
 *.iml
+*.idea
 .DS_Store
 
 # Package Files #
