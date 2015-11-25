@@ -8,6 +8,8 @@
 
 <div id="home-container">
 
+    ${ ui.includeFragment("coreapps", "administrativenotification/notifications") }
+
     <% if (authenticatedUser) { %>
         <h4>
             ${ ui.message("referenceapplication.home.currentUser", ui.format(authenticatedUser), ui.format(sessionContext.sessionLocation)) }
