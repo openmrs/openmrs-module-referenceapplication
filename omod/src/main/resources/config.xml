@@ -15,6 +15,9 @@
 	<require_version>1.9.3</require_version>
 	<!-- / Module Properties -->
 
+	<aware_of_modules>
+		<aware_of_module>org.openmrs.module.atlas</aware_of_module>
+	</aware_of_modules>
 	
 	<!-- Required Modules -->
 	<require_modules>
@@ -45,7 +48,7 @@
 			
 	</require_modules>
 	<!-- / Required Modules -->
-	
+
 	<!-- Module Activator -->
 	<activator>${project.parent.groupId}.${project.parent.artifactId}.ReferenceApplicationActivator</activator>
 	
