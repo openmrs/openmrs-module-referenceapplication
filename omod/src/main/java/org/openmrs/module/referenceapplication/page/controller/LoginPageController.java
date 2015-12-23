@@ -16,6 +16,7 @@ package org.openmrs.module.referenceapplication.page.controller;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -135,7 +136,7 @@ public class LoginPageController {
 				redirectUrl = pageRequest.getRequest().getHeader("Referer");
 			}
 		}
-	    return redirectUrl;
+	    return StringEscapeUtils.escapeHtml(redirectUrl);
     }
 
 	/**
