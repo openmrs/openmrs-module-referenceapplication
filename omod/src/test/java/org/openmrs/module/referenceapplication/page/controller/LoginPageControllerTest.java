@@ -300,7 +300,7 @@ public class LoginPageControllerTest {
 
 	/**
      * @see LoginPageController#get(PageModel,UiUtils,PageRequest,String,LocationService,AppFrameworkService)
-     * @verifies not set the referer as the redirectUrl in the page model if referer url is outside context path
+     * @verifies not set the referer as the redirectUrl in the page model if referer URL is outside context path
      */
     @Test
     public void get_shouldNotSetTheRefererAsTheRedirectUrlInThePageModelIfRefererUrlIsOutsideContextPath() throws Exception {
@@ -318,7 +318,7 @@ public class LoginPageControllerTest {
 
 	/**
      * @see LoginPageController#get(PageModel,UiUtils,PageRequest,String,LocationService,AppFrameworkService)
-     * @verifies set the referer as the redirectUrl in the page model if referer url is within context path
+     * @verifies set the referer as the redirectUrl in the page model if referer URL is within context path
      */
     @Test
     public void get_shouldSetTheRefererAsTheRedirectUrlInThePageModelIfRefererUrlIsWithinContextPath() throws Exception {

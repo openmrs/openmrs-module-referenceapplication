@@ -69,8 +69,8 @@ public class LoginPageController {
 	 * @should set redirectUrl in the page model if any was specified in the request
 	 * @should set the referer as the redirectUrl in the page model if no redirect param exists
 	 * @should set redirectUrl in the page model if any was specified in the session
-	 * @should not set the referer as the redirectUrl in the page model if referer url is outside context path
-	 * @should set the referer as the redirectUrl in the page model if referer url is within context path 
+	 * @should not set the referer as the redirectUrl in the page model if referer URL is outside context path
+	 * @should set the referer as the redirectUrl in the page model if referer URL is within context path 
 	 */
 	public String get(PageModel model,
 	                  UiUtils ui,

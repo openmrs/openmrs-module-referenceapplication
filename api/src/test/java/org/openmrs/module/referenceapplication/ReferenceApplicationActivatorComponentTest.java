@@ -74,7 +74,7 @@ public class ReferenceApplicationActivatorComponentTest extends BaseModuleContex
     }
 
     /**
-     * Tests that if there are no login locations and no unknown location then atleast one of the
+     * Tests that if there are no login locations and no unknown location then at least one of the
      * existing locations gets tagged as a login location
      *
      * @throws Exception
