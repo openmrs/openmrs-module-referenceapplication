@@ -15,6 +15,7 @@ package org.openmrs.module.referenceapplication.page.controller;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Locale;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
@@ -27,6 +28,7 @@ import org.openmrs.api.context.ContextAuthenticationException;
 import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.appui.UiSessionContext;
 import org.openmrs.module.emrapi.EmrApiConstants;
+import org.openmrs.module.emrapi.utils.GeneralUtils;
 import org.openmrs.module.referenceapplication.ReferenceApplicationConstants;
 import org.openmrs.module.referenceapplication.ReferenceApplicationWebConstants;
 import org.openmrs.ui.framework.UiUtils;
@@ -37,6 +39,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -190,6 +193,14 @@ public class LoginPageController {
 						log.debug("User has successfully authenticated");
 					
 					sessionContext.setSessionLocation(sessionLocation);
+
+					// set the locale based on the user's default locale
+					Locale userLocale = GeneralUtils.getDefaultLocale(Context.getUserContext().getAuthenticatedUser());
+					if (userLocale != null) {
+						Context.getUserContext().setLocale(userLocale);
+						pageRequest.getResponse().setLocale(userLocale);
+						new CookieLocaleResolver().setDefaultLocale(userLocale);
+					}
 					
 					if (StringUtils.isNotBlank(redirectUrl)) {
 						//don't redirect back to the login page on success nor an external url
