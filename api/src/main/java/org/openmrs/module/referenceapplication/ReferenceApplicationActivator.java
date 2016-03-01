@@ -13,6 +13,12 @@
  */
 package org.openmrs.module.referenceapplication;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.GlobalProperty;
@@ -38,10 +44,6 @@ import org.openmrs.scheduler.SchedulerService;
 import org.openmrs.scheduler.TaskDefinition;
 import org.openmrs.scheduler.tasks.ProcessHL7InQueueTask;
 import org.openmrs.ui.framework.resource.ResourceFactory;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * This class contains the logic that is run every time this module is either started or stopped.
@@ -210,7 +212,25 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
 			processHL7Task.setStartOnStartup(true);
 			processHL7Task.setRepeatInterval(ReferenceApplicationConstants.PROCESS_HL7_TASK_INTERVAL);
 			
-			schedulerService.saveTask(processHL7Task);
+			try {
+				schedulerService.saveTask(processHL7Task);
+			}
+			catch (NoSuchMethodError ex) {
+				//platform 2.0 renamed saveTask to saveTaskDefinition
+				try {
+					Method method = schedulerService.getClass().getMethod("saveTaskDefinition", new Class[] { TaskDefinition.class });
+					method.invoke(schedulerService, processHL7Task);
+				}
+				catch (NoSuchMethodException e) {
+					//this should not happen
+				}
+				catch (IllegalAccessException e) {
+					//this should not happen
+				}
+				catch (InvocationTargetException e) {
+					//this should not happen
+				}
+			}
 		}
 	}
 
