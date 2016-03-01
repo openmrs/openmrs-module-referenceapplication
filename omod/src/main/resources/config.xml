@@ -21,7 +21,11 @@
 	
 	<!-- Required Modules -->
 	<require_modules>
-																											
+
+		<require_module version="${webservicesRestModuleVersion}">
+			org.openmrs.module.webservices.rest
+		</require_module>
+
 		<require_module version="${appframeworkVersion}">
 			org.openmrs.module.appframework
 		</require_module>

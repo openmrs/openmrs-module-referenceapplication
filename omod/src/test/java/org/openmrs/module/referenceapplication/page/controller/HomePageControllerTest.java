@@ -17,6 +17,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openmrs.Location;
 import org.openmrs.LocationTag;
+import org.openmrs.User;
+import org.openmrs.api.LocationService;
+import org.openmrs.api.ProviderService;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.context.UserContext;
 import org.openmrs.module.appframework.config.AppFrameworkConfig;
@@ -32,9 +35,9 @@ import org.openmrs.module.appui.UiSessionContext;
 import org.openmrs.module.referenceapplication.ReferenceApplicationConstants;
 import org.openmrs.test.Verifies;
 import org.openmrs.ui.framework.page.PageModel;
-import org.openmrs.util.LocationUtility;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockHttpServletRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,9 +49,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-@PrepareForTest({ Context.class, LocationUtility.class })
-@RunWith(PowerMockRunner.class)
-public class HomePageControllerTest {
+public class HomePageControllerTest extends BaseModuleWebContextSensitiveTest {
+
+    @Autowired
+    LocationService locationService;
+
+    @Autowired
+    ProviderService providerService;
 
     /**
      * @see HomePageController#controller(org.openmrs.ui.framework.page.PageModel model,
@@ -58,12 +65,6 @@ public class HomePageControllerTest {
     @Test
     @Verifies(value = "should limit which apps are shown on the homepage based on location", method = "controller(PageModel,AppFrameworkService,UiSessionContext)")
     public void controller_shouldLimitWhichAppsAreShownOnTheHomePageBasedOnLocation() throws Exception {
-        UserContext userContext= mock(UserContext.class);
-        when(userContext.hasPrivilege("")).thenReturn(Boolean.TRUE);
-
-        mockStatic(Context.class);
-        when(Context.isAuthenticated()).thenReturn(true);
-        when(Context.getUserContext()).thenReturn(userContext);
 
         AppFrameworkConfig appFrameworkConfig = mock(AppFrameworkConfig.class);
 
@@ -78,27 +79,27 @@ public class HomePageControllerTest {
         List<Extension> extensions = new ArrayList<Extension>();
 
         Extension extension = new Extension("ext1", "app1", ReferenceApplicationConstants.HOME_PAGE_EXTENSION_POINT_ID, "link", "label", "url", 1);
-        extension.setRequire("sessionContext.get(\"sessionLocation\").hasTag(\"tag1\")");
+        extension.setRequire("hasMemberWithProperty(sessionLocation.tags, 'display', 'tag1')");
         when(appFrameworkConfig.isEnabled(extension)).thenReturn(Boolean.TRUE);
         extensions.add(extension);
 
         extension = new Extension("ext2", "app1", ReferenceApplicationConstants.HOME_PAGE_EXTENSION_POINT_ID, "link", "label", "url", 2);
-        extension.setRequire("sessionContext.get(\"sessionLocation\").hasTag(\"tag2\")");
+        extension.setRequire("hasMemberWithProperty(sessionLocation.tags, 'display', 'tag2')");
         when(appFrameworkConfig.isEnabled(extension)).thenReturn(Boolean.TRUE);
         extensions.add(extension);
 
         extension = new Extension("ext3", "app1", ReferenceApplicationConstants.HOME_PAGE_EXTENSION_POINT_ID, "link", "label", "url", 3);
-        extension.setRequire("sessionContext.get(\"sessionLocation\").hasTag(\"tag3\")");
+        extension.setRequire("hasMemberWithProperty(sessionLocation.tags, 'display', 'tag3')");
         when(appFrameworkConfig.isEnabled(extension)).thenReturn(Boolean.TRUE);
         extensions.add(extension);
 
         extension = new Extension("ext4", "app1", ReferenceApplicationConstants.HOME_PAGE_EXTENSION_POINT_ID, "link", "label", "url", 4);
-        extension.setRequire("sessionContext.get(\"sessionLocation\").getUuid()==\"" + locationUuid + "\"");
+        extension.setRequire("sessionLocation.uuid=='" + locationUuid + "'");
         when(appFrameworkConfig.isEnabled(extension)).thenReturn(Boolean.TRUE);
         extensions.add(extension);
 
         extension = new Extension("ext5", "app1", ReferenceApplicationConstants.HOME_PAGE_EXTENSION_POINT_ID, "link", "label", "url", 5);
-        extension.setRequire("sessionContext.get(\"sessionLocation\").getUuid()==\"000\"");
+        extension.setRequire("sessionLocation.uuid=='000'");
         when(appFrameworkConfig.isEnabled(extension)).thenReturn(Boolean.TRUE);
         extensions.add(extension);
 
@@ -114,10 +115,8 @@ public class HomePageControllerTest {
 
         AppFrameworkService frameworkService = new AppFrameworkServiceImpl(null, appDescriptors, freeStandingExtensions, componentsState, null, null, appFrameworkConfig, userApps);
 
-        UiSessionContext sessionContext = new UiSessionContext();
-
+        UiSessionContext sessionContext = new UiSessionContext(locationService, providerService, new MockHttpServletRequest());
         sessionContext.setSessionLocation(location);
-        sessionContext.setUserContext(userContext);
 
         new HomePageController().controller(pageModel, frameworkService, sessionContext);
 

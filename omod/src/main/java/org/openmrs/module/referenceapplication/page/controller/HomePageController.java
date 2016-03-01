@@ -47,14 +47,7 @@ public class HomePageController {
                              @SpringBean("appFrameworkService") AppFrameworkService appFrameworkService,
                              UiSessionContext sessionContext) {
 
-        AppContextModel contextModel = new AppContextModel();
-        SimpleObject map = new SimpleObject();
-
-        map.put("currentUser", sessionContext.getCurrentUser());
-        map.put("currentProvider", sessionContext.getCurrentProvider());
-        map.put("sessionLocation", sessionContext.getSessionLocation());
-
-        contextModel = contextModel.with("sessionContext", map);
+        AppContextModel contextModel = sessionContext.generateAppContextModel();
 
         model.addAttribute("extensions",
                 appFrameworkService.getExtensionsForCurrentUser(ReferenceApplicationConstants.HOME_PAGE_EXTENSION_POINT_ID, contextModel));
