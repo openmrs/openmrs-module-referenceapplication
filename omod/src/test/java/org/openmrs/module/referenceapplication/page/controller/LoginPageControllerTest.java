@@ -78,6 +78,8 @@ public class LoginPageControllerTest {
 	
 	private static final String GET_LOCATIONS = "Get Locations";
 
+	private static final String VIEW_LOCATIONS = "View Locations";
+
 	private final UiUtils uiUtils = new UiUtils() {
 
 		@Override
@@ -119,8 +121,8 @@ public class LoginPageControllerTest {
 		when(location.hasTag(Mockito.eq(EmrApiConstants.LOCATION_TAG_SUPPORTS_LOGIN))).thenReturn(locationHasLoginTag);
 		when(locationService.getLocation(Mockito.eq(SESSION_LOCATION_ID))).thenReturn(location);
 		spy(Context.class);
-		doNothing().when(Context.class, "addProxyPrivilege", PrivilegeConstants.VIEW_LOCATIONS);
-		doNothing().when(Context.class, "removeProxyPrivilege", PrivilegeConstants.VIEW_LOCATIONS);
+		doNothing().when(Context.class, "addProxyPrivilege", VIEW_LOCATIONS);
+		doNothing().when(Context.class, "removeProxyPrivilege", VIEW_LOCATIONS);
 		doNothing().when(Context.class, "addProxyPrivilege", GET_LOCATIONS);
 		doNothing().when(Context.class, "removeProxyPrivilege", GET_LOCATIONS);
 		doNothing().when(Context.class, "authenticate", USERNAME, PASSWORD);
