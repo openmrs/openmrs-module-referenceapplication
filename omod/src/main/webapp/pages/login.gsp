@@ -23,7 +23,6 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
     jQuery(function() {
     	updateSelectedOption = function() {
 	        jQuery('#sessionLocation li').removeClass('selected');
-			jQuery('#sessionLocationError').hide();
 	        
 			var sessionLocationVal = jQuery('#sessionLocationInput').val();
 	        if(sessionLocationVal != null && sessionLocationVal != "" && sessionLocationVal != 0){
@@ -33,20 +32,19 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
     
         updateSelectedOption();
 
-		jQuery('#login-form').submit(function(event) {
-			var sessionLocationVal = jQuery('#sessionLocationInput').val();
-
-			if (sessionLocationVal == null && sessionLocationVal == "" && sessionLocationVal == 0) {				
-				jQuery('#sessionLocationError').show().style('color', 'red');				
-				return false;
-			}
-			return true;
-		});
-
         jQuery('#sessionLocation li').click( function() {
             jQuery('#sessionLocationInput').val(jQuery(this).attr("value"));
             updateSelectedOption();
         });
+        
+        jQuery('#login-form').submit(function(e) {
+        	var sessionLocationVal = jQuery('#sessionLocationInput').val();
+        	
+        	if (sessionLocationVal == null || sessionLocationVal == "" || sessionLocationVal == 0) {
+       			jQuery('#sessionLocationError').show(); 		
+        		e.preventDefault();
+        	}
+        });	
         
         jQuery('#username').focus();
 
@@ -101,7 +99,7 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
 
                 <p class="clear">
                     <label for="sessionLocation">
-                        ${ ui.message("referenceapplication.login.sessionLocation") }: <span id="sessionLocationError">${ ui.message("referenceapplication.login.sessionLocationError") }</span>
+                        ${ ui.message("referenceapplication.login.sessionLocation") }: <span class="location-error" id="sessionLocationError" hidden="hidden">${ui.message("referenceapplication.login.error.locationRequired")}</span>
                     </label>
                     <ul id="sessionLocation" class="select">
                         <% locations.sort { ui.format(it) }.each { %>
