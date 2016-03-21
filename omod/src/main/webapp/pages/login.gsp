@@ -23,14 +23,10 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
     jQuery(function() {
     	updateSelectedOption = function() {
 	        jQuery('#sessionLocation li').removeClass('selected');
-	        var sessionLocationVal = jQuery('#sessionLocationInput').val();
+	        
+			var sessionLocationVal = jQuery('#sessionLocationInput').val();
 	        if(sessionLocationVal != null && sessionLocationVal != "" && sessionLocationVal != 0){
 	            jQuery('#sessionLocation li[value|=' + sessionLocationVal + ']').addClass('selected');
-	            jQuery('#loginButton').removeClass('disabled');
-	            jQuery('#loginButton').removeAttr('disabled');
-	        }else{
-	            jQuery('#loginButton').addClass('disabled');
-	            jQuery('#loginButton').attr('disabled','disabled');
 	        }
     	};
     
@@ -40,6 +36,15 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
             jQuery('#sessionLocationInput').val(jQuery(this).attr("value"));
             updateSelectedOption();
         });
+        
+        jQuery('#login-form').submit(function(e) {
+        	var sessionLocationVal = jQuery('#sessionLocationInput').val();
+        	
+        	if (sessionLocationVal == null || sessionLocationVal == "" || sessionLocationVal == 0) {
+       			jQuery('#sessionLocationError').show(); 		
+        		e.preventDefault();
+        	}
+        });	
         
         jQuery('#username').focus();
 
@@ -94,7 +99,7 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
 
                 <p class="clear">
                     <label for="sessionLocation">
-                        ${ ui.message("referenceapplication.login.sessionLocation") }:
+                        ${ ui.message("referenceapplication.login.sessionLocation") }: <span class="location-error" id="sessionLocationError" hidden="hidden">${ui.message("referenceapplication.login.error.locationRequired")}</span>
                     </label>
                     <ul id="sessionLocation" class="select">
                         <% locations.sort { ui.format(it) }.each { %>
