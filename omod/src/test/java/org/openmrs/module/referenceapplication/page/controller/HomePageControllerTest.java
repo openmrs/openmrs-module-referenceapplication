@@ -120,10 +120,10 @@ public class HomePageControllerTest extends BaseModuleWebContextSensitiveTest {
 
         new HomePageController().controller(pageModel, frameworkService, sessionContext);
 
-        assertEquals(3, ((ArrayList) pageModel.get("extensions")).size());
+        assertEquals(1, ((ArrayList) pageModel.get("extensions")).size());
 
-        assertTrue(((ArrayList) pageModel.get("extensions")).contains(extensions.get(0)));
-        assertTrue(((ArrayList) pageModel.get("extensions")).contains(extensions.get(1)));
+        assertFalse(((ArrayList) pageModel.get("extensions")).contains(extensions.get(0)));
+        assertFalse(((ArrayList) pageModel.get("extensions")).contains(extensions.get(1)));
         assertFalse(((ArrayList) pageModel.get("extensions")).contains(extensions.get(2)));
         assertTrue(((ArrayList) pageModel.get("extensions")).contains(extensions.get(3)));
         assertFalse(((ArrayList) pageModel.get("extensions")).contains(extensions.get(4)));
