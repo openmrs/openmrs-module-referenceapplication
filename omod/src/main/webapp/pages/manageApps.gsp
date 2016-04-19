@@ -57,24 +57,29 @@
         </td>
         <td>
             <form id="form-${app.id}" method="POST">
-            <% if(app.enabled) { %>
-                <i class="icon-stop stop-action referenceapplication-action"
-                   title="${ ui.message("referenceapplication.app.action.disable") }"></i>
-                <input type="hidden" name="id" value="${app.id}"/>
-                <input type="hidden" name="action" value="disable" />
-            <% } else { %>
-                <i class="icon-play play-action referenceapplication-action"
-                   title="${ ui.message("referenceapplication.app.action.enable") }"></i>
-                <input type="hidden" name="id" value="${app.id}"/>
-                <input type="hidden" name="action" value="enable" />
-            <% } %>
-            <% if(!app.builtIn) { %>
-                <i class="icon-pencil edit-action" title="${ ui.message("general.edit") }"
-                   onclick="location.href='${ui.pageLink("referenceapplication", "userApp", [appId: app.id, action: "edit"])}';"></i>
-                <i class="icon-remove delete-action" title="${ ui.message("general.delete") }"
-                   onclick="showDeleteUserAppDialog('${app.id}')"></i>
+            <% if(!app.cannotBeStopped) { %>
+                <% if(app.enabled) { %>
+                    <i class="icon-stop stop-action referenceapplication-action"
+                       title="${ ui.message("referenceapplication.app.action.disable") }"></i>
+                    <input type="hidden" name="id" value="${app.id}"/>
+                    <input type="hidden" name="action" value="disable" />
+                <% } else { %>
+                    <i class="icon-play play-action referenceapplication-action"
+                       title="${ ui.message("referenceapplication.app.action.enable") }"></i>
+                    <input type="hidden" name="id" value="${app.id}"/>
+                    <input type="hidden" name="action" value="enable" />
+                <% } %>
+                <% if(!app.builtIn) { %>
+                    <i class="icon-pencil edit-action" title="${ ui.message("general.edit") }"
+                       onclick="location.href='${ui.pageLink("referenceapplication", "userApp", [appId: app.id, action: "edit"])}';"></i>
+                    <i class="icon-remove delete-action" title="${ ui.message("general.delete") }"
+                       onclick="showDeleteUserAppDialog('${app.id}')"></i>
+                <% } %>
             <% } %>
             </form>
+            <% if(app.cannotBeStopped) { %>
+                <i class="icon-lock lock-action referenceapplication-action"></i>
+            <% } %>
         </td>
     </tr>
     </tbody>

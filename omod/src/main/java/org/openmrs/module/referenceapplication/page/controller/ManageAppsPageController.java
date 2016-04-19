@@ -13,6 +13,7 @@
  */
 package org.openmrs.module.referenceapplication.page.controller;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,14 +32,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ManageAppsPageController {
+	List<String> appsThatCannotBeStopped = Arrays.asList("coreapps.systemAdministrationApp");
 	
 	public void get(PageModel model, @SpringBean("appFrameworkService") AppFrameworkService service) {
 		addModelAttributes(model, service);
 	}
 	
-	public String post(PageModel model, @RequestParam("id") String id, @RequestParam("action") String action,
+	public String post(PageModel model, @RequestParam("id") String id, @RequestParam("action") String action, 
 	                   @SpringBean("appFrameworkService") AppFrameworkService service, HttpSession session, UiUtils ui) {
-		
 		String successMsgCode = "referenceapplication.app.manageApps." + action + ".success";
 		String failMessageCode = "referenceapplication.app.manageApps." + action + ".fail";
 		try {
@@ -51,7 +52,7 @@ public class ManageAppsPageController {
 			}
 			
 			InfoErrorMessageUtil.flashInfoMessage(session, ui.message(successMsgCode, id));
-			
+
 			return "redirect:referenceapplication/manageApps.page";
 		}
 		catch (Exception e) {
@@ -84,11 +85,14 @@ public class ManageAppsPageController {
 		private boolean enabled;
 		
 		private boolean builtIn;
+
+		private boolean cannotBeStopped;
 		
 		public AppModel(String id, boolean enabled, boolean builtIn) {
 			this.id = id;
 			this.enabled = enabled;
 			this.builtIn = builtIn;
+			this.cannotBeStopped = appsThatCannotBeStopped.contains(this.id) ? Boolean.TRUE : Boolean.FALSE;
 		}
 		
 	}
