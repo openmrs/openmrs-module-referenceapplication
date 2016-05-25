@@ -29,11 +29,13 @@ public class ConfigureAtlasNotificationProducer implements AdministrativeNotific
         if (cachedDoNotShow) {
             return null;
         }
-        if (isConfigured() || optedOut()) {
-            cachedDoNotShow = true;
+        
+        if (!Context.hasPrivilege(AtlasConstants.PRIV_MANAGE_ATLAS_DATA)) {
             return null;
         }
-        if (!Context.hasPrivilege(AtlasConstants.PRIV_MANAGE_ATLAS_DATA)) {
+        
+        if (isConfigured() || optedOut()) {
+            cachedDoNotShow = true;
             return null;
         }
 
