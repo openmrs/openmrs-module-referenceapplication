@@ -37,7 +37,7 @@ public class ReferenceApplicationActivatorTest {
 		
 		new ReferenceApplicationActivator().setupHL7ProcessingTask(schedulerService);
 		
-		verify(schedulerService, never()).saveTask(Matchers.any(TaskDefinition.class));
+		verify(schedulerService, never()).saveTaskDefinition(Matchers.any(TaskDefinition.class));
 	}
 	
 	@Test
@@ -47,7 +47,7 @@ public class ReferenceApplicationActivatorTest {
 		
 		new ReferenceApplicationActivator().setupHL7ProcessingTask(schedulerService);
 		
-		verify(schedulerService).saveTask(Matchers.argThat(new BaseMatcher<TaskDefinition>() {
+		verify(schedulerService).saveTaskDefinition(Matchers.argThat(new BaseMatcher<TaskDefinition>() {
 			
 			@Override
 			public boolean matches(Object obj) {

@@ -213,7 +213,7 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
 			processHL7Task.setRepeatInterval(ReferenceApplicationConstants.PROCESS_HL7_TASK_INTERVAL);
 			
 			try {
-				schedulerService.saveTask(processHL7Task);
+				schedulerService.saveTaskDefinition(processHL7Task);
 			}
 			catch (NoSuchMethodError ex) {
 				//platform 2.0 renamed saveTask to saveTaskDefinition
