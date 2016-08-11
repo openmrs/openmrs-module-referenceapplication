@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<dataset>
+
+    <metadatamapping_metadata_source
+            metadata_source_id = "2134"
+            creator = "1"
+            date_created="2008-08-18 12:38:58.0"
+            uuid="cf25712e-f193-48d5-a85a-5fd8d0242223"
+            name="org.openmrs.module.emrapi"
+            retired = "false"
+    />
+
+    <metadatamapping_metadata_term_mapping metadata_term_mapping_id = "1" metadata_source_id = "2134"
+                                           creator = "1" date_created="2008-08-18 12:38:58.0" uuid="453e855a-b8eb-11e2-9426-3edb8e345d35"
+                                           retired = "false" code = "emr.exitFromInpatientEncounterType" metadata_class = "org.openmrs.EncounterType"
+    />
+
+    <metadatamapping_metadata_term_mapping metadata_term_mapping_id = "2" metadata_source_id = "2134"
+                                           creator = "1" date_created="2008-08-18 12:38:58.0" uuid="776cb3c3-9e66-42c6-8f03-2a0c1e9ca2a8"
+                                           retired = "false" code = "emr.transferWithinHospitalEncounterType" metadata_class = "org.openmrs.EncounterType"
+    />
+
+    <metadatamapping_metadata_term_mapping metadata_term_mapping_id = "3" metadata_source_id = "2134"
+                                           creator = "1" date_created="2008-08-18 12:38:58.0" uuid="fc578302-3de8-48f1-87c5-f5f8baac1773"
+                                           retired = "false" code = "emr.admissionEncounterType" metadata_class = "org.openmrs.EncounterType"
+    />
+
+    <metadatamapping_metadata_term_mapping metadata_term_mapping_id = "4" metadata_source_id = "2134"
+                                           creator = "1" date_created="2008-08-18 12:38:58.0" uuid="a283f195-fb1b-4b39-8ca8-0f55765ed2dd"
+                                           retired = "false" code = "emr.checkInEncounterType" metadata_class = "org.openmrs.EncounterType"
+    />
+
+    <metadatamapping_metadata_term_mapping metadata_term_mapping_id = "5" metadata_source_id = "2134"
+                                           creator = "1" date_created="2008-08-18 12:38:58.0" uuid="abb9f947-4a09-4afb-ab2b-846039d1f82b"
+                                           retired = "false" code = "emr.atFacilityVisitType" metadata_class = "org.openmrs.VisitType"
+    />
+
+</dataset>
