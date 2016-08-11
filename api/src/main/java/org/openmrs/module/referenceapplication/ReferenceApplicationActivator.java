@@ -21,9 +21,12 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.EncounterType;
 import org.openmrs.GlobalProperty;
 import org.openmrs.Location;
 import org.openmrs.LocationTag;
+import org.openmrs.OpenmrsMetadata;
+import org.openmrs.VisitType;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.FormService;
 import org.openmrs.api.LocationService;
@@ -36,6 +39,9 @@ import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.emrapi.EmrApiConstants;
 import org.openmrs.module.htmlformentry.HtmlFormEntryService;
 import org.openmrs.module.htmlformentryui.HtmlFormUtil;
+import org.openmrs.module.metadatamapping.MetadataSource;
+import org.openmrs.module.metadatamapping.MetadataTermMapping;
+import org.openmrs.module.metadatamapping.api.MetadataMappingService;
 import org.openmrs.module.namephonetics.NamePhoneticsConstants;
 import org.openmrs.module.referencemetadata.ReferenceMetadataConstants;
 import org.openmrs.module.referencemetadata.ReferenceMetadataProperties;
@@ -81,6 +87,7 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
 	        AdministrationService administrationService = Context.getAdministrationService();
 	        AppFrameworkService appFrameworkService = Context.getService(AppFrameworkService.class);
 	        SchedulerService schedulerService = Context.getSchedulerService();
+			MetadataMappingService metadataMappingService = Context.getService(MetadataMappingService.class);
 	
 	        appFrameworkService.disableApp("registrationapp.basicRegisterPatient");
 	        appFrameworkService.disableApp("coreapps.awaitingAdmission");
@@ -88,7 +95,7 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
 	        administrationService.saveGlobalProperty(new GlobalProperty("registrationcore.patientNameSearch",
 	                "registrationcore.ExistingPatientNameSearch"));
 	
-	        setupEmrApiGlobalProperties(administrationService);
+	        setupEmrApiGlobalProperties(administrationService, metadataMappingService);
 	        setupNamePhoneticsGlobalProperties(administrationService);
 	        setupRegistrationcoreGlobalProperties(administrationService);
 	        setupConceptManagementAppsGlobalProperties(administrationService);
@@ -113,18 +120,36 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
 		    "1ADDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 	}
 
-    public void setupEmrApiGlobalProperties(AdministrationService administrationService) {
-        setGlobalProperty(administrationService, EmrApiConstants.GP_ADMISSION_ENCOUNTER_TYPE, ReferenceMetadataProperties.ADMISSION_ENCOUNTER_TYPE_UUID);
-        setGlobalProperty(administrationService, EmrApiConstants.GP_TRANSFER_WITHIN_HOSPITAL_ENCOUNTER_TYPE, ReferenceMetadataProperties.TRANSFER_ENCOUNTER_TYPE_UUID);
-        setGlobalProperty(administrationService, EmrApiConstants.GP_EXIT_FROM_INPATIENT_ENCOUNTER_TYPE, ReferenceMetadataProperties.DISCHARGE_ENCOUNTER_TYPE_UUID);
-        setGlobalProperty(administrationService, EmrApiConstants.GP_CHECK_IN_ENCOUNTER_TYPE, ReferenceMetadataProperties.CHECK_IN_ENCOUNTER_TYPE_UUID);
+    public void setupEmrApiGlobalProperties(AdministrationService administrationService, MetadataMappingService metadataMappingService) {
+		MetadataSource emrapiSource = metadataMappingService.getMetadataSourceByName(EmrApiConstants.EMR_METADATA_SOURCE_NAME);
 
-        setGlobalProperty(administrationService, EmrApiConstants.GP_AT_FACILITY_VISIT_TYPE, ReferenceMetadataProperties.FACILITY_VISIT_TYPE_UUID);
+		EncounterType admissionEncounterType = Context.getEncounterService().getEncounterTypeByUuid(ReferenceMetadataProperties.ADMISSION_ENCOUNTER_TYPE_UUID);
+		mapMetadata(metadataMappingService, emrapiSource, EmrApiConstants.GP_ADMISSION_ENCOUNTER_TYPE, admissionEncounterType);
+
+		EncounterType transferEncounterType = Context.getEncounterService().getEncounterTypeByUuid(ReferenceMetadataProperties.TRANSFER_ENCOUNTER_TYPE_UUID);
+		mapMetadata(metadataMappingService, emrapiSource, EmrApiConstants.GP_TRANSFER_WITHIN_HOSPITAL_ENCOUNTER_TYPE, transferEncounterType);
+
+		EncounterType exitEncounterType = Context.getEncounterService().getEncounterTypeByUuid(ReferenceMetadataProperties.DISCHARGE_ENCOUNTER_TYPE_UUID);
+		mapMetadata(metadataMappingService, emrapiSource, EmrApiConstants.GP_EXIT_FROM_INPATIENT_ENCOUNTER_TYPE, exitEncounterType);
+
+		EncounterType checkInEncounterType = Context.getEncounterService().getEncounterTypeByUuid(ReferenceMetadataProperties.CHECK_IN_ENCOUNTER_TYPE_UUID);
+		mapMetadata(metadataMappingService, emrapiSource, EmrApiConstants.GP_CHECK_IN_ENCOUNTER_TYPE, checkInEncounterType);
+
+		VisitType facilityVisitType = Context.getVisitService().getVisitTypeByUuid(ReferenceMetadataProperties.FACILITY_VISIT_TYPE_UUID);
+		mapMetadata(metadataMappingService, emrapiSource, EmrApiConstants.GP_AT_FACILITY_VISIT_TYPE, facilityVisitType);
 
         setGlobalProperty(administrationService, EmrApiConstants.GP_DIAGNOSIS_SET_OF_SETS, ReferenceMetadataProperties.ICPC_DIAGNOSIS_CATEGORIES_CONCEPT_UUID);
     }
 
-    private void setupNamePhoneticsGlobalProperties(AdministrationService administrationService) {
+	private void mapMetadata(MetadataMappingService metadataMappingService, MetadataSource emrapiSource, String code, OpenmrsMetadata metadata) {
+		MetadataTermMapping termMapping = metadataMappingService.getMetadataTermMapping(emrapiSource, code);
+		if(!metadata.getUuid().equals(termMapping.getMetadataUuid())){
+			termMapping.setMappedObject(metadata);
+			metadataMappingService.saveMetadataTermMapping(termMapping);
+		}
+	}
+
+	private void setupNamePhoneticsGlobalProperties(AdministrationService administrationService) {
 		setGlobalProperty(administrationService, NamePhoneticsConstants.GIVEN_NAME_GLOBAL_PROPERTY, "Soundex");
 		setGlobalProperty(administrationService, NamePhoneticsConstants.MIDDLE_NAME_GLOBAL_PROPERTY, "Soundex");
 		setGlobalProperty(administrationService, NamePhoneticsConstants.FAMILY_NAME_GLOBAL_PROPERTY, "Soundex");
