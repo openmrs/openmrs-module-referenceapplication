@@ -1,19 +1,14 @@
 package org.openmrs.module.referenceapplication;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.LocationTag;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.LocationService;
 import org.openmrs.module.appframework.AppFrameworkConstants;
-import org.openmrs.module.emrapi.EmrApiConstants;
 import org.openmrs.module.emrapi.EmrApiProperties;
 import org.openmrs.module.emrapi.utils.MetadataUtil;
-import org.openmrs.module.metadatamapping.MetadataSource;
-import org.openmrs.module.metadatamapping.api.MetadataMappingService;
 import org.openmrs.module.referencemetadata.ReferenceMetadataConstants;
 import org.openmrs.module.referencemetadata.ReferenceMetadataProperties;
 import org.openmrs.scheduler.SchedulerService;
@@ -25,7 +20,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.Collection;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -51,29 +45,19 @@ public class ReferenceApplicationActivatorComponentTest extends BaseModuleContex
     @Autowired
     private SchedulerService schedulerService;
 
-    @Autowired
-    private MetadataMappingService metadataMappingService;
-
-    @Before
-    public void setup() throws Exception {
-        executeDataSet("ReferenceApplicationActivatorTestDataset.xml");
-        MetadataUtil.setupSpecificMetadata(getClass().getClassLoader(), "Reference_Application_Visit_and_Encounter_Types");
-    }
-
     @Test
     public void testSetUpAdtGlobalProperties() throws Exception {
+        MetadataUtil.setupSpecificMetadata(getClass().getClassLoader(), "Reference_Application_Visit_and_Encounter_Types");
+
         ReferenceApplicationActivator referenceApplicationActivator = new ReferenceApplicationActivator();
-        referenceApplicationActivator.setupEmrApiGlobalProperties(administrationService, metadataMappingService);
+        referenceApplicationActivator.setupEmrApiGlobalProperties(administrationService);
 
         assertThat(emrApiProperties.getAdmissionEncounterType(), hasUuid(ReferenceMetadataProperties.ADMISSION_ENCOUNTER_TYPE_UUID));
-        assertThat(emrApiProperties.getCheckInEncounterType(), hasUuid(ReferenceMetadataProperties.CHECK_IN_ENCOUNTER_TYPE_UUID));
         assertThat(emrApiProperties.getExitFromInpatientEncounterType(), hasUuid(ReferenceMetadataProperties.DISCHARGE_ENCOUNTER_TYPE_UUID));
         assertThat(emrApiProperties.getTransferWithinHospitalEncounterType(), hasUuid(ReferenceMetadataProperties.TRANSFER_ENCOUNTER_TYPE_UUID));
-        assertThat(emrApiProperties.getAtFacilityVisitType(), hasUuid(ReferenceMetadataProperties.FACILITY_VISIT_TYPE_UUID));
+        assertThat(emrApiProperties.getCheckInEncounterType(), hasUuid(ReferenceMetadataProperties.CHECK_IN_ENCOUNTER_TYPE_UUID));
 
-        //sanity check with direct check of mapping
-        EncounterType admissionEncounterType = metadataMappingService.getMetadataItem(EncounterType.class, EmrApiConstants.EMR_METADATA_SOURCE_NAME, EmrApiConstants.GP_ADMISSION_ENCOUNTER_TYPE);
-        assertThat(admissionEncounterType, hasUuid(ReferenceMetadataProperties.ADMISSION_ENCOUNTER_TYPE_UUID));
+        assertThat(emrApiProperties.getAtFacilityVisitType(), hasUuid(ReferenceMetadataProperties.FACILITY_VISIT_TYPE_UUID));
     }
 
     @Test
