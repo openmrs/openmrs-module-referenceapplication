@@ -10,9 +10,5 @@
         <mapping resource="ExportedPackage.hbm.xml" />
         <mapping resource="ImportedPackage.hbm.xml" />
         <mapping resource="ImportedItem.hbm.xml" />
-
-        <!--metadata mapping module-->
-        <mapping resource="MetadataSource.hbm.xml"/>
-        <mapping resource="MetadataTermMapping.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>
