@@ -12,7 +12,7 @@
 
     <% if (authenticatedUser) { %>
         <h4>
-            ${ ui.message("referenceapplication.home.currentUser", ui.format(authenticatedUser), ui.format(sessionContext.sessionLocation)) }
+            ${ ui.escapeJs(ui.message("referenceapplication.home.currentUser", ui.format(authenticatedUser), ui.format(sessionContext.sessionLocation))) }
         </h4>
     <% } else { %>
         <h4>
