@@ -103,7 +103,7 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
                     </label>
                     <ul id="sessionLocation" class="select">
                         <% locations.sort { ui.format(it) }.each { %>
-                        <li id="${ui.escapeJs(it.name)}" value="${it.id}">${ui.escapeJs(ui.format(it))}</li>
+                        <li id="${ui.encodeHtmlContent(it.name)}" value="${it.id}">${ui.encodeHtmlContent(ui.format(it))}</li>
                         <% } %>
                     </ul>
                 </p>
