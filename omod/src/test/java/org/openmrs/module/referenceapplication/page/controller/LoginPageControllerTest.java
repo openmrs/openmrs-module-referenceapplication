@@ -13,7 +13,40 @@
  */
 package org.openmrs.module.referenceapplication.page.controller;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.openmrs.Location;
+import org.openmrs.api.LocationService;
+import org.openmrs.api.context.Context;
+import org.openmrs.api.context.UserContext;
+import org.openmrs.module.appframework.service.AppFrameworkService;
+import org.openmrs.module.appui.AppUiConstants;
+import org.openmrs.module.appui.UiSessionContext;
+import org.openmrs.module.emrapi.EmrApiConstants;
+import org.openmrs.module.referenceapplication.ReferenceApplicationConstants;
+import org.openmrs.module.referenceapplication.ReferenceApplicationWebConstants;
+import org.openmrs.test.Verifies;
+import org.openmrs.ui.framework.BasicUiUtils;
+import org.openmrs.ui.framework.UiUtils;
+import org.openmrs.ui.framework.page.PageModel;
+import org.openmrs.ui.framework.page.PageRequest;
+import org.openmrs.ui.framework.session.Session;
+import org.openmrs.util.LocationUtility;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockHttpSession;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -24,43 +57,6 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.spy;
 import static org.powermock.api.support.membermodification.MemberMatcher.method;
 import static org.powermock.api.support.membermodification.MemberModifier.stub;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.databene.commons.StringUtil;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.openmrs.Location;
-import org.openmrs.api.LocationService;
-import org.openmrs.api.context.Context;
-import org.openmrs.api.context.UserContext;
-import org.openmrs.module.appframework.service.AppFrameworkService;
-import org.openmrs.module.appui.UiSessionContext;
-import org.openmrs.module.emrapi.EmrApiConstants;
-import org.openmrs.module.referenceapplication.ReferenceApplicationConstants;
-import org.openmrs.test.Verifies;
-import org.openmrs.ui.framework.BasicUiUtils;
-import org.openmrs.ui.framework.UiUtils;
-import org.openmrs.ui.framework.page.PageModel;
-import org.openmrs.ui.framework.page.PageRequest;
-import org.openmrs.ui.framework.session.Session;
-import org.openmrs.util.LocationUtility;
-import org.openmrs.util.PrivilegeConstants;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.mock.web.MockHttpSession;
-
-import static org.mockito.Mockito.when;
-import static org.mockito.Matchers.any;
 
 @PrepareForTest({ Context.class, LocationUtility.class })
 @RunWith(PowerMockRunner.class)
@@ -77,6 +73,7 @@ public class LoginPageControllerTest {
 	private LocationService locationService;
 	
 	private static final String GET_LOCATIONS = "Get Locations";
+	private static final String VIEW_LOCATIONS = "View Locations";
 
 	private final UiUtils uiUtils = new UiUtils() {
 
@@ -118,9 +115,11 @@ public class LoginPageControllerTest {
 		Location location = Mockito.spy(new Location(SESSION_LOCATION_ID));
 		when(location.hasTag(Mockito.eq(EmrApiConstants.LOCATION_TAG_SUPPORTS_LOGIN))).thenReturn(locationHasLoginTag);
 		when(locationService.getLocation(Mockito.eq(SESSION_LOCATION_ID))).thenReturn(location);
+		UserContext userContext = Mockito.spy(new UserContext());
 		spy(Context.class);
-		doNothing().when(Context.class, "addProxyPrivilege", PrivilegeConstants.GET_LOCATIONS);
-		doNothing().when(Context.class, "removeProxyPrivilege", PrivilegeConstants.GET_LOCATIONS);
+		stub(method(Context.class, "getUserContext")).toReturn(userContext);
+		doNothing().when(Context.class, "addProxyPrivilege", VIEW_LOCATIONS);
+		doNothing().when(Context.class, "removeProxyPrivilege", VIEW_LOCATIONS);
 		doNothing().when(Context.class, "addProxyPrivilege", GET_LOCATIONS);
 		doNothing().when(Context.class, "removeProxyPrivilege", GET_LOCATIONS);
 		doNothing().when(Context.class, "authenticate", USERNAME, PASSWORD);
@@ -161,8 +160,8 @@ public class LoginPageControllerTest {
 	 *      org.openmrs.module.appframework.service.AppFrameworkService)
 	 */
 	@Test
-	@Verifies(value = "should set redirectUrl in the page model if any was specified in the request", method = "get(PageModel,UiUtils,PageRequest)")
-	public void get_shouldSetRedirectUrlInThePageModelIfAnyWasSpecifiedInTheRequest() throws Exception {
+	@Verifies(value = "should set redirectUrl in the page model if openmrs related url was specified in the request", method = "get(PageModel,UiUtils,PageRequest)")
+	public void get_shouldSetRedirectUrlInThePageModelIfOpenmrsRelatedUrlWasSpecifiedInTheRequest() throws Exception {
 		when(Context.isAuthenticated()).thenReturn(false);
 
 		String redirectUrl = TEST_CONTEXT_PATH + "/referenceapplication/patient.page";
@@ -224,23 +223,77 @@ public class LoginPageControllerTest {
 	}
 
 	/**
+	 * @see LoginPageController#get(org.openmrs.ui.framework.page.PageModel,
+	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest, String,
+	 *      org.openmrs.api.LocationService,
+	 *      org.openmrs.module.appframework.service.AppFrameworkService)
+	 */
+	@Test
+	@Verifies(value = "should redirect user to requested url specified in ?redirectUrl if it is openmrs related and user is authenticated", method = "get(PageModel,UiUtils,PageRequest)")
+	public void get_shouldRedirectUserToRequestedUrlIfAuthenticated() throws Exception{
+		when(Context.isAuthenticated()).thenReturn(true);
+
+		String redirectUrl = TEST_CONTEXT_PATH + "/referenceapplication/patient.page";
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		request.setContextPath(TEST_CONTEXT_PATH);
+		request.setParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL, redirectUrl);
+		PageRequest pageRequest = createPageRequest(request, null);
+		HttpSession httpSession = new MockHttpSession();
+		request.setSession(httpSession);
+
+		PageModel pageModel = new PageModel();
+
+		assertEquals("redirect:" + redirectUrl, new LoginPageController().get(pageModel, uiUtils, pageRequest, null, null, appFrameworkService));
+	}
+
+	/**
+	 * @see LoginPageController#get(org.openmrs.ui.framework.page.PageModel,
+	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest, String,
+	 *      org.openmrs.api.LocationService,
+	 *      org.openmrs.module.appframework.service.AppFrameworkService)
+	 */
+	@Test
+	@Verifies(value = "should redirect user to home if ?redirectUrl is not openmrs related and user is authenticated", method = "get(PageModel,UiUtils,PageRequest)")
+	public void get_shouldRedirectUserToHomeIfAuthenticated() throws Exception{
+		when(Context.isAuthenticated()).thenReturn(true);
+
+		String redirectUrl = "/somePage/notOpenmrs.page";
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		request.setContextPath(TEST_CONTEXT_PATH);
+		request.setParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL, redirectUrl);
+		PageRequest pageRequest = createPageRequest(request, null);
+		HttpSession httpSession = new MockHttpSession();
+		request.setSession(httpSession);
+
+		PageModel pageModel = new PageModel();
+
+		assertNotEquals("redirect:" + redirectUrl, new LoginPageController().get(pageModel, uiUtils, pageRequest, null, null, appFrameworkService));
+	}
+
+	/**
 	 * @see LoginPageController#post(String, String, Integer, org.openmrs.api.LocationService,
 	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest,
 	 *      org.openmrs.module.appui.UiSessionContext)
 	 */
 	@Test
-    @Ignore
-	@Verifies(value = "should redirect the user back to the redirectUrl if any", method = "post(String,String,UiUtils,PageRequest)")
-	public void post_shouldRedirectTheUserBackToTheRedirectUrlIfAny() throws Exception {
-		setupMocksForSuccessfulAuthentication(true);
+	@Verifies(value = "should redirect user to home after manual logout and login", method = "get(String,String,UiUtils,PageRequest)")
+	public void get_shouldNotSetRedirectUrlParamAfterManualLogout() throws Exception {
+		when(Context.isAuthenticated()).thenReturn(false);
 
-		final String redirectUrl = TEST_CONTEXT_PATH + "/referenceapplication/patient.page";
+		final String homeRedirect = "redirect:" + uiUtils.pageLink(ReferenceApplicationConstants.MODULE_ID, "home");
+
 		MockHttpServletRequest request = new MockHttpServletRequest();
-		request.addParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL, redirectUrl);
+		request.addHeader("Referer", "somePage/weDont/wantTo/beRedirected");
 		PageRequest pageRequest = createPageRequest(request, null);
+		Session session = new Session(new MockHttpSession());
+		session.setAttribute(AppUiConstants.SESSION_ATTRIBUTE_MANUAL_LOGOUT, "true");
+		pageRequest.setSession(session);
 
-		assertEquals("redirect:" + redirectUrl, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID,
-		    locationService, uiUtils, pageRequest, sessionContext));
+		PageModel pageModel = new PageModel();
+
+		new LoginPageController().get(pageModel, uiUtils, pageRequest, null, null, appFrameworkService);
+
+		assertEquals("", pageModel.getAttribute(ReferenceApplicationWebConstants.REQUEST_PARAMETER_NAME_REDIRECT_URL));
 
 	}
 
@@ -250,7 +303,50 @@ public class LoginPageControllerTest {
 	 *      org.openmrs.module.appui.UiSessionContext)
 	 */
 	@Test
-    @Ignore
+	@Verifies(value = "should redirect new user to home", method = "post(String,String,UiUtils,PageRequest)")
+	public void post_shouldRedirectNewUserToHome() throws Exception {
+		setupMocksForSuccessfulAuthentication(true);
+
+		final String homeRedirect = "redirect:" + uiUtils.pageLink(ReferenceApplicationConstants.MODULE_ID, "home");
+		String redirectUrl = TEST_CONTEXT_PATH + "/referenceapplication/patient.page";
+
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		request.setParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL, redirectUrl);
+		request.setCookies(new Cookie(ReferenceApplicationWebConstants.COOKIE_NAME_LAST_USER, String.valueOf("oldUser".hashCode())));
+
+		PageRequest pageRequest = createPageRequest(request, null);
+
+		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID,
+				locationService, uiUtils, pageRequest, sessionContext));
+	}
+
+	/**
+	 * @see LoginPageController#post(String, String, Integer, org.openmrs.api.LocationService,
+	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest,
+	 *      org.openmrs.module.appui.UiSessionContext)
+	 */
+	@Test
+	@Verifies(value = "should redirect old user to page requested in redirectUrl param", method = "post(String,String,UiUtils,PageRequest)")
+	public void post_shouldRedirectOldUserToRedirectUrl() throws Exception {
+		setupMocksForSuccessfulAuthentication(true);
+
+		String redirectUrl = TEST_CONTEXT_PATH + "/referenceapplication/patient.page";
+
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		request.setParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL, redirectUrl);
+		request.setCookies(new Cookie(ReferenceApplicationWebConstants.COOKIE_NAME_LAST_USER, String.valueOf(USERNAME.hashCode())));
+		PageRequest pageRequest = createPageRequest(request, null);
+
+		assertEquals("redirect:" + redirectUrl, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID,
+				locationService, uiUtils, pageRequest, sessionContext));
+	}
+
+	/**
+	 * @see LoginPageController#post(String, String, Integer, org.openmrs.api.LocationService,
+	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest,
+	 *      org.openmrs.module.appui.UiSessionContext)
+	 */
+	@Test
 	@Verifies(value = "should redirect the user to the home page if the redirectUrl is the login page", method = "post(String,String,UiUtils,PageRequest)")
 	public void post_shouldRedirectTheUserToTheHomePageIfTheRedirectUrlIsTheLoginPage() throws Exception {
 		setupMocksForSuccessfulAuthentication(true);
@@ -289,7 +385,6 @@ public class LoginPageControllerTest {
 	 *      org.openmrs.module.appui.UiSessionContext)
 	 */
 	@Test
-    @Ignore
 	public void post_shouldSendTheUserBackToTheLoginPageIfAnInvalidLocationIsSelected() throws Exception {
 		setupMocksForSuccessfulAuthentication(false);
 		MockHttpServletRequest request = new MockHttpServletRequest();
@@ -334,4 +429,30 @@ public class LoginPageControllerTest {
 		
 		assertEquals(redirectUrl, pageModel.get(REQUEST_PARAMETER_NAME_REDIRECT_URL));
     }
+
+	/**
+	 * @see LoginPageController#get(org.openmrs.ui.framework.page.PageModel,
+	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest, String,
+	 *      org.openmrs.api.LocationService,
+	 *      org.openmrs.module.appframework.service.AppFrameworkService)
+	 */
+	@Test
+	@Verifies(value = "should set redirectUrl as redirectUrl param when referer specified", method = "get(PageModel,UiUtils,PageRequest)")
+	public void get_shouldChooseRedirectUrlOverReferer() throws Exception{
+		when(Context.isAuthenticated()).thenReturn(true);
+
+		String redirectUrl = "/openmrs/redirect.page";
+		String refererUrl = "/openmrs/referer.page";
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		request.setContextPath(TEST_CONTEXT_PATH);
+		request.setParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL, redirectUrl);
+		request.addHeader("Referer", refererUrl);
+		PageRequest pageRequest = createPageRequest(request, null);
+		HttpSession httpSession = new MockHttpSession();
+		request.setSession(httpSession);
+
+		PageModel pageModel = new PageModel();
+
+		assertEquals("redirect:" + redirectUrl, new LoginPageController().get(pageModel, uiUtils, pageRequest, null, null, appFrameworkService));
+	}
 }

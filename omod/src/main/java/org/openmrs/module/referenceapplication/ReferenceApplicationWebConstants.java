@@ -24,5 +24,7 @@ public final class ReferenceApplicationWebConstants {
 	public static final String REQUEST_PARAMETER_NAME_REDIRECT_URL = "redirectUrl";
 
     public static final String COOKIE_NAME_LAST_SESSION_LOCATION = "referenceapplication.lastSessionLocation";
+
+	public static final String COOKIE_NAME_LAST_USER = "_REFERENCE_APPLICATION_LAST_USER_";
 	
 }
