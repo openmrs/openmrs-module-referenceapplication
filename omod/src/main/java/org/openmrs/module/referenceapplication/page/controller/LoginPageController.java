@@ -26,6 +26,7 @@ import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.context.ContextAuthenticationException;
 import org.openmrs.module.appframework.service.AppFrameworkService;
+import org.openmrs.module.appui.AppUiConstants;
 import org.openmrs.module.appui.UiSessionContext;
 import org.openmrs.module.emrapi.EmrApiConstants;
 import org.openmrs.module.emrapi.utils.GeneralUtils;
@@ -123,21 +124,26 @@ public class LoginPageController {
 	    String referer = pageRequest.getRequest().getHeader("Referer");
 	    String redirectUrl = "";
 		if (referer != null) {
-			if (referer.contains("http://") || referer.contains("https://")) {
-				try {
-					URL refererUrl = new URL(referer);
-					String refererPath = refererUrl.getFile();
-					String refererContextPath = refererPath.substring(0, refererPath.indexOf('/', 1));
-					if (StringUtils.equals(pageRequest.getRequest().getContextPath(), refererContextPath)) {
-						redirectUrl = refererPath;
+			String manualLogout = pageRequest.getSession().getAttribute(AppUiConstants.SESSION_ATTRIBUTE_MANUAL_LOGOUT, String.class);
+			if (!"true".equals(manualLogout)) {
+				if (referer.contains("http://") || referer.contains("https://")) {
+					try {
+						URL refererUrl = new URL(referer);
+						String refererPath = refererUrl.getFile();
+						String refererContextPath = refererPath.substring(0, refererPath.indexOf('/', 1));
+						if (StringUtils.equals(pageRequest.getRequest().getContextPath(), refererContextPath)) {
+							redirectUrl = refererPath;
+						}
 					}
+					catch (MalformedURLException e) {
+						log.error(e.getMessage());
+					}
+				} else {
+					redirectUrl = pageRequest.getRequest().getHeader("Referer");
 				}
-				catch (MalformedURLException e) {
-					log.error(e.getMessage());
-				}
-			} else {
-				redirectUrl = pageRequest.getRequest().getHeader("Referer");
 			}
+			
+			pageRequest.getSession().setAttribute(AppUiConstants.SESSION_ATTRIBUTE_MANUAL_LOGOUT, null);
 		}
 	    return StringEscapeUtils.escapeHtml(redirectUrl);
     }
