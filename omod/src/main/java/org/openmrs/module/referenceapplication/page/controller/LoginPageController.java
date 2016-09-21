@@ -126,7 +126,7 @@ public class LoginPageController {
 			if (referer.contains("http://") || referer.contains("https://")) {
 				try {
 					URL refererUrl = new URL(referer);
-					String refererPath = refererUrl.getPath();
+					String refererPath = refererUrl.getFile();
 					String refererContextPath = refererPath.substring(0, refererPath.indexOf('/', 1));
 					if (StringUtils.equals(pageRequest.getRequest().getContextPath(), refererContextPath)) {
 						redirectUrl = refererPath;
