@@ -252,9 +252,9 @@ public class LoginPageController {
 	}
 	
 	private String getStringSessionAttribute(String attributeName, HttpServletRequest request) {
-		String attributeValue = request.getSession().getAttribute(attributeName).toString();
+		Object attributeValue = request.getSession().getAttribute(attributeName);
 		request.getSession().removeAttribute(attributeName);
-		return attributeValue;
+		return attributeValue != null ? attributeValue.toString() : null;
 	}
 	
 	public String getRelativeUrl(String url, PageRequest pageRequest) {
