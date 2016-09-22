@@ -252,7 +252,7 @@ public class LoginPageController {
 	}
 	
 	private String getStringSessionAttribute(String attributeName, HttpServletRequest request) {
-		String attributeValue = (String) request.getSession().getAttribute(attributeName);
+		String attributeValue = request.getSession().getAttribute(attributeName).toString();
 		request.getSession().removeAttribute(attributeName);
 		return attributeValue;
 	}
