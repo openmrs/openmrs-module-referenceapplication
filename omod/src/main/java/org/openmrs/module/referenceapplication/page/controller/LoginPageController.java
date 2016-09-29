@@ -124,11 +124,10 @@ public class LoginPageController {
                     if (StringUtils.equals(pageRequest.getRequest().getContextPath(), urlContextPath)) {
                         return true;
                     }
-                }
-                catch (MalformedURLException e) {
+                } catch (MalformedURLException e) {
                     log.error(e.getMessage());
                 }
-			} else if(redirectUrl.startsWith("/openmrs")){
+			} else if(redirectUrl.startsWith(pageRequest.getRequest().getContextPath())){
 				return true;
 			}
 		}
@@ -153,15 +152,15 @@ public class LoginPageController {
 		return pageRequest.getRequest().getParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL);
 	}
 
-	private String getRedirectUrl(PageRequest pageRequest){
+	private String getRedirectUrl(PageRequest pageRequest) {
 		String redirectUrl = getRedirectUrlFromRequest(pageRequest);
-		if(StringUtils.isBlank(redirectUrl)) {
-			redirectUrl = getRedirectUrlFromReferer(pageRequest);
-		}
-		if(StringUtils.isBlank(redirectUrl)) {
+		if (StringUtils.isBlank(redirectUrl)) {
 			redirectUrl = getStringSessionAttribute(SESSION_ATTRIBUTE_REDIRECT_URL, pageRequest.getRequest());
 		}
-		if(StringUtils.isNotBlank(redirectUrl) && isUrlWithinOpenmrs(pageRequest, redirectUrl)){
+		if (StringUtils.isBlank(redirectUrl)) {
+			redirectUrl = getRedirectUrlFromReferer(pageRequest);
+		}
+		if (StringUtils.isNotBlank(redirectUrl) && isUrlWithinOpenmrs(pageRequest, redirectUrl)) {
 			return redirectUrl;
 		}
 		return "";
