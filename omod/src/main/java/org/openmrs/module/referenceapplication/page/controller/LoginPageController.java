@@ -31,6 +31,7 @@ import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
 import org.openmrs.ui.framework.page.PageRequest;
+import org.openmrs.web.user.CurrentUsers;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -215,6 +216,8 @@ public class LoginPageController {
 				if (Context.isAuthenticated()) {
 					if (log.isDebugEnabled())
 						log.debug("User has successfully authenticated");
+					
+					CurrentUsers.addUser(pageRequest.getRequest().getSession(), Context.getAuthenticatedUser());
 
 					sessionContext.setSessionLocation(sessionLocation);
 					//we set the username value to check it new or old user is trying to log in
