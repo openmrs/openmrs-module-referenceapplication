@@ -50,7 +50,7 @@
 		<namephoneticsVersion>1.5</namephoneticsVersion>
 		<metadatadeployVersion>1.7</metadatadeployVersion>
 		<metadatasharingVersion>1.2.2</metadatasharingVersion>
-		<emrapiVersion>1.19-SNAPSHOT</emrapiVersion>
+		<emrapiVersion>1.20-SNAPSHOT</emrapiVersion>
 		<providermanagementVersion>2.5.0</providermanagementVersion>
 		<uiframeworkVersion>3.9</uiframeworkVersion>
 		<appuiVersion>1.7</appuiVersion>
