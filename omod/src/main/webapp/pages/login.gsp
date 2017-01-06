@@ -36,8 +36,42 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
             jQuery('#sessionLocationInput').val(jQuery(this).attr("value"));
             updateSelectedOption();
         });
-        
-        jQuery('#login-form').submit(function(e) {
+		jQuery('#sessionLocation li').focus( function() {
+            jQuery('#sessionLocationInput').val(jQuery(this).attr("value"));
+            updateSelectedOption();
+        });
+		
+		// If <Enter> Key is pressed, submit the form
+		jQuery('#sessionLocation').keyup(function (e) {
+    		var key = e.which || e.keyCode;
+    		if (key === 13) {
+      			jQuery('#login-form').submit();
+    		}
+		});
+		var  listItem = Array.from(jQuery('#sessionLocation li'));
+		for (var i in  listItem){
+			 listItem[i].setAttribute('data-key', i);
+			 listItem[i].addEventListener('keyup', function (event){
+				var keyCode = event.which || event.keyCode;
+				switch (keyCode) {
+					case 37: // move left
+						jQuery(this).prev('#sessionLocation li').focus();
+						break;
+					case 39: // move right
+						jQuery(this).next('#sessionLocation li').focus();
+						break;
+					case 38: // move up
+						jQuery('#sessionLocation li[data-key=' +(Number(jQuery(document.activeElement).attr('data-key')) - 3) + ']').focus(); 
+						break;
+					case 40: //	move down
+						jQuery('#sessionLocation li[data-key=' +(Number(jQuery(document.activeElement).attr('data-key')) + 3) + ']').focus(); 
+						break;
+					default: break;
+				}
+			});
+		}
+		
+        jQuery('#loginButton').click(function(e) {
         	var sessionLocationVal = jQuery('#sessionLocationInput').val();
         	
         	if (!sessionLocationVal) {
@@ -45,9 +79,7 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
         		e.preventDefault();
         	}
         });	
-        
-        jQuery('#username').focus();
-
+		
         var cannotLoginController = emr.setupConfirmationDialog({
             selector: '#cannotLoginPopup',
             actions: {
@@ -57,6 +89,7 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
             }
         });
         
+		jQuery('#username').focus();
         jQuery('a#cantLogin').click(function() {
             cannotLoginController.show();
         });
@@ -103,7 +136,7 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
                     </label>
                     <ul id="sessionLocation" class="select">
                         <% locations.sort { ui.format(it) }.each { %>
-                        <li id="${ui.encodeHtmlContent(it.name)}" value="${it.id}">${ui.encodeHtmlContent(ui.format(it))}</li>
+                        <li id="${ui.encodeHtmlContent(it.name)}" tabindex="0"  value="${it.id}">${ui.encodeHtmlContent(ui.format(it))}</li>
                         <% } %>
                     </ul>
                 </p>
