@@ -209,7 +209,9 @@ public class LoginPageController {
 		//TODO uncomment this to replace the if clause after it
 		if (sessionLocation != null && sessionLocation.hasTag(EmrApiConstants.LOCATION_TAG_SUPPORTS_LOGIN)) {
 			// Set a cookie, so next time someone logs in on this machine, we can default to that same location
-			pageRequest.setCookieValue(COOKIE_NAME_LAST_SESSION_LOCATION, sessionLocationId.toString());
+			Cookie cookie = new Cookie(COOKIE_NAME_LAST_SESSION_LOCATION, sessionLocationId.toString());
+			cookie.setHttpOnly(true);
+			pageRequest.getResponse().addCookie(cookie);
 
 			try {
 				Context.authenticate(username, password);
@@ -221,8 +223,11 @@ public class LoginPageController {
 					CurrentUsers.addUser(pageRequest.getRequest().getSession(), Context.getAuthenticatedUser());
 
 					sessionContext.setSessionLocation(sessionLocation);
+					
 					//we set the username value to check it new or old user is trying to log in
-					pageRequest.setCookieValue(ReferenceApplicationWebConstants.COOKIE_NAME_LAST_USER, String.valueOf(username.hashCode()));
+					cookie = new Cookie(ReferenceApplicationWebConstants.COOKIE_NAME_LAST_USER, String.valueOf(username.hashCode()));
+					cookie.setHttpOnly(true);
+					pageRequest.getResponse().addCookie(cookie);
 
 					// set the locale based on the user's default locale
 					Locale userLocale = GeneralUtils.getDefaultLocale(Context.getUserContext().getAuthenticatedUser());
