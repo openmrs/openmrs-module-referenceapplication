@@ -143,6 +143,7 @@ public class LoginPageController {
 		} else {
 			Cookie cookie = new Cookie(ReferenceApplicationWebConstants.COOKIE_NAME_LAST_USER, null);
 			cookie.setMaxAge(0);
+			cookie.setHttpOnly(true);
 			pageRequest.getResponse().addCookie(cookie);
 		}
 		pageRequest.getSession().setAttribute(AppUiConstants.SESSION_ATTRIBUTE_MANUAL_LOGOUT, null);
