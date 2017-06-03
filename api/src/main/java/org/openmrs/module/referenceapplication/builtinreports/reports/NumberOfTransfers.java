@@ -7,6 +7,7 @@ import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.manager.BaseReportManager;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +15,16 @@ import java.util.List;
 /**
  * Created by Jude on 6/3/2017.
  */
+
+@Component
 public class NumberOfTransfers extends BaseReportManager {
+
+	public NumberOfTransfers() {
+	}
 
 	@Override
 	public String getUuid() {
-		return "b9c4a218-4840-11e7-a919-92ebcb67fe33";
+		return "b39c4c4c-4881-11e7-a919-92ebcb67fe33";
 	}
 
 	@Override
@@ -51,7 +57,7 @@ public class NumberOfTransfers extends BaseReportManager {
 		sqlDataDef.addParameters(getParameters());
 		sqlDataDef.setSqlQuery(getSQLQuery());
 
-		reportDef.addDataSetDefinition("transferCount", Mapped.mapStraightThrough(sqlDataDef));
+		reportDef.addDataSetDefinition("Transfer Count", Mapped.mapStraightThrough(sqlDataDef));
 
 
 		return reportDef;

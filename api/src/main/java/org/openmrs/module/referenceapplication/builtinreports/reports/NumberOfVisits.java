@@ -25,7 +25,7 @@ public class NumberOfVisits extends BaseReportManager {
 
 	@Override
 	public String getUuid() {
-		return "a2547274-4837-11e7-a919-92ebcb67fe33";
+		return "9667a78e-4881-11e7-a919-92ebcb67fe33";
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class NumberOfVisits extends BaseReportManager {
 		sqlDataDef.addParameters(getParameters());
 		sqlDataDef.setSqlQuery(getSQLQuery());
 
-		reportDef.addDataSetDefinition("visitCount", Mapped.mapStraightThrough(sqlDataDef));
+		reportDef.addDataSetDefinition("Visit Count", Mapped.mapStraightThrough(sqlDataDef));
 
 
 		return reportDef;
@@ -70,7 +70,7 @@ public class NumberOfVisits extends BaseReportManager {
 	@Override
 	public List<ReportDesign> constructReportDesigns(ReportDefinition reportDefinition) {
 		List<ReportDesign> l = new ArrayList<ReportDesign>();
-		l.add(ReportManagerUtil.createExcelDesign("ae928860-4a4e-48d4-bbc2-50902babcfc0", reportDefinition));
+		l.add(ReportManagerUtil.createExcelDesign("283638f8-487b-11e7-a919-92ebcb67fe33", reportDefinition));
 		return l;
 	}
 

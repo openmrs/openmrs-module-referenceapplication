@@ -47,6 +47,8 @@
 		<htmlformentryuiVersion>1.6.1</htmlformentryuiVersion>
 		<idgenVersion>4.4.0</idgenVersion>
 		<registrationcoreVersion>1.6</registrationcoreVersion>
+		<reportingrestVersion>1.4</reportingrestVersion>
+		<reportinguiVersion>1.0</reportinguiVersion>
 		<namephoneticsVersion>1.5</namephoneticsVersion>
 		<metadatadeployVersion>1.7</metadatadeployVersion>
 		<metadatasharingVersion>1.2.2</metadatasharingVersion>

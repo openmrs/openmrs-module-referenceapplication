@@ -17,30 +17,31 @@ import java.util.List;
  */
 
 @Component
-public class NumberOfAdmissions extends BaseReportManager {
+public class ListOfDiagnosis extends BaseReportManager {
 
-	public NumberOfAdmissions() {
+	public ListOfDiagnosis() {
 	}
 
 	@Override
 	public String getUuid() {
-		return "d39509bc-4881-11e7-a919-92ebcb67fe33";
+		return "e451ae04-4881-11e7-a919-92ebcb67fe33";
 	}
 
 	@Override
 	public String getName() {
-		return "Number of Admissions (Java)";
+		return "List of Diagnosis (Java)";
 	}
 
 	@Override
 	public String getDescription() {
-		return "Number of Admissions for a given location";
+		return "List all diagnosis's for a given date range along with the count";
 	}
 
 	@Override
 	public List<Parameter> getParameters() {
 		List<Parameter> parameterArrayList = new ArrayList<Parameter>();
-		parameterArrayList.add(ReportingConstants.LOCATION_PARAMETER);
+		parameterArrayList.add(ReportingConstants.START_DATE_PARAMETER);
+		parameterArrayList.add(ReportingConstants.END_DATE_PARAMETER);
 		return parameterArrayList;
 	}
 
@@ -57,7 +58,7 @@ public class NumberOfAdmissions extends BaseReportManager {
 		sqlDataDef.addParameters(getParameters());
 		sqlDataDef.setSqlQuery(getSQLQuery());
 
-		reportDef.addDataSetDefinition("Admission Count", Mapped.mapStraightThrough(sqlDataDef));
+		reportDef.addDataSetDefinition("listOfDiagnosis", Mapped.mapStraightThrough(sqlDataDef));
 
 
 		return reportDef;
@@ -75,11 +76,16 @@ public class NumberOfAdmissions extends BaseReportManager {
 
 	private String getSQLQuery(){
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("select 'Admissions', count(*) as 'total' from encounter e ");
-		stringBuilder.append("where e.encounter_type=(select encounter_type_id from encounter_type where uuid='e22e39fd-7db2-45e7-80f1-60fa0d5a4378') ");
-		stringBuilder.append("and e.location_id=:location ");
-		stringBuilder.append("and e.voided = 0 ");
-		stringBuilder.append("group by e.encounter_type ");
+		stringBuilder.append("select cn.name, count(*) as 'count' ");
+		stringBuilder.append("from  obs, concept_name cn ");
+		stringBuilder.append("where obs.concept_id = (select concept_id from concept where uuid='1284AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA') ");
+		stringBuilder.append("and value_coded= cn.concept_id and ");
+		stringBuilder.append("locale='en' and ");
+		stringBuilder.append("locale_preferred = '1' ");
+		stringBuilder.append("and obs.date_created >= :startDate ");
+		stringBuilder.append("and obs.date_created <= :endDate ");
+		stringBuilder.append("group by value_coded, cn.name ");
+		stringBuilder.append("order by count(*) desc ");
 
 		return stringBuilder.toString();
 	}

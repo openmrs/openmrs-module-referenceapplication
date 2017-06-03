@@ -17,30 +17,30 @@ import java.util.List;
  */
 
 @Component
-public class NumberOfAdmissions extends BaseReportManager {
+public class ListOfNewPatientReg extends BaseReportManager {
 
-	public NumberOfAdmissions() {
+	public ListOfNewPatientReg() {
 	}
 
 	@Override
 	public String getUuid() {
-		return "d39509bc-4881-11e7-a919-92ebcb67fe33";
+		return "e451a9d6-4881-11e7-a919-92ebcb67fe33";
 	}
 
 	@Override
 	public String getName() {
-		return "Number of Admissions (Java)";
+		return "List of New Patient Registrations (Java)";
 	}
 
 	@Override
 	public String getDescription() {
-		return "Number of Admissions for a given location";
+		return "List all patients who have registered within since a given date";
 	}
 
 	@Override
 	public List<Parameter> getParameters() {
 		List<Parameter> parameterArrayList = new ArrayList<Parameter>();
-		parameterArrayList.add(ReportingConstants.LOCATION_PARAMETER);
+		parameterArrayList.add(ReportingConstants.START_DATE_PARAMETER);
 		return parameterArrayList;
 	}
 
@@ -57,7 +57,7 @@ public class NumberOfAdmissions extends BaseReportManager {
 		sqlDataDef.addParameters(getParameters());
 		sqlDataDef.setSqlQuery(getSQLQuery());
 
-		reportDef.addDataSetDefinition("Admission Count", Mapped.mapStraightThrough(sqlDataDef));
+		reportDef.addDataSetDefinition("newPatientRegistrations", Mapped.mapStraightThrough(sqlDataDef));
 
 
 		return reportDef;
@@ -75,11 +75,9 @@ public class NumberOfAdmissions extends BaseReportManager {
 
 	private String getSQLQuery(){
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("select 'Admissions', count(*) as 'total' from encounter e ");
-		stringBuilder.append("where e.encounter_type=(select encounter_type_id from encounter_type where uuid='e22e39fd-7db2-45e7-80f1-60fa0d5a4378') ");
-		stringBuilder.append("and e.location_id=:location ");
-		stringBuilder.append("and e.voided = 0 ");
-		stringBuilder.append("group by e.encounter_type ");
+		stringBuilder.append("select * ");
+		stringBuilder.append("from patient ");
+		stringBuilder.append("where date_created >= :startDate; ");
 
 		return stringBuilder.toString();
 	}

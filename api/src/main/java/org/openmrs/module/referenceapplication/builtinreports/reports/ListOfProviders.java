@@ -1,6 +1,5 @@
 package org.openmrs.module.referenceapplication.builtinreports.reports;
 
-import org.openmrs.module.reporting.ReportingConstants;
 import org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
@@ -17,30 +16,30 @@ import java.util.List;
  */
 
 @Component
-public class NumberOfAdmissions extends BaseReportManager {
+public class ListOfProviders extends BaseReportManager {
 
-	public NumberOfAdmissions() {
+	public ListOfProviders() {
 	}
 
 	@Override
 	public String getUuid() {
-		return "d39509bc-4881-11e7-a919-92ebcb67fe33";
+		return "d3950ea8-4881-11e7-a919-92ebcb67fe33";
 	}
 
 	@Override
 	public String getName() {
-		return "Number of Admissions (Java)";
+		return "List of Providers (Java)";
 	}
 
 	@Override
 	public String getDescription() {
-		return "Number of Admissions for a given location";
+		return "List all providers grouped by active and inactive providers";
 	}
 
 	@Override
 	public List<Parameter> getParameters() {
 		List<Parameter> parameterArrayList = new ArrayList<Parameter>();
-		parameterArrayList.add(ReportingConstants.LOCATION_PARAMETER);
+		parameterArrayList.add(new Parameter("retired", "Retired Users", Boolean.class));
 		return parameterArrayList;
 	}
 
@@ -57,7 +56,7 @@ public class NumberOfAdmissions extends BaseReportManager {
 		sqlDataDef.addParameters(getParameters());
 		sqlDataDef.setSqlQuery(getSQLQuery());
 
-		reportDef.addDataSetDefinition("Admission Count", Mapped.mapStraightThrough(sqlDataDef));
+		reportDef.addDataSetDefinition("listOfProviders", Mapped.mapStraightThrough(sqlDataDef));
 
 
 		return reportDef;
@@ -75,11 +74,9 @@ public class NumberOfAdmissions extends BaseReportManager {
 
 	private String getSQLQuery(){
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("select 'Admissions', count(*) as 'total' from encounter e ");
-		stringBuilder.append("where e.encounter_type=(select encounter_type_id from encounter_type where uuid='e22e39fd-7db2-45e7-80f1-60fa0d5a4378') ");
-		stringBuilder.append("and e.location_id=:location ");
-		stringBuilder.append("and e.voided = 0 ");
-		stringBuilder.append("group by e.encounter_type ");
+		stringBuilder.append("select identifier, uuid ");
+		stringBuilder.append("from provider ");
+		stringBuilder.append("where retired = :retired; ");
 
 		return stringBuilder.toString();
 	}

@@ -7,6 +7,7 @@ import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.manager.BaseReportManager;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +15,16 @@ import java.util.List;
 /**
  * Created by Jude on 6/3/2017.
  */
+
+@Component
 public class NumberOfVisitNotes extends BaseReportManager {
+
+	public NumberOfVisitNotes() {
+	}
 
 	@Override
 	public String getUuid() {
-		return "fd34d19c-483d-11e7-a919-92ebcb67fe33";
+		return "9667ac52-4881-11e7-a919-92ebcb67fe33";
 	}
 
 	@Override
@@ -52,7 +58,7 @@ public class NumberOfVisitNotes extends BaseReportManager {
 		sqlDataDef.addParameters(getParameters());
 		sqlDataDef.setSqlQuery(getSQLQuery());
 
-		reportDef.addDataSetDefinition("visitNoteCount", Mapped.mapStraightThrough(sqlDataDef));
+		reportDef.addDataSetDefinition("Visit Note Count", Mapped.mapStraightThrough(sqlDataDef));
 
 
 		return reportDef;
