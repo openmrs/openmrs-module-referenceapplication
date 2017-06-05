@@ -233,6 +233,14 @@
 	            <version>${htmlformentryVersion}</version>
 	            <scope>provided</scope>
 	        </dependency>
+
+	        <dependency>
+		        <groupId>org.openmrs.module</groupId>
+		        <artifactId>reporting-api-2.0</artifactId>
+		        <version>${reportingVersion}</version>
+		        <scope>provided</scope>
+	        </dependency>
+
 	        
 	        <dependency>
 	            <groupId>org.openmrs.module</groupId>
@@ -470,6 +478,11 @@
 			<artifactId>idgen-api</artifactId>
 			<type>jar</type>
 		</dependency>
+
+	    <dependency>
+		    <groupId>org.openmrs.module</groupId>
+		    <artifactId>reporting-api-2.0</artifactId>
+	    </dependency>
 		
 		<dependency>
             <groupId>org.openmrs.module</groupId>
