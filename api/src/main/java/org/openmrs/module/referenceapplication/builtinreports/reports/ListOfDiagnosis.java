@@ -29,7 +29,7 @@ public class ListOfDiagnosis extends BaseReportManager {
 
 	@Override
 	public String getName() {
-		return "List of Diagnosis (Java)";
+		return "List of Diagnosis";
 	}
 
 	@Override

@@ -28,7 +28,7 @@ public class ListOfProviders extends BaseReportManager {
 
 	@Override
 	public String getName() {
-		return "List of Providers (Java)";
+		return "List of Providers";
 	}
 
 	@Override

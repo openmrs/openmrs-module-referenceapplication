@@ -30,7 +30,7 @@ public class ListOfUsers extends BaseReportManager {
 
 	@Override
 	public String getName() {
-		return "List of Users (Java)";
+		return "List of Users";
 	}
 
 	@Override

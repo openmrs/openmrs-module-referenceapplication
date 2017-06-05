@@ -29,7 +29,7 @@ public class ListOfNewPatientReg extends BaseReportManager {
 
 	@Override
 	public String getName() {
-		return "List of New Patient Registrations (Java)";
+		return "List of New Patient Registrations";
 	}
 
 	@Override

@@ -29,7 +29,7 @@ public class NumberOfAdmissions extends BaseReportManager {
 
 	@Override
 	public String getName() {
-		return "Number of Admissions (Java)";
+		return "Number of Admissions";
 	}
 
 	@Override

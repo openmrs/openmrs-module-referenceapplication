@@ -30,7 +30,7 @@ public class NumberOfVisits extends BaseReportManager {
 
 	@Override
 	public String getName() {
-		return "Number of Visits (Java)";
+		return "Number of Visits";
 	}
 
 	@Override
