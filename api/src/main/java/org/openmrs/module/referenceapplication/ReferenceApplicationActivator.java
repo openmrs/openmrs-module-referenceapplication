@@ -46,6 +46,8 @@ import org.openmrs.module.namephonetics.NamePhoneticsConstants;
 import org.openmrs.module.referencemetadata.ReferenceMetadataConstants;
 import org.openmrs.module.referencemetadata.ReferenceMetadataProperties;
 import org.openmrs.module.registrationcore.RegistrationCoreConstants;
+import org.openmrs.module.reporting.report.manager.ReportManager;
+import org.openmrs.module.reporting.report.manager.ReportManagerUtil;
 import org.openmrs.scheduler.SchedulerService;
 import org.openmrs.scheduler.TaskDefinition;
 import org.openmrs.scheduler.tasks.ProcessHL7InQueueTask;
@@ -105,6 +107,8 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
             setupTagLocation(ReferenceMetadataConstants.VISIT_LOCATION_TAG_UUID);
 	        setupHtmlForms();
 	        setupHL7ProcessingTask(schedulerService);
+
+			ReportManagerUtil.setupAllReports(ReportManager.class);
 		} 
 		catch (Exception e) {
             Module mod = ModuleFactory.getModuleById(ReferenceApplicationConstants.MODULE_ID);
