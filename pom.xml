@@ -47,6 +47,8 @@
 		<htmlformentryuiVersion>1.6.1</htmlformentryuiVersion>
 		<idgenVersion>4.4.0</idgenVersion>
 		<registrationcoreVersion>1.6</registrationcoreVersion>
+		<reportingrestVersion>1.4</reportingrestVersion>
+		<reportinguiVersion>1.0</reportinguiVersion>
 		<namephoneticsVersion>1.5</namephoneticsVersion>
 		<metadatadeployVersion>1.7</metadatadeployVersion>
 		<metadatasharingVersion>1.2.2</metadatasharingVersion>
@@ -230,6 +232,13 @@
 	            <artifactId>htmlformentry-api-1.10</artifactId>
 	            <version>${htmlformentryVersion}</version>
 	            <scope>provided</scope>
+	        </dependency>
+
+	        <dependency>
+		        <groupId>org.openmrs.module</groupId>
+		        <artifactId>reporting-api-2.0</artifactId>
+		        <version>${reportingVersion}</version>
+		        <scope>provided</scope>
 	        </dependency>
 	        
 	        <dependency>
@@ -473,6 +482,11 @@
             <groupId>org.openmrs.module</groupId>
             <artifactId>htmlformentry-api-1.10</artifactId>
         </dependency>
+
+	    <dependency>
+		    <groupId>org.openmrs.module</groupId>
+		    <artifactId>reporting-api-2.0</artifactId>
+	    </dependency>
         
         <dependency>
             <groupId>org.openmrs.module</groupId>
