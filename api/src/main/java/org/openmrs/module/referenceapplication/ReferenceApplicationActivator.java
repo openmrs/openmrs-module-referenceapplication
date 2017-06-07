@@ -108,6 +108,7 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
 	        setupHtmlForms();
 	        setupHL7ProcessingTask(schedulerService);
 
+			//setup built-in reports from #org.openmrs.module.referenceapplication.reports
 			ReportManagerUtil.setupAllReports(ReportManager.class);
 		} 
 		catch (Exception e) {
