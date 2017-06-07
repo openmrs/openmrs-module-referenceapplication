@@ -1,4 +1,13 @@
-package org.openmrs.module.referenceapplication.basicreports;
+/**
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+ * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+ *
+ * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+ * graphic logo is a trademark of OpenMRS Inc.
+ */
+package org.openmrs.module.referenceapplication.reports;
 
 import org.openmrs.module.reporting.ReportingConstants;
 import org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition;
@@ -12,29 +21,25 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Jude on 6/3/2017.
- */
-
 @Component
-public class NumberOfVisitNotes extends BaseReportManager {
+public class ListOfDiagnosis extends BaseReportManager {
 
-	public NumberOfVisitNotes() {
+	public ListOfDiagnosis() {
 	}
 
 	@Override
 	public String getUuid() {
-		return "9667ac52-4881-11e7-a919-92ebcb67fe33";
+		return "e451ae04-4881-11e7-a919-92ebcb67fe33";
 	}
 
 	@Override
 	public String getName() {
-		return "Number of Visit Notes";
+		return "List of Diagnosis";
 	}
 
 	@Override
 	public String getDescription() {
-		return "Number of active visit notes for a given time period";
+		return "List all diagnosis's for a given date range along with the count";
 	}
 
 	@Override
@@ -58,7 +63,7 @@ public class NumberOfVisitNotes extends BaseReportManager {
 		sqlDataDef.addParameters(getParameters());
 		sqlDataDef.setSqlQuery(getSQLQuery());
 
-		reportDef.addDataSetDefinition("Visit Note Count", Mapped.mapStraightThrough(sqlDataDef));
+		reportDef.addDataSetDefinition("listOfDiagnosis", Mapped.mapStraightThrough(sqlDataDef));
 
 
 		return reportDef;
@@ -76,14 +81,16 @@ public class NumberOfVisitNotes extends BaseReportManager {
 
 	private String getSQLQuery(){
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("select count(*) as Number_of_visit_notes ");
-		stringBuilder.append("from encounter e ");
-		stringBuilder.append("where e.encounter_type = (select et.encounter_type_id ");
-		stringBuilder.append("from encounter_type et ");
-		stringBuilder.append("where et.uuid = 'd7151f82-c1f3-4152-a605-2f9ea7414a79') ");
-		stringBuilder.append("and e.encounter_datetime >= :startDate ");
-		stringBuilder.append("and e.encounter_datetime <= :endDate ");
-		stringBuilder.append("and e.voided = 0 ");
+		stringBuilder.append("select cn.name, count(*) as 'count' ");
+		stringBuilder.append("from  obs, concept_name cn ");
+		stringBuilder.append("where obs.concept_id = (select concept_id from concept where uuid='1284AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA') ");
+		stringBuilder.append("and value_coded= cn.concept_id and ");
+		stringBuilder.append("locale='en' and ");
+		stringBuilder.append("locale_preferred = '1' ");
+		stringBuilder.append("and obs.date_created >= :startDate ");
+		stringBuilder.append("and obs.date_created <= :endDate ");
+		stringBuilder.append("group by value_coded, cn.name ");
+		stringBuilder.append("order by count(*) desc ");
 
 		return stringBuilder.toString();
 	}

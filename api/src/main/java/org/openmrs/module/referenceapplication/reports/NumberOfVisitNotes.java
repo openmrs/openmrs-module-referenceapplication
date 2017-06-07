@@ -1,5 +1,15 @@
-package org.openmrs.module.referenceapplication.basicreports;
+/**
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+ * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+ *
+ * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+ * graphic logo is a trademark of OpenMRS Inc.
+ */
+package org.openmrs.module.referenceapplication.reports;
 
+import org.openmrs.module.reporting.ReportingConstants;
 import org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
@@ -11,35 +21,32 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Jude on 6/3/2017.
- */
-
 @Component
-public class ListOfUsers extends BaseReportManager {
+public class NumberOfVisitNotes extends BaseReportManager {
 
-	public ListOfUsers() {
+	public NumberOfVisitNotes() {
 	}
 
 	@Override
 	public String getUuid() {
-		return "d3950d7c-4881-11e7-a919-92ebcb67fe33";
+		return "9667ac52-4881-11e7-a919-92ebcb67fe33";
 	}
 
 	@Override
 	public String getName() {
-		return "List of Users";
+		return "Number of Visit Notes";
 	}
 
 	@Override
 	public String getDescription() {
-		return "List all users who are active or retired in the system";
+		return "Number of active visit notes for a given time period";
 	}
 
 	@Override
 	public List<Parameter> getParameters() {
 		List<Parameter> parameterArrayList = new ArrayList<Parameter>();
-		parameterArrayList.add(new Parameter("retired", "Retired Users", Boolean.class));
+		parameterArrayList.add(ReportingConstants.START_DATE_PARAMETER);
+		parameterArrayList.add(ReportingConstants.END_DATE_PARAMETER);
 		return parameterArrayList;
 	}
 
@@ -56,7 +63,7 @@ public class ListOfUsers extends BaseReportManager {
 		sqlDataDef.addParameters(getParameters());
 		sqlDataDef.setSqlQuery(getSQLQuery());
 
-		reportDef.addDataSetDefinition("listOfUsers", Mapped.mapStraightThrough(sqlDataDef));
+		reportDef.addDataSetDefinition("Visit Note Count", Mapped.mapStraightThrough(sqlDataDef));
 
 
 		return reportDef;
@@ -74,9 +81,14 @@ public class ListOfUsers extends BaseReportManager {
 
 	private String getSQLQuery(){
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("select username, uuid ");
-		stringBuilder.append("from users ");
-		stringBuilder.append("where retired = :retired; ");
+		stringBuilder.append("select count(*) as Number_of_visit_notes ");
+		stringBuilder.append("from encounter e ");
+		stringBuilder.append("where e.encounter_type = (select et.encounter_type_id ");
+		stringBuilder.append("from encounter_type et ");
+		stringBuilder.append("where et.uuid = 'd7151f82-c1f3-4152-a605-2f9ea7414a79') ");
+		stringBuilder.append("and e.encounter_datetime >= :startDate ");
+		stringBuilder.append("and e.encounter_datetime <= :endDate ");
+		stringBuilder.append("and e.voided = 0 ");
 
 		return stringBuilder.toString();
 	}

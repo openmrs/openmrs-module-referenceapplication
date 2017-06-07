@@ -1,4 +1,13 @@
-package org.openmrs.module.referenceapplication.basicreports;
+/**
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+ * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+ *
+ * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+ * graphic logo is a trademark of OpenMRS Inc.
+ */
+package org.openmrs.module.referenceapplication.reports;
 
 import org.openmrs.module.reporting.ReportingConstants;
 import org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition;
@@ -12,36 +21,31 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Jude on 6/3/2017.
- */
-
 @Component
-public class ListOfDiagnosis extends BaseReportManager {
+public class ListOfNewPatientReg extends BaseReportManager {
 
-	public ListOfDiagnosis() {
+	public ListOfNewPatientReg() {
 	}
 
 	@Override
 	public String getUuid() {
-		return "e451ae04-4881-11e7-a919-92ebcb67fe33";
+		return "e451a9d6-4881-11e7-a919-92ebcb67fe33";
 	}
 
 	@Override
 	public String getName() {
-		return "List of Diagnosis";
+		return "List of New Patient Registrations";
 	}
 
 	@Override
 	public String getDescription() {
-		return "List all diagnosis's for a given date range along with the count";
+		return "List all patients who have registered within since a given date";
 	}
 
 	@Override
 	public List<Parameter> getParameters() {
 		List<Parameter> parameterArrayList = new ArrayList<Parameter>();
 		parameterArrayList.add(ReportingConstants.START_DATE_PARAMETER);
-		parameterArrayList.add(ReportingConstants.END_DATE_PARAMETER);
 		return parameterArrayList;
 	}
 
@@ -58,7 +62,7 @@ public class ListOfDiagnosis extends BaseReportManager {
 		sqlDataDef.addParameters(getParameters());
 		sqlDataDef.setSqlQuery(getSQLQuery());
 
-		reportDef.addDataSetDefinition("listOfDiagnosis", Mapped.mapStraightThrough(sqlDataDef));
+		reportDef.addDataSetDefinition("newPatientRegistrations", Mapped.mapStraightThrough(sqlDataDef));
 
 
 		return reportDef;
@@ -76,16 +80,9 @@ public class ListOfDiagnosis extends BaseReportManager {
 
 	private String getSQLQuery(){
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("select cn.name, count(*) as 'count' ");
-		stringBuilder.append("from  obs, concept_name cn ");
-		stringBuilder.append("where obs.concept_id = (select concept_id from concept where uuid='1284AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA') ");
-		stringBuilder.append("and value_coded= cn.concept_id and ");
-		stringBuilder.append("locale='en' and ");
-		stringBuilder.append("locale_preferred = '1' ");
-		stringBuilder.append("and obs.date_created >= :startDate ");
-		stringBuilder.append("and obs.date_created <= :endDate ");
-		stringBuilder.append("group by value_coded, cn.name ");
-		stringBuilder.append("order by count(*) desc ");
+		stringBuilder.append("select * ");
+		stringBuilder.append("from patient ");
+		stringBuilder.append("where date_created >= :startDate; ");
 
 		return stringBuilder.toString();
 	}

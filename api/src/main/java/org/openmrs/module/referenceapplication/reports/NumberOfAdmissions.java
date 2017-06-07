@@ -1,4 +1,13 @@
-package org.openmrs.module.referenceapplication.basicreports;
+/**
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+ * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+ *
+ * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+ * graphic logo is a trademark of OpenMRS Inc.
+ */
+package org.openmrs.module.referenceapplication.reports;
 
 import org.openmrs.module.reporting.ReportingConstants;
 import org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition;
@@ -12,36 +21,31 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Jude on 6/3/2017.
- */
-
 @Component
-public class NumberOfPatientRegistrations extends BaseReportManager {
+public class NumberOfAdmissions extends BaseReportManager {
 
-	public NumberOfPatientRegistrations() {
+	public NumberOfAdmissions() {
 	}
 
 	@Override
 	public String getUuid() {
-		return "b39c5b24-4881-11e7-a919-92ebcb67fe33";
+		return "d39509bc-4881-11e7-a919-92ebcb67fe33";
 	}
 
 	@Override
 	public String getName() {
-		return "Number of Patient Registrations";
+		return "Number of Admissions";
 	}
 
 	@Override
 	public String getDescription() {
-		return "Number of patient registrations for a given date period";
+		return "Number of Admissions for a given location";
 	}
 
 	@Override
 	public List<Parameter> getParameters() {
 		List<Parameter> parameterArrayList = new ArrayList<Parameter>();
-		parameterArrayList.add(ReportingConstants.START_DATE_PARAMETER);
-		parameterArrayList.add(ReportingConstants.END_DATE_PARAMETER);
+		parameterArrayList.add(ReportingConstants.LOCATION_PARAMETER);
 		return parameterArrayList;
 	}
 
@@ -58,7 +62,7 @@ public class NumberOfPatientRegistrations extends BaseReportManager {
 		sqlDataDef.addParameters(getParameters());
 		sqlDataDef.setSqlQuery(getSQLQuery());
 
-		reportDef.addDataSetDefinition("Patient Registration Count", Mapped.mapStraightThrough(sqlDataDef));
+		reportDef.addDataSetDefinition("Admission Count", Mapped.mapStraightThrough(sqlDataDef));
 
 
 		return reportDef;
@@ -76,10 +80,11 @@ public class NumberOfPatientRegistrations extends BaseReportManager {
 
 	private String getSQLQuery(){
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("select count(*) as Number_of_patient_registrations ");
-		stringBuilder.append("from patient p ");
-		stringBuilder.append("where p.date_created >= :startDate ");
-		stringBuilder.append("and p.date_created <= :endDate ");
+		stringBuilder.append("select 'Admissions', count(*) as 'total' from encounter e ");
+		stringBuilder.append("where e.encounter_type=(select encounter_type_id from encounter_type where uuid='e22e39fd-7db2-45e7-80f1-60fa0d5a4378') ");
+		stringBuilder.append("and e.location_id=:location ");
+		stringBuilder.append("and e.voided = 0 ");
+		stringBuilder.append("group by e.encounter_type ");
 
 		return stringBuilder.toString();
 	}

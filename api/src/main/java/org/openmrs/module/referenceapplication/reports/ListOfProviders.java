@@ -1,6 +1,14 @@
-package org.openmrs.module.referenceapplication.basicreports;
+/**
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+ * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+ *
+ * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+ * graphic logo is a trademark of OpenMRS Inc.
+ */
+package org.openmrs.module.referenceapplication.reports;
 
-import org.openmrs.module.reporting.ReportingConstants;
 import org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
@@ -12,35 +20,31 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Jude on 6/3/2017.
- */
-
 @Component
-public class ListOfNewPatientReg extends BaseReportManager {
+public class ListOfProviders extends BaseReportManager {
 
-	public ListOfNewPatientReg() {
+	public ListOfProviders() {
 	}
 
 	@Override
 	public String getUuid() {
-		return "e451a9d6-4881-11e7-a919-92ebcb67fe33";
+		return "d3950ea8-4881-11e7-a919-92ebcb67fe33";
 	}
 
 	@Override
 	public String getName() {
-		return "List of New Patient Registrations";
+		return "List of Providers";
 	}
 
 	@Override
 	public String getDescription() {
-		return "List all patients who have registered within since a given date";
+		return "List all providers grouped by active and inactive providers";
 	}
 
 	@Override
 	public List<Parameter> getParameters() {
 		List<Parameter> parameterArrayList = new ArrayList<Parameter>();
-		parameterArrayList.add(ReportingConstants.START_DATE_PARAMETER);
+		parameterArrayList.add(new Parameter("retired", "Retired Users", Boolean.class));
 		return parameterArrayList;
 	}
 
@@ -57,7 +61,7 @@ public class ListOfNewPatientReg extends BaseReportManager {
 		sqlDataDef.addParameters(getParameters());
 		sqlDataDef.setSqlQuery(getSQLQuery());
 
-		reportDef.addDataSetDefinition("newPatientRegistrations", Mapped.mapStraightThrough(sqlDataDef));
+		reportDef.addDataSetDefinition("listOfProviders", Mapped.mapStraightThrough(sqlDataDef));
 
 
 		return reportDef;
@@ -75,9 +79,9 @@ public class ListOfNewPatientReg extends BaseReportManager {
 
 	private String getSQLQuery(){
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("select * ");
-		stringBuilder.append("from patient ");
-		stringBuilder.append("where date_created >= :startDate; ");
+		stringBuilder.append("select identifier, uuid ");
+		stringBuilder.append("from provider ");
+		stringBuilder.append("where retired = :retired; ");
 
 		return stringBuilder.toString();
 	}

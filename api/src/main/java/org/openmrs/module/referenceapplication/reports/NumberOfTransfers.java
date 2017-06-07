@@ -1,5 +1,15 @@
-package org.openmrs.module.referenceapplication.basicreports;
+/**
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+ * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+ *
+ * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
+ * graphic logo is a trademark of OpenMRS Inc.
+ */
+package org.openmrs.module.referenceapplication.reports;
 
+import org.openmrs.module.reporting.ReportingConstants;
 import org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
@@ -11,35 +21,31 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Jude on 6/3/2017.
- */
-
 @Component
-public class ListOfProviders extends BaseReportManager {
+public class NumberOfTransfers extends BaseReportManager {
 
-	public ListOfProviders() {
+	public NumberOfTransfers() {
 	}
 
 	@Override
 	public String getUuid() {
-		return "d3950ea8-4881-11e7-a919-92ebcb67fe33";
+		return "b39c4c4c-4881-11e7-a919-92ebcb67fe33";
 	}
 
 	@Override
 	public String getName() {
-		return "List of Providers";
+		return "Number of Transfers";
 	}
 
 	@Override
 	public String getDescription() {
-		return "List all providers grouped by active and inactive providers";
+		return "Number of Transfers for a given location";
 	}
 
 	@Override
 	public List<Parameter> getParameters() {
 		List<Parameter> parameterArrayList = new ArrayList<Parameter>();
-		parameterArrayList.add(new Parameter("retired", "Retired Users", Boolean.class));
+		parameterArrayList.add(ReportingConstants.LOCATION_PARAMETER);
 		return parameterArrayList;
 	}
 
@@ -56,7 +62,7 @@ public class ListOfProviders extends BaseReportManager {
 		sqlDataDef.addParameters(getParameters());
 		sqlDataDef.setSqlQuery(getSQLQuery());
 
-		reportDef.addDataSetDefinition("listOfProviders", Mapped.mapStraightThrough(sqlDataDef));
+		reportDef.addDataSetDefinition("Transfer Count", Mapped.mapStraightThrough(sqlDataDef));
 
 
 		return reportDef;
@@ -74,9 +80,11 @@ public class ListOfProviders extends BaseReportManager {
 
 	private String getSQLQuery(){
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("select identifier, uuid ");
-		stringBuilder.append("from provider ");
-		stringBuilder.append("where retired = :retired; ");
+		stringBuilder.append("select 'Tranfers', count(*) as 'total' from encounter e ");
+		stringBuilder.append("where e.encounter_type=(select encounter_type_id from encounter_type where uuid='7b68d557-85ef-4fc8-b767-4fa4f5eb5c23') ");
+		stringBuilder.append("and e.location_id=:location ");
+		stringBuilder.append("and e.voided = 0 ");
+		stringBuilder.append("group by e.encounter_type ");
 
 		return stringBuilder.toString();
 	}
