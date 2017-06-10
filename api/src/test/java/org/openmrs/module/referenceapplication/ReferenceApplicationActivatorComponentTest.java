@@ -57,6 +57,7 @@ public class ReferenceApplicationActivatorComponentTest extends BaseModuleContex
     @Before
     public void setup() throws Exception {
         executeDataSet("ReferenceApplicationActivatorTestDataset.xml");
+        executeDataSet("BuiltInReportsTestDataset.xml");
         MetadataUtil.setupSpecificMetadata(getClass().getClassLoader(), "Reference_Application_Visit_and_Encounter_Types");
     }
 

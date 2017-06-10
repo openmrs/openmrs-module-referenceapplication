@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<dataset>
+
+	<patient_identifier_type patient_identifier_type_id="1" name="OpenMRS ID" description="OpenMRS patient identifier, with check-digit"
+	                         creator="1" date_created="2017-05-18 22:49:03" required="1" validator="org.openmrs.module.idgen.validator.LuhnMod30IdentifierValidator"
+	                         retired="0" uuid="05a29f94-c0ed-11e2-94be-8c13b969e334"/>
+
+
+
+	<person person_id="50" gender="M" birthdate="1955-03-07" dead="0" date_created="2017-05-18 23:49:20" voided="0" deathdate_estimated="0"
+	        uuid="fc44ab10-f192-4517-843c-623a20eadc34"/>
+
+	<patient patient_id = "50" creator = "1" date_created="2017-06-15 08:26:51" voided = "0" allergy_status="Unknown"/>
+	<person_name person_name_id="1" preferred="1" person_id="50" given_name="Jude" family_name="Niroshan" creator="1" date_created="2017-05-18 23:49:20"
+	             voided = "0" uuid="70231dcf-3ecc-4406-a883-67ad07c73aa5"/>
+	<patient_identifier patient_identifier_id="1" patient_id="50" identifier="10004M" identifier_type="1" preferred="1" location_id="1" creator="1"
+	                    date_created="2017-05-18 23:44:34" uuid="4334edba-df62-42c4-811d-cb9cbfded1f3"/>
+
+
+
+	<person person_id="51" gender="M" birthdate="1955-03-07" dead="0" date_created="2017-05-18 23:49:20" voided="0" deathdate_estimated="0"
+	        uuid="150a0bf6-deb6-46d4-a827-bfe9cfedecde"/>
+
+	<patient patient_id = "51" creator = "1" date_created="2017-10-15 08:26:51" voided = "0" allergy_status="Unknown"/>
+	<person_name person_name_id="2" preferred="1" person_id="51" given_name="Rafal" family_name="Korytkowski" creator="1" date_created="2017-05-18 23:49:20"
+	             voided = "0" uuid="17694822-8b9c-40e6-88ae-d2a479654490"/>
+	<patient_identifier patient_identifier_id="2" patient_id="51" identifier="1000EE" identifier_type="1" preferred="1" location_id="1" creator="1"
+	                    date_created="2017-05-18 23:44:34" uuid="bce48200-6456-4fe9-949a-30de7c652bb1"/>
+</dataset>
