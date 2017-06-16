@@ -9,13 +9,19 @@
  */
 package org.openmrs.module.referenceapplication.reports;
 
+import org.openmrs.module.referenceapplication.definition.CohortDefinitionProvider;
+import org.openmrs.module.referenceapplication.definition.PatientDataLibrary;
 import org.openmrs.module.reporting.ReportingConstants;
-import org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition;
+import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
+import org.openmrs.module.reporting.data.patient.definition.PatientDataDefinition;
+import org.openmrs.module.reporting.data.patient.library.BuiltInPatientDataLibrary;
+import org.openmrs.module.reporting.dataset.definition.PatientDataSetDefinition;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.manager.BaseReportManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -24,17 +30,26 @@ import java.util.List;
 @Component
 public class NumberOfPatientRegistrations extends BaseReportManager {
 
+	@Autowired
+	private BuiltInPatientDataLibrary builtInPatientData;
+
+	@Autowired
+	private CohortDefinitionProvider cohortDefinitionProvider;
+
+	@Autowired
+	private PatientDataLibrary patientDataLibrary;
+
 	public NumberOfPatientRegistrations() {
 	}
 
 	@Override
 	public String getUuid() {
-		return "b39c5b24-4881-11e7-a919-92ebcb67fe33";
+		return "7faf04ee-5261-11e7-b114-b2f933d5fe66";
 	}
 
 	@Override
 	public String getName() {
-		return "Number of Patient Registrations";
+		return "Number of Patient Registrations (Cohort-Java)";
 	}
 
 	@Override
@@ -58,12 +73,20 @@ public class NumberOfPatientRegistrations extends BaseReportManager {
 		reportDef.setDescription(getDescription());
 		reportDef.setParameters(getParameters());
 
-		SqlDataSetDefinition sqlDataDef = new SqlDataSetDefinition();
-		sqlDataDef.setName(getName());
-		sqlDataDef.addParameters(getParameters());
-		sqlDataDef.setSqlQuery(getSQLQuery());
 
-		reportDef.addDataSetDefinition("Patient Registration Count", Mapped.mapStraightThrough(sqlDataDef));
+		PatientDataSetDefinition dataSetDefinition = new PatientDataSetDefinition();
+		dataSetDefinition.setName(getName());
+		dataSetDefinition.setParameters(getParameters());
+
+		CohortDefinition cohortDefinition = cohortDefinitionProvider.getActivePatientRegistrations();
+		dataSetDefinition.addRowFilter(Mapped.mapStraightThrough(cohortDefinition));
+
+		reportDef.addDataSetDefinition("Patient Registration Count", Mapped.mapStraightThrough(dataSetDefinition));
+
+		addColumn(dataSetDefinition, "OpenMRS ID", patientDataLibrary.getOpenmrsId());
+		addColumn(dataSetDefinition, "Patient Name", builtInPatientData.getPreferredGivenName());
+		addColumn(dataSetDefinition, "Gender", builtInPatientData.getGender());
+		addColumn(dataSetDefinition, "Date Created", patientDataLibrary.getDateCreated());
 
 
 		return reportDef;
@@ -79,13 +102,8 @@ public class NumberOfPatientRegistrations extends BaseReportManager {
 		return "1.0";
 	}
 
-	private String getSQLQuery(){
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("select count(*) as Number_of_patient_registrations ");
-		stringBuilder.append("from patient p ");
-		stringBuilder.append("where p.date_created >= :startDate ");
-		stringBuilder.append("and p.date_created <= :endDate ");
 
-		return stringBuilder.toString();
+	protected void addColumn(PatientDataSetDefinition dsd, String columnName, PatientDataDefinition pdd) {
+		dsd.addColumn(columnName, pdd, Mapped.straightThroughMappings(pdd));
 	}
 }
