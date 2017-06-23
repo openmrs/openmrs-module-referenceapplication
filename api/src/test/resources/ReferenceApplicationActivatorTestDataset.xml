@@ -36,4 +36,9 @@
                                            retired = "false" code = "emr.atFacilityVisitType" metadata_class = "org.openmrs.VisitType"
     />
 
+    <patient_identifier_type patient_identifier_type_id = "1" name = "OpenMRS ID" description="OpenMRS patient identifier, with check-digit"
+                             creator = "1" date_created = "2017-05-18 22:49:03" required = "1" validator = "org.openmrs.module.idgen.validator.LuhnMod30IdentifierValidator"
+                             retired = "0" uuid = "05a29f94-c0ed-11e2-94be-8c13b969e334"
+        />
+
 </dataset>
