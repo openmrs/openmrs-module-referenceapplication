@@ -1,0 +1,12 @@
+[
+    {
+        "id": "${project.parent.artifactId}.manageScheduler",
+        "extensionPointId": "systemAdministration.apps",
+        "type": "link",
+        "label": "${project.parent.artifactId}.app.manageScheduler.title",
+        "url": "owa/SystemAdministration/index.html#/task-view",
+        "icon": "icon-time",
+        "order": 0,
+        "requiredPrivilege": "App: ${project.parent.artifactId}.manageScheduler"
+    }
+]
