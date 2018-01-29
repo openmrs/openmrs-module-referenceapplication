@@ -7,7 +7,7 @@
 	<bean class="org.openmrs.ui.framework.StandardModuleUiConfiguration">
         <property name="moduleId" value="${project.parent.artifactId}"/>
     </bean>
-    
+
     <!-- Includes the specified resources on every page in the module -->
     <bean class="org.openmrs.ui.framework.page.GlobalResourceIncluder">
 		<property name="resources">
@@ -15,6 +15,10 @@
                 <bean class="org.openmrs.ui.framework.resource.Resource">
                     <property name="category" value="css" />
                     <property name="providerName" value="${project.parent.artifactId}" />
+                    <!-- <property name="resourcePath" value="styles/font-awesome-5/fontawesome.css" />
+                    <property name="resourcePath" value="styles/font-awesome-5/fa-brands.css" />
+                    <property name="resourcePath" value="styles/font-awesome-5/fa-regular.css" />
+                    <property name="resourcePath" value="styles/font-awesome-5/fa-solid.css" /> -->
                     <property name="resourcePath" value="styles/referenceapplication.css" />
                     <property name="priority" value="-100" />
                 </bean>
