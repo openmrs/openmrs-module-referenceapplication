@@ -42,6 +42,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.net.MalformedURLException;
 import java.net.URL;
+import org.openmrs.api.AdministrationService;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Locale;
 
 import static org.openmrs.module.referenceapplication.ReferenceApplicationWebConstants.COOKIE_NAME_LAST_SESSION_LOCATION;
@@ -82,7 +85,8 @@ public class LoginPageController {
 	                  PageRequest pageRequest,
 	                  @CookieValue(value = COOKIE_NAME_LAST_SESSION_LOCATION, required = false) String lastSessionLocationId,
 	                  @SpringBean("locationService") LocationService locationService,
-	                  @SpringBean("appFrameworkService") AppFrameworkService appFrameworkService) {
+	                  @SpringBean("appFrameworkService") AppFrameworkService appFrameworkService,
+			  @SpringBean("adminService") AdministrationService administrationService) {
 
 		String redirectUrl = getRedirectUrl(pageRequest);
 
@@ -110,9 +114,24 @@ public class LoginPageController {
 			Context.removeProxyPrivilege(GET_LOCATIONS);
 		}
 
+		Boolean isLocationUserPropertyAvailable = isLocationUserPropertyAvailable(administrationService);
+		Object showLocation = pageRequest.getAttribute("showSessionLocations");
+		if(showLocation != null && showLocation.toString().equals("true")) {
+			// if the request contains a attribute as showSessionLocations, then ignore isLocationUserPropertyAvailable
+			isLocationUserPropertyAvailable = false;
+		}
+		model.addAttribute("showSessionLocations", !isLocationUserPropertyAvailable);
 		model.addAttribute("lastSessionLocation", lastSessionLocation);
 
 		return null;
+	}
+
+	private boolean isLocationUserPropertyAvailable(AdministrationService administrationService) {
+		String locationUserPropertyName = administrationService.getGlobalProperty(ReferenceApplicationConstants.LOCATION_USER_PROPERTY_NAME);
+		if(StringUtils.isNotBlank(locationUserPropertyName)) {
+			return true;
+		}
+		return false;
 	}
 
 	private boolean isUrlWithinOpenmrs(PageRequest pageRequest, String redirectUrl){
@@ -187,8 +206,10 @@ public class LoginPageController {
 	public String post(@RequestParam(value = "username", required = false) String username,
 	                   @RequestParam(value = "password", required = false) String password,
 	                   @RequestParam(value = "sessionLocation", required = false) Integer sessionLocationId,
-	                   @SpringBean("locationService") LocationService locationService, UiUtils ui, PageRequest pageRequest,
-	                   UiSessionContext sessionContext) {
+	                   @SpringBean("locationService") LocationService locationService,
+			   @SpringBean("adminService") AdministrationService administrationService,
+			   UiUtils ui, PageRequest pageRequest,
+			   UiSessionContext sessionContext) {
 
 		String redirectUrl = pageRequest.getRequest().getParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL);
 		redirectUrl = getRelativeUrl(redirectUrl, pageRequest);
@@ -206,24 +227,43 @@ public class LoginPageController {
 			}
 		}
 
-		//TODO uncomment this to replace the if clause after it
-		if (sessionLocation != null && sessionLocation.hasTag(EmrApiConstants.LOCATION_TAG_SUPPORTS_LOGIN)) {
-			// Set a cookie, so next time someone logs in on this machine, we can default to that same location
-			Cookie cookie = new Cookie(COOKIE_NAME_LAST_SESSION_LOCATION, sessionLocationId.toString());
-			cookie.setHttpOnly(true);
-			pageRequest.getResponse().addCookie(cookie);
+		try {
+			Context.authenticate(username, password);
+			String locationUserPropertyName = administrationService.getGlobalProperty(ReferenceApplicationConstants.LOCATION_USER_PROPERTY_NAME);
+			if (StringUtils.isNotBlank(locationUserPropertyName)) {
+				if (Context.isAuthenticated() && Context.getUserContext().getAuthenticatedUser() != null) {
+					String locationUuid = Context.getUserContext().getAuthenticatedUser().getUserProperty(locationUserPropertyName);
+					if (StringUtils.isNotBlank(locationUuid)) {
+						sessionLocation = locationService.getLocationByUuid(locationUuid);
+					}
+					if (sessionLocation != null) {
+						sessionLocationId = sessionLocation.getLocationId();
+                    			}
+					else {
+						pageRequest.getSession().setAttribute(ReferenceApplicationWebConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
+								ui.message("referenceapplication.login.error.locationRequired"));
+					    	// Since the user is already authenticated without location, need to logout before redirecting
+						Context.logout();
+						Map<String, Object> returnParameters = new HashMap<String, Object>();
+						returnParameters.put("showSessionLocations", true);
+						return "redirect:" + ui.pageLink(ReferenceApplicationConstants.MODULE_ID, "login", returnParameters);
+				    	}
+				}
+			}
 
-			try {
-				Context.authenticate(username, password);
 
+
+			if (sessionLocation != null && sessionLocation.hasTag(EmrApiConstants.LOCATION_TAG_SUPPORTS_LOGIN)) {
+				// Set a cookie, so next time someone logs in on this machine, we can default to that same location
+				Cookie cookie = new Cookie(COOKIE_NAME_LAST_SESSION_LOCATION, sessionLocationId.toString());
+				cookie.setHttpOnly(true);
+				pageRequest.getResponse().addCookie(cookie);
 				if (Context.isAuthenticated()) {
 					if (log.isDebugEnabled())
 						log.debug("User has successfully authenticated");
-					
 					CurrentUsers.addUser(pageRequest.getRequest().getSession(), Context.getAuthenticatedUser());
 
 					sessionContext.setSessionLocation(sessionLocation);
-					
 					//we set the username value to check it new or old user is trying to log in
 					cookie = new Cookie(ReferenceApplicationWebConstants.COOKIE_NAME_LAST_USER, String.valueOf(username.hashCode()));
 					cookie.setHttpOnly(true);
@@ -253,22 +293,21 @@ public class LoginPageController {
 
 					return "redirect:" + ui.pageLink(ReferenceApplicationConstants.MODULE_ID, "home");
 				}
-			}
-			catch (ContextAuthenticationException ex) {
-				if (log.isDebugEnabled())
-					log.debug("Failed to authenticate user");
-
+			} else if (sessionLocation == null) {
 				pageRequest.getSession().setAttribute(ReferenceApplicationWebConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
-				    ui.message(ReferenceApplicationConstants.MODULE_ID + ".error.login.fail"));
+						ui.message("referenceapplication.login.error.locationRequired"));
+			} else {
+				// the UI shouldn't allow this, but protect against it just in case
+				pageRequest.getSession().setAttribute(ReferenceApplicationWebConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
+						ui.message("referenceapplication.login.error.invalidLocation", sessionLocation.getName()));
 			}
+		}
+		catch (ContextAuthenticationException ex) {
+			if (log.isDebugEnabled())
+				log.debug("Failed to authenticate user");
 
-		} else if (sessionLocation == null) {
 			pageRequest.getSession().setAttribute(ReferenceApplicationWebConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
-			    ui.message("referenceapplication.login.error.locationRequired"));
-		} else {
-			// the UI shouldn't allow this, but protect against it just in case
-			pageRequest.getSession().setAttribute(ReferenceApplicationWebConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
-			    ui.message("referenceapplication.login.error.invalidLocation", sessionLocation.getName()));
+					ui.message(ReferenceApplicationConstants.MODULE_ID + ".error.login.fail"));
 		}
 
 		if (log.isDebugEnabled())
@@ -277,7 +316,8 @@ public class LoginPageController {
 		//TODO limit login attempts by IP Address
 
 		pageRequest.getSession().setAttribute(SESSION_ATTRIBUTE_REDIRECT_URL, redirectUrl);
-
+		// Since the user is already authenticated without location, need to logout before redirecting
+		Context.logout();
 		return "redirect:" + ui.pageLink(ReferenceApplicationConstants.MODULE_ID, "login");
 	}
 

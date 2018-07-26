@@ -37,6 +37,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.openmrs.Location;
 import org.openmrs.User;
+import org.openmrs.api.AdministrationService;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.context.UserContext;
@@ -93,12 +94,15 @@ public class LoginPageControllerTest {
 
     private AppFrameworkService appFrameworkService;
 
+    private AdministrationService administrationService;
+
 	@Before
 	public void setup() {
 		mockStatic(Context.class);
 		locationService = mock(LocationService.class);
 		sessionContext = mock(UiSessionContext.class);
         appFrameworkService = mock(AppFrameworkService.class);
+        administrationService = mock(AdministrationService.class);
     }
 
 	private PageRequest createPageRequest(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
@@ -130,7 +134,8 @@ public class LoginPageControllerTest {
 	 * @see LoginPageController#get(org.openmrs.ui.framework.page.PageModel,
 	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest, String,
 	 *      org.openmrs.api.LocationService,
-	 *      org.openmrs.module.appframework.service.AppFrameworkService)
+	 *      org.openmrs.module.appframework.service.AppFrameworkService,
+     *      org.openmrs.api.AdministrationService)
 	 */
 	@Test
 	@Verifies(value = "should redirect the user to the home page if they are already authenticated", method = "get(PageModel,UiUtils,PageRequest)")
@@ -138,27 +143,29 @@ public class LoginPageControllerTest {
 		when(Context.isAuthenticated()).thenReturn(true);
 		String homeRedirect = "redirect:" + uiUtils.pageLink(ReferenceApplicationConstants.MODULE_ID, "home");
 		assertEquals(homeRedirect,
-		    new LoginPageController().get(null, uiUtils, createPageRequest(null, null), null, null, appFrameworkService));
+		    new LoginPageController().get(null, uiUtils, createPageRequest(null, null), null, null, appFrameworkService, administrationService));
 	}
 
 	/**
 	 * @see LoginPageController#get(org.openmrs.ui.framework.page.PageModel,
 	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest, String,
 	 *      org.openmrs.api.LocationService,
-	 *      org.openmrs.module.appframework.service.AppFrameworkService)
+	 *      org.openmrs.module.appframework.service.AppFrameworkService,
+     *      org.openmrs.api.AdministrationService)
 	 */
 	@Test
 	@Verifies(value = "should show the user the login page if they are not authenticated", method = "get(PageModel,UiUtils,PageRequest)")
 	public void get_shouldShowTheUserTheLoginPageIfTheyAreNotAuthenticated() throws Exception {
 		when(Context.isAuthenticated()).thenReturn(false);
-		assertNull(new LoginPageController().get(new PageModel(), uiUtils, createPageRequest(null, null), null, null, appFrameworkService));
+		assertNull(new LoginPageController().get(new PageModel(), uiUtils, createPageRequest(null, null), null, null, appFrameworkService, administrationService));
 	}
 
 	/**
 	 * @see LoginPageController#get(org.openmrs.ui.framework.page.PageModel,
 	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest, String,
 	 *      org.openmrs.api.LocationService,
-	 *      org.openmrs.module.appframework.service.AppFrameworkService)
+	 *      org.openmrs.module.appframework.service.AppFrameworkService,
+     *      org.openmrs.api.AdministrationService)
 	 */
 	@Test
 	@Verifies(value = "should set redirectUrl in the page model if openmrs related url was specified in the request", method = "get(PageModel,UiUtils,PageRequest)")
@@ -171,7 +178,7 @@ public class LoginPageControllerTest {
 		request.addParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL, redirectUrl);
 		PageModel pageModel = new PageModel();
 
-		new LoginPageController().get(pageModel, uiUtils, createPageRequest(request, null), null, null, appFrameworkService);
+		new LoginPageController().get(pageModel, uiUtils, createPageRequest(request, null), null, null, appFrameworkService, administrationService);
 
 		assertEquals(redirectUrl, pageModel.get(REQUEST_PARAMETER_NAME_REDIRECT_URL));
 	}
@@ -180,7 +187,8 @@ public class LoginPageControllerTest {
 	 * @see LoginPageController#get(org.openmrs.ui.framework.page.PageModel,
 	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest, String,
 	 *      org.openmrs.api.LocationService,
-	 *      org.openmrs.module.appframework.service.AppFrameworkService)
+	 *      org.openmrs.module.appframework.service.AppFrameworkService,
+     *      org.openmrs.api.AdministrationService)
 	 */
 	@Test
 	@Verifies(value = "should set the referer as the redirectUrl in the page model if no redirect param exists", method = "get(PageModel,UiUtils,PageRequest)")
@@ -193,7 +201,7 @@ public class LoginPageControllerTest {
 		request.addHeader("Referer", refererUrl);
 		PageModel pageModel = new PageModel();
 
-		new LoginPageController().get(pageModel, uiUtils, createPageRequest(request, null), null, null, appFrameworkService);
+		new LoginPageController().get(pageModel, uiUtils, createPageRequest(request, null), null, null, appFrameworkService, administrationService);
 
 		assertEquals(refererUrl, pageModel.get(REQUEST_PARAMETER_NAME_REDIRECT_URL));
 	}
@@ -202,7 +210,8 @@ public class LoginPageControllerTest {
 	 * @see LoginPageController#get(org.openmrs.ui.framework.page.PageModel,
 	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest, String,
 	 *      org.openmrs.api.LocationService,
-	 *      org.openmrs.module.appframework.service.AppFrameworkService)
+	 *      org.openmrs.module.appframework.service.AppFrameworkService,
+     *      org.openmrs.api.AdministrationService)
 	 */
 	@Test
 	@Verifies(value = "should set redirectUrl in the page model if any was specified in the session", method = "get(PageModel,UiUtils,PageRequest)")
@@ -218,7 +227,7 @@ public class LoginPageControllerTest {
 		request.setSession(httpSession);
 
 		PageModel pageModel = new PageModel();
-		new LoginPageController().get(pageModel, uiUtils, pageRequest, null, null, appFrameworkService);
+		new LoginPageController().get(pageModel, uiUtils, pageRequest, null, null, appFrameworkService, administrationService);
 
 		assertEquals(redirectUrl, pageModel.get(REQUEST_PARAMETER_NAME_REDIRECT_URL));
 	}
@@ -227,7 +236,8 @@ public class LoginPageControllerTest {
 	 * @see LoginPageController#get(org.openmrs.ui.framework.page.PageModel,
 	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest, String,
 	 *      org.openmrs.api.LocationService,
-	 *      org.openmrs.module.appframework.service.AppFrameworkService)
+	 *      org.openmrs.module.appframework.service.AppFrameworkService,
+     *      org.openmrs.api.AdministrationService)
 	 */
 	@Test
 	@Verifies(value = "should redirect user to requested url specified in ?redirectUrl if it is openmrs related and user is authenticated", method = "get(PageModel,UiUtils,PageRequest)")
@@ -244,14 +254,15 @@ public class LoginPageControllerTest {
 
 		PageModel pageModel = new PageModel();
 
-		assertEquals("redirect:" + redirectUrl, new LoginPageController().get(pageModel, uiUtils, pageRequest, null, null, appFrameworkService));
+		assertEquals("redirect:" + redirectUrl, new LoginPageController().get(pageModel, uiUtils, pageRequest, null, null, appFrameworkService, administrationService));
 	}
 
 	/**
 	 * @see LoginPageController#get(org.openmrs.ui.framework.page.PageModel,
 	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest, String,
 	 *      org.openmrs.api.LocationService,
-	 *      org.openmrs.module.appframework.service.AppFrameworkService)
+	 *      org.openmrs.module.appframework.service.AppFrameworkService,
+     *      org.openmrs.api.AdministrationService)
 	 */
 	@Test
 	@Verifies(value = "should redirect user to home if ?redirectUrl is not openmrs related and user is authenticated", method = "get(PageModel,UiUtils,PageRequest)")
@@ -268,11 +279,11 @@ public class LoginPageControllerTest {
 
 		PageModel pageModel = new PageModel();
 
-		assertNotEquals("redirect:" + redirectUrl, new LoginPageController().get(pageModel, uiUtils, pageRequest, null, null, appFrameworkService));
+		assertNotEquals("redirect:" + redirectUrl, new LoginPageController().get(pageModel, uiUtils, pageRequest, null, null, appFrameworkService, administrationService));
 	}
 
 	/**
-	 * @see LoginPageController#post(String, String, Integer, org.openmrs.api.LocationService,
+	 * @see LoginPageController#post(String, String, Integer, org.openmrs.api.LocationService, org.openmrs.api.AdministrationService,
 	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest,
 	 *      org.openmrs.module.appui.UiSessionContext)
 	 */
@@ -292,14 +303,14 @@ public class LoginPageControllerTest {
 
 		PageModel pageModel = new PageModel();
 
-		new LoginPageController().get(pageModel, uiUtils, pageRequest, null, null, appFrameworkService);
+		new LoginPageController().get(pageModel, uiUtils, pageRequest, null, null, appFrameworkService, administrationService);
 
 		assertEquals("", pageModel.getAttribute(ReferenceApplicationWebConstants.REQUEST_PARAMETER_NAME_REDIRECT_URL));
 
 	}
 
 	/**
-	 * @see LoginPageController#post(String, String, Integer, org.openmrs.api.LocationService,
+	 * @see LoginPageController#post(String, String, Integer, org.openmrs.api.LocationService, org.openmrs.api.AdministrationService,
 	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest,
 	 *      org.openmrs.module.appui.UiSessionContext)
 	 */
@@ -320,11 +331,11 @@ public class LoginPageControllerTest {
 		mockAuthenticatedUser();
 		
 		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID,
-				locationService, uiUtils, pageRequest, sessionContext));
+				locationService, administrationService, uiUtils, pageRequest, sessionContext));
 	}
 
 	/**
-	 * @see LoginPageController#post(String, String, Integer, org.openmrs.api.LocationService,
+	 * @see LoginPageController#post(String, String, Integer, org.openmrs.api.LocationService, org.openmrs.api.AdministrationService,
 	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest,
 	 *      org.openmrs.module.appui.UiSessionContext)
 	 */
@@ -343,11 +354,11 @@ public class LoginPageControllerTest {
 		mockAuthenticatedUser();
 		
 		assertEquals("redirect:" + redirectUrl, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID,
-				locationService, uiUtils, pageRequest, sessionContext));
+				locationService, administrationService, uiUtils, pageRequest, sessionContext));
 	}
 
 	/**
-	 * @see LoginPageController#post(String, String, Integer, org.openmrs.api.LocationService,
+	 * @see LoginPageController#post(String, String, Integer, org.openmrs.api.LocationService, org.openmrs.api.AdministrationService,
 	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest,
 	 *      org.openmrs.module.appui.UiSessionContext)
 	 */
@@ -365,7 +376,7 @@ public class LoginPageControllerTest {
 
 		mockAuthenticatedUser();
 		
-		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID, locationService,
+		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID, locationService, administrationService,
 		    uiUtils, pageRequest, sessionContext));
 
 	}
@@ -378,7 +389,7 @@ public class LoginPageControllerTest {
 
 	/**
 	 * @verifies send the user back to the login page when authentication fails
-	 * @see LoginPageController#post(String, String, Integer, org.openmrs.api.LocationService,
+	 * @see LoginPageController#post(String, String, Integer, org.openmrs.api.LocationService, org.openmrs.api.AdministrationService,
 	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest,
 	 *      org.openmrs.module.appui.UiSessionContext)
 	 */
@@ -386,14 +397,14 @@ public class LoginPageControllerTest {
 	public void post_shouldSendTheUserBackToTheLoginPageWhenAuthenticationFails() throws Exception {
 		when(Context.isAuthenticated()).thenReturn(false);
 		MockHttpServletRequest request = new MockHttpServletRequest();
-		String page = new LoginPageController().post(null, null, SESSION_LOCATION_ID, locationService, uiUtils,
+		String page = new LoginPageController().post(null, null, SESSION_LOCATION_ID, locationService, administrationService, uiUtils,
 		    createPageRequest(request, null), sessionContext);
 		assertEquals("redirect:" + uiUtils.pageLink("referenceapplication", "login"), page);
 	}
 
 	/**
 	 * @verifies send the user back to the login page if an invalid location is selected
-	 * @see LoginPageController#post(String, String, Integer, org.openmrs.api.LocationService,
+	 * @see LoginPageController#post(String, String, Integer, org.openmrs.api.LocationService, org.openmrs.api.AdministrationService,
 	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest,
 	 *      org.openmrs.module.appui.UiSessionContext)
 	 */
@@ -401,13 +412,13 @@ public class LoginPageControllerTest {
 	public void post_shouldSendTheUserBackToTheLoginPageIfAnInvalidLocationIsSelected() throws Exception {
 		setupMocksForSuccessfulAuthentication(false);
 		MockHttpServletRequest request = new MockHttpServletRequest();
-		String page = new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID, locationService, uiUtils,
+		String page = new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID, locationService, administrationService, uiUtils,
 		    createPageRequest(request, null), sessionContext);
 		assertEquals("redirect:" + uiUtils.pageLink("referenceapplication", "login"), page);
 	}
 
 	/**
-     * @see LoginPageController#get(PageModel,UiUtils,PageRequest,String,LocationService,AppFrameworkService)
+     * @see LoginPageController#get(PageModel,UiUtils,PageRequest,String,LocationService,AppFrameworkService,AdministrationService)
      * @verifies not set the referer as the redirectUrl in the page model if referer URL is outside context path
      */
     @Test
@@ -419,13 +430,13 @@ public class LoginPageControllerTest {
 		request.setContextPath(TEST_CONTEXT_PATH);
 		request.addHeader("Referer", refererUrl);
 		PageModel pageModel = new PageModel();
-		new LoginPageController().get(pageModel, uiUtils, createPageRequest(request, null), null, null, appFrameworkService);
+		new LoginPageController().get(pageModel, uiUtils, createPageRequest(request, null), null, null, appFrameworkService, administrationService);
 		
 		assertEquals("", pageModel.get(REQUEST_PARAMETER_NAME_REDIRECT_URL));
     }
 
 	/**
-     * @see LoginPageController#get(PageModel,UiUtils,PageRequest,String,LocationService,AppFrameworkService)
+     * @see LoginPageController#get(PageModel,UiUtils,PageRequest,String,LocationService,AppFrameworkService,AdministrationService)
      * @verifies set the referer as the redirectUrl in the page model if referer URL is within context path
      */
     @Test
@@ -438,7 +449,7 @@ public class LoginPageControllerTest {
 		request.setContextPath(TEST_CONTEXT_PATH);
 		request.addHeader("Referer", refererUrl);
 		PageModel pageModel = new PageModel();
-		new LoginPageController().get(pageModel, uiUtils, createPageRequest(request, null), null, null, appFrameworkService);
+		new LoginPageController().get(pageModel, uiUtils, createPageRequest(request, null), null, null, appFrameworkService, administrationService);
 		
 		assertEquals(redirectUrl, pageModel.get(REQUEST_PARAMETER_NAME_REDIRECT_URL));
     }
@@ -447,7 +458,8 @@ public class LoginPageControllerTest {
 	 * @see LoginPageController#get(org.openmrs.ui.framework.page.PageModel,
 	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest, String,
 	 *      org.openmrs.api.LocationService,
-	 *      org.openmrs.module.appframework.service.AppFrameworkService)
+	 *      org.openmrs.module.appframework.service.AppFrameworkService,
+     *      org.openmrs.api.AdministrationService)
 	 */
 	@Test
 	@Verifies(value = "should set redirectUrl as redirectUrl param when referer specified", method = "get(PageModel,UiUtils,PageRequest)")
@@ -466,6 +478,6 @@ public class LoginPageControllerTest {
 
 		PageModel pageModel = new PageModel();
 
-		assertEquals("redirect:" + redirectUrl, new LoginPageController().get(pageModel, uiUtils, pageRequest, null, null, appFrameworkService));
+		assertEquals("redirect:" + redirectUrl, new LoginPageController().get(pageModel, uiUtils, pageRequest, null, null, appFrameworkService, administrationService));
 	}
 }
