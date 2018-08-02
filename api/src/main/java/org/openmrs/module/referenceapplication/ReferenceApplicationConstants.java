@@ -23,4 +23,6 @@ public final class ReferenceApplicationConstants {
 	
 	public static final long PROCESS_HL7_TASK_INTERVAL = 5L;
 
+	public static final String LOCATION_USER_PROPERTY_NAME = "referenceapplication.locationUserPropertyName";
+
 }

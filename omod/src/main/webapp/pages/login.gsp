@@ -19,6 +19,7 @@
 
 ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
 
+<% if(showSessionLocations) { %>
 <script type="text/javascript">
     jQuery(function() {
     	updateSelectedOption = function() {
@@ -78,8 +79,13 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
        			jQuery('#sessionLocationError').show(); 		
         		e.preventDefault();
         	}
-        });	
-		
+        });
+    });
+</script>
+<% } %>
+
+<script type="text/javascript">
+    jQuery(function() {
         var cannotLoginController = emr.setupConfirmationDialog({
             selector: '#cannotLoginPopup',
             actions: {
@@ -130,6 +136,7 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
                     <input id="password" type="password" name="password" placeholder="${ ui.message("referenceapplication.login.password.placeholder") }"/>
                 </p>
 
+                <% if(showSessionLocations) { %>
                 <p class="clear">
                     <label for="sessionLocation">
                         ${ ui.message("referenceapplication.login.sessionLocation") }: <span class="location-error" id="sessionLocationError" style="display: none">${ui.message("referenceapplication.login.error.locationRequired")}</span>
@@ -145,6 +152,7 @@ ${ ui.includeFragment("referenceapplication", "infoAndErrorMessages") }
                     <% if (lastSessionLocation != null) { %> value="${lastSessionLocation.id}" <% } %> />
 
                 <p></p>
+                <% } %>
                 <p>
                     <input id="loginButton" class="confirm" type="submit" value="${ ui.message("referenceapplication.login.button") }"/>
                 </p>
