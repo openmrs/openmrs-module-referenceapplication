@@ -68,7 +68,12 @@ public class LoginPageController {
 	@RequestMapping("/login.htm")
 	public String overrideLoginpage() {
 		//TODO The referer should actually be captured from here since we are doing a redirect
-		return "forward:/" + ReferenceApplicationConstants.MODULE_ID + "/login.page";
+
+		//Fixes the RA-1408 Redirection Issue. Redirects to home.page if user is logged in, else redirects to login.page
+		if(Context.isAuthenticated())
+			return "forward:/" + ReferenceApplicationConstants.MODULE_ID + "/home.page";
+		else
+			return "forward:/" + ReferenceApplicationConstants.MODULE_ID + "/login.page";
 	}
 
 	/**
