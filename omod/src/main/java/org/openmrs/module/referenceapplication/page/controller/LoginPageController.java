@@ -234,6 +234,7 @@ public class LoginPageController {
 				if (Context.isAuthenticated() && Context.getUserContext().getAuthenticatedUser() != null) {
 					String locationUuid = Context.getUserContext().getAuthenticatedUser().getUserProperty(locationUserPropertyName);
 					if (StringUtils.isNotBlank(locationUuid)) {
+						locationUuid = locationUuid.split(",")[0];
 						sessionLocation = locationService.getLocationByUuid(locationUuid);
 					}
 					if (sessionLocation != null) {
