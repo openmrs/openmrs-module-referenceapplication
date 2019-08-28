@@ -28,7 +28,7 @@
 </button>
 </br></br>
 
-<table>
+<table class="table table-sm table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
     <thead>
     <tr>
         <th>${ ui.message("referenceapplication.app.appId.label")}</th>
