@@ -3,20 +3,23 @@
  * Version 1.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
  * http://license.openmrs.org
- *
+ * <p>
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
- *
+ * <p>
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
 package org.openmrs.module.referenceapplication.page.controller;
 
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.mockito.internal.util.reflection.Whitebox;
 import org.openmrs.Location;
 import org.openmrs.User;
 import org.openmrs.api.AdministrationService;
@@ -32,12 +35,14 @@ import org.openmrs.module.referenceapplication.ReferenceApplicationWebConstants;
 import org.openmrs.test.Verifies;
 import org.openmrs.ui.framework.BasicUiUtils;
 import org.openmrs.ui.framework.UiUtils;
+import org.openmrs.ui.framework.WebConstants;
 import org.openmrs.ui.framework.page.PageModel;
 import org.openmrs.ui.framework.page.PageRequest;
 import org.openmrs.ui.framework.session.Session;
 import org.openmrs.util.LocationUtility;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
@@ -46,10 +51,13 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.openmrs.module.referenceapplication.ReferenceApplicationWebConstants.REQUEST_PARAMETER_NAME_REDIRECT_URL;
@@ -64,7 +72,9 @@ import static org.powermock.api.support.membermodification.MemberModifier.stub;
 @RunWith(PowerMockRunner.class)
 public class LoginPageControllerTest {
 	
-	private static final String TEST_CONTEXT_PATH = "/openmrs";
+	private static final String TEST_CONTEXT_NAME = "openmrs";
+	
+	private static final String TEST_CONTEXT_PATH = "/" + TEST_CONTEXT_NAME;
 	
 	private static final String USERNAME = "admin";
 	
@@ -106,6 +116,16 @@ public class LoginPageControllerTest {
 		administrationService = mock(AdministrationService.class);
 	}
 	
+	@BeforeClass
+	public static void beforeClass() {
+		WebConstants.CONTEXT_PATH = TEST_CONTEXT_NAME;
+	}
+	
+	@AfterClass
+	public static void afterClass() {
+		WebConstants.CONTEXT_PATH = null;
+	}
+	
 	private PageRequest createPageRequest(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
 		HttpServletRequest request = (httpRequest != null) ? httpRequest : new MockHttpServletRequest();
 		HttpServletResponse response = (httpResponse != null) ? httpResponse : new MockHttpServletResponse();
@@ -124,6 +144,7 @@ public class LoginPageControllerTest {
 		UserContext userContext = Mockito.spy(new UserContext());
 		spy(Context.class);
 		stub(method(Context.class, "getUserContext")).toReturn(userContext);
+		when(userContext.getLocationId()).thenReturn(1);
 		doNothing().when(Context.class, "addProxyPrivilege", VIEW_LOCATIONS);
 		doNothing().when(Context.class, "removeProxyPrivilege", VIEW_LOCATIONS);
 		doNothing().when(Context.class, "addProxyPrivilege", GET_LOCATIONS);
@@ -140,8 +161,10 @@ public class LoginPageControllerTest {
 	 */
 	@Test
 	@Verifies(value = "should redirect the user to the home page if they are already authenticated", method = "get(PageModel,UiUtils,PageRequest)")
-	public void get_shouldRedirectTheUserToTheHomePageIfTheyAreAlreadyAuthenticated() throws Exception {
+	public void get_shouldRedirectTheUserToTheHomePageIfTheyAreAlreadyAuthenticatedAndSelectedLoginLocation()
+	    throws Exception {
 		when(Context.isAuthenticated()).thenReturn(true);
+		when(Context.getUserContext()).thenReturn(mock(UserContext.class));
 		String homeRedirect = "redirect:" + uiUtils.pageLink(ReferenceApplicationConstants.MODULE_ID, "home");
 		assertEquals(homeRedirect, new LoginPageController().get(null, uiUtils, createPageRequest(null, null), null, null,
 		    appFrameworkService, administrationService));
@@ -248,7 +271,7 @@ public class LoginPageControllerTest {
 	@Verifies(value = "should redirect user to requested url specified in ?redirectUrl if it is openmrs related and user is authenticated", method = "get(PageModel,UiUtils,PageRequest)")
 	public void get_shouldRedirectUserToRequestedUrlIfAuthenticated() throws Exception {
 		when(Context.isAuthenticated()).thenReturn(true);
-		
+		when(Context.getUserContext()).thenReturn(mock(UserContext.class));
 		String redirectUrl = TEST_CONTEXT_PATH + "/referenceapplication/patient.page";
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setContextPath(TEST_CONTEXT_PATH);
@@ -274,6 +297,7 @@ public class LoginPageControllerTest {
 	@Verifies(value = "should redirect user to home if ?redirectUrl is not openmrs related and user is authenticated", method = "get(PageModel,UiUtils,PageRequest)")
 	public void get_shouldRedirectUserToHomeIfAuthenticated() throws Exception {
 		when(Context.isAuthenticated()).thenReturn(true);
+		when(Context.getUserContext()).thenReturn(mock(UserContext.class));
 		
 		String redirectUrl = "/somePage/notOpenmrs.page";
 		MockHttpServletRequest request = new MockHttpServletRequest();
@@ -428,7 +452,8 @@ public class LoginPageControllerTest {
 	}
 	
 	/**
-	 * @see LoginPageController#get(PageModel,UiUtils,PageRequest,String,LocationService,AppFrameworkService,AdministrationService)
+	 * @see LoginPageController#get(PageModel, UiUtils, PageRequest, String, LocationService,
+	 *      AppFrameworkService, AdministrationService)
 	 * @verifies not set the referer as the redirectUrl in the page model if referer URL is outside
 	 *           context path
 	 */
@@ -448,7 +473,8 @@ public class LoginPageControllerTest {
 	}
 	
 	/**
-	 * @see LoginPageController#get(PageModel,UiUtils,PageRequest,String,LocationService,AppFrameworkService,AdministrationService)
+	 * @see LoginPageController#get(PageModel, UiUtils, PageRequest, String, LocationService,
+	 *      AppFrameworkService, AdministrationService)
 	 * @verifies set the referer as the redirectUrl in the page model if referer URL is within context
 	 *           path
 	 */
@@ -479,6 +505,7 @@ public class LoginPageControllerTest {
 	@Verifies(value = "should set redirectUrl as redirectUrl param when referer specified", method = "get(PageModel,UiUtils,PageRequest)")
 	public void get_shouldChooseRedirectUrlOverReferer() throws Exception {
 		when(Context.isAuthenticated()).thenReturn(true);
+		when(Context.getUserContext()).thenReturn(mock(UserContext.class));
 		
 		String redirectUrl = "/openmrs/redirect.page";
 		String refererUrl = "/openmrs/referer.page";
@@ -495,4 +522,62 @@ public class LoginPageControllerTest {
 		assertEquals("redirect:" + redirectUrl, new LoginPageController().get(pageModel, uiUtils, pageRequest, null, null,
 		    appFrameworkService, administrationService));
 	}
+	
+	@Test
+	public void post_shouldSendUserToLocationSelectionPageIfTheyAreAssociatedWithMultipleLocations() throws Exception {
+		setupMocksForSuccessfulAuthentication(true);
+		final String locationPropertyName = "location";
+		when(administrationService.getGlobalProperty(eq(ReferenceApplicationConstants.LOCATION_USER_PROPERTY_NAME)))
+		        .thenReturn(locationPropertyName);
+		User user = mock(User.class);
+		when(Context.getAuthenticatedUser()).thenReturn(user);
+		final String locationUuid1 = "uuid1";
+		final String locationUuid2 = "uuid2";
+		when(user.getUserProperty(eq(locationPropertyName))).thenReturn(locationUuid1 + ", " + locationUuid2);
+		when(locationService.getLocationByUuid(eq(locationUuid1))).thenReturn(mock(Location.class));
+		when(locationService.getLocationByUuid(eq(locationUuid2))).thenReturn(mock(Location.class));
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		final String expectedPage = "redirect:/openmrs/" + ReferenceApplicationConstants.MODULE_ID + "/login.page";
+		ConversionService conversionService = mock(ConversionService.class);
+		when(conversionService.convert(eq(true), eq(String.class))).thenReturn("true");
+		Whitebox.setInternalState(uiUtils, "conversionService", conversionService);
+		String page = new LoginPageController().post(USERNAME, PASSWORD, null, locationService, administrationService,
+		    uiUtils, createPageRequest(request, null), sessionContext);
+		assertEquals(expectedPage, page);
+	}
+	
+	@Test
+	public void get_shouldScaleDownLoginLocationsToUserSpecificOnesInCaseMultipleLocationsAreConfigured() throws Exception {
+		when(Context.isAuthenticated()).thenReturn(true);
+		UserContext userContext = mock(UserContext.class);
+		when(Context.getUserContext()).thenReturn(userContext);
+		when(userContext.getLocationId()).thenReturn(null);
+		final String locationPropertyName = "location";
+		when(administrationService.getGlobalProperty(eq(ReferenceApplicationConstants.LOCATION_USER_PROPERTY_NAME)))
+		        .thenReturn(locationPropertyName);
+		User user = mock(User.class);
+		when(Context.getAuthenticatedUser()).thenReturn(user);
+		final String locationUuid1 = "uuid1";
+		final String locationUuid2 = "uuid2";
+		when(user.getUserProperty(eq(locationPropertyName))).thenReturn(locationUuid1 + ", " + locationUuid2);
+		Location location1 = new Location();
+		location1.setUuid(locationUuid1);
+		Location location2 = new Location();
+		location2.setUuid(locationUuid2);
+		when(locationService.getLocationByUuid(eq(locationUuid1))).thenReturn(location1);
+		when(locationService.getLocationByUuid(eq(locationUuid2))).thenReturn(location2);
+		
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		request.setContextPath(TEST_CONTEXT_PATH);
+		PageRequest pageRequest = createPageRequest(request, null);
+		PageModel pageModel = new PageModel();
+		
+		assertNull(new LoginPageController().get(pageModel, uiUtils, pageRequest, null, locationService, appFrameworkService,
+		    administrationService));
+		List<Location> locations = (List) pageModel.getAttribute("locations");
+		assertEquals(2, locations.size());
+		assertTrue(locations.contains(location1));
+		assertTrue(locations.contains(location2));
+	}
+	
 }

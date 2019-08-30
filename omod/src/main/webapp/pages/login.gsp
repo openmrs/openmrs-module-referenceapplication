@@ -133,9 +133,10 @@
 
                             <legend class="w-auto">
                                 <i class="icon-lock small"></i>
-                                ${ ui.message("referenceapplication.login.loginHeading") }
+                                ${ ui.message(selectLocation ? "referenceapplication.login.sessionLocation" : "referenceapplication.login.loginHeading") }
                             </legend>
 
+                            <% if(!selectLocation) { %>
                             <p class="left">
                                 <label for="username">
                                     ${ ui.message("referenceapplication.login.username") }:
@@ -149,11 +150,12 @@
                                 </label>
                                 <input class="form-control form-control-sm form-control-lg form-control-md" id="password" type="password" name="password" placeholder="${ ui.message("referenceapplication.login.password.placeholder") }"/>
                             </p>
+                            <% } %>
 
                             <% if(showSessionLocations) { %>
                             <p class="clear">
                                 <label for="sessionLocation">
-                                    ${ ui.message("referenceapplication.login.sessionLocation") }: <span class="location-error" id="sessionLocationError" style="display: none">${ui.message("referenceapplication.login.error.locationRequired")}</span>
+                                    <% if(!selectLocation) { %>${ ui.message("referenceapplication.login.sessionLocation") }: <% } %><span class="location-error" id="sessionLocationError" style="display: none">${ui.message("referenceapplication.login.error.locationRequired")}</span>
                                 </label>
                                 <ul id="sessionLocation" class="select">
                                     <% locations.sort { ui.format(it) }.each { %>
@@ -168,15 +170,22 @@
                             <p></p>
                             <% } %>
                             <p>
-                                <input id="loginButton" class="btn btn-success" type="submit" value="${ ui.message("referenceapplication.login.button") }"/>
+                            <% if(selectLocation) {%>
+                                <input id="cancelButton" class="btn cancel" type="button"
+                                    onclick="javascript:window.location = '/${ contextPath }/logout'"
+                                    value="${ ui.message("general.cancel") }" />&nbsp;&nbsp;
+                            <% } %>
+                                <input id="loginButton" class="btn ${ ui.message(selectLocation ? "confirm" : "btn-success") }" type="submit"
+                                    value="${ ui.message(selectLocation ? "general.done" : "referenceapplication.login.button") }"/>
                             </p>
+                            <% if(!selectLocation) {%>
                             <p>
                                 <a id="cantLogin" href="javascript:void(0)">
                                     <i class="icon-question-sign small"></i>
                                     ${ ui.message("referenceapplication.login.cannotLogin") }
                                 </a>
                             </p>
-
+                            <% } %>
                         </fieldset>
 
                         <input type="hidden" name="redirectUrl" value="${redirectUrl}" />

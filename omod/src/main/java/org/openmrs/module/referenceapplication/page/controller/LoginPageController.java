@@ -17,6 +17,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Location;
+import org.openmrs.api.APIException;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
@@ -43,9 +44,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import static org.openmrs.module.referenceapplication.ReferenceApplicationWebConstants.COOKIE_NAME_LAST_SESSION_LOCATION;
 import static org.openmrs.module.referenceapplication.ReferenceApplicationWebConstants.REQUEST_PARAMETER_NAME_REDIRECT_URL;
@@ -90,7 +91,7 @@ public class LoginPageController {
 		
 		String redirectUrl = getRedirectUrl(pageRequest);
 		
-		if (Context.isAuthenticated()) {
+		if (Context.isAuthenticated() && Context.getUserContext().getLocationId() != null) {
 			if (StringUtils.isNotBlank(redirectUrl)) {
 				return "redirect:" + getRelativeUrl(redirectUrl, pageRequest);
 			}
@@ -99,11 +100,21 @@ public class LoginPageController {
 		
 		model.addAttribute(REQUEST_PARAMETER_NAME_REDIRECT_URL, getRelativeUrl(redirectUrl, pageRequest));
 		
+		Boolean isLocationUserPropertyAvailable = isLocationUserPropertyAvailable(administrationService);
+		Object showLocation = pageRequest.getAttribute("showSessionLocations");
+		if (showLocation != null && showLocation.toString().equals("true")) {
+			// if the request contains a attribute as showSessionLocations, then ignore isLocationUserPropertyAvailable
+			isLocationUserPropertyAvailable = false;
+		}
+		
 		Location lastSessionLocation = null;
+		
 		try {
 			Context.addProxyPrivilege(VIEW_LOCATIONS);
 			Context.addProxyPrivilege(GET_LOCATIONS);
-			model.addAttribute("locations", appFrameworkService.getLoginLocations());
+			if (!isLocationUserPropertyAvailable) {
+				model.addAttribute("locations", appFrameworkService.getLoginLocations());
+			}
 			lastSessionLocation = locationService.getLocation(Integer.valueOf(lastSessionLocationId));
 		}
 		catch (NumberFormatException ex) {
@@ -114,13 +125,20 @@ public class LoginPageController {
 			Context.removeProxyPrivilege(GET_LOCATIONS);
 		}
 		
-		Boolean isLocationUserPropertyAvailable = isLocationUserPropertyAvailable(administrationService);
-		Object showLocation = pageRequest.getAttribute("showSessionLocations");
-		if (showLocation != null && showLocation.toString().equals("true")) {
-			// if the request contains a attribute as showSessionLocations, then ignore isLocationUserPropertyAvailable
-			isLocationUserPropertyAvailable = false;
+		boolean showSessionLocations = !isLocationUserPropertyAvailable;
+		boolean selectLocation = false;
+		if (isSelectLocationRequest(isLocationUserPropertyAvailable)) {
+			selectLocation = true;
+			showSessionLocations = true;
+			List<Location> locations = getUserLocations(administrationService, locationService);
+			if (locations.isEmpty()) {
+				locations = appFrameworkService.getLoginLocations();
+			}
+			model.addAttribute("locations", locations);
 		}
-		model.addAttribute("showSessionLocations", !isLocationUserPropertyAvailable);
+		
+		model.addAttribute("showSessionLocations", showSessionLocations);
+		model.addAttribute("selectLocation", selectLocation);
 		model.addAttribute("lastSessionLocation", lastSessionLocation);
 		
 		return null;
@@ -230,28 +248,23 @@ public class LoginPageController {
 		}
 		
 		try {
-			Context.authenticate(username, password);
-			String locationUserPropertyName = administrationService
-			        .getGlobalProperty(ReferenceApplicationConstants.LOCATION_USER_PROPERTY_NAME);
-			if (StringUtils.isNotBlank(locationUserPropertyName)) {
-				if (Context.isAuthenticated() && Context.getUserContext().getAuthenticatedUser() != null) {
-					String locationUuid = Context.getUserContext().getAuthenticatedUser()
-					        .getUserProperty(locationUserPropertyName);
-					if (StringUtils.isNotBlank(locationUuid)) {
-						locationUuid = locationUuid.split(",")[0];
-						sessionLocation = locationService.getLocationByUuid(locationUuid);
+			if (!Context.isAuthenticated()) {
+				Context.authenticate(username, password);
+				
+				if (isLocationUserPropertyAvailable(administrationService)) {
+					if (Context.isAuthenticated() && Context.getAuthenticatedUser() != null) {
+						List<Location> accessibleLocations = getUserLocations(administrationService, locationService);
+						if (accessibleLocations.size() == 1) {
+							sessionLocation = accessibleLocations.get(0);
+						} else if (accessibleLocations.size() > 1) {
+							return "redirect:" + ui.pageLink(ReferenceApplicationConstants.MODULE_ID, "login");
+						}
 					}
+					
 					if (sessionLocation != null) {
 						sessionLocationId = sessionLocation.getLocationId();
 					} else {
-						pageRequest.getSession().setAttribute(
-						    ReferenceApplicationWebConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
-						    ui.message("referenceapplication.login.error.locationRequired"));
-						// Since the user is already authenticated without location, need to logout before redirecting
-						Context.logout();
-						Map<String, Object> returnParameters = new HashMap<String, Object>();
-						returnParameters.put("showSessionLocations", true);
-						return "redirect:" + ui.pageLink(ReferenceApplicationConstants.MODULE_ID, "login", returnParameters);
+						return "redirect:" + ui.pageLink(ReferenceApplicationConstants.MODULE_ID, "login");
 					}
 				}
 			}
@@ -325,6 +338,19 @@ public class LoginPageController {
 		return "redirect:" + ui.pageLink(ReferenceApplicationConstants.MODULE_ID, "login");
 	}
 	
+	/**
+	 * Checks if the request should be treated as a submission of a session location selection.
+	 * 
+	 * @param isUserLocPropEnabled boolean value to specify if location usr property is set or not
+	 * @return
+	 */
+	private boolean isSelectLocationRequest(boolean isUserLocPropEnabled) {
+		if (isUserLocPropEnabled && Context.isAuthenticated() && Context.getUserContext().getLocationId() == null) {
+			return true;
+		}
+		return false;
+	}
+	
 	private boolean isSameUser(PageRequest pageRequest, String username) {
 		String cookieValue = pageRequest.getCookieValue(ReferenceApplicationWebConstants.COOKIE_NAME_LAST_USER);
 		int storedUsername = 0;
@@ -332,6 +358,25 @@ public class LoginPageController {
 			storedUsername = Integer.parseInt(cookieValue);
 		}
 		return cookieValue == null || storedUsername == username.hashCode();
+	}
+	
+	private List<Location> getUserLocations(AdministrationService adminService, LocationService locationService) {
+		String locationUserPropertyName = adminService
+		        .getGlobalProperty(ReferenceApplicationConstants.LOCATION_USER_PROPERTY_NAME);
+		List<Location> locations = new ArrayList();
+		String locationUuids = Context.getAuthenticatedUser().getUserProperty(locationUserPropertyName);
+		if (StringUtils.isNotBlank(locationUuids)) {
+			for (String uuid : StringUtils.split(locationUuids, ",")) {
+				uuid = uuid.trim();
+				Location loc = locationService.getLocationByUuid(uuid);
+				if (loc == null) {
+					throw new APIException("No location with uuid: " + uuid);
+				}
+				locations.add(locationService.getLocationByUuid(uuid));
+			}
+		}
+		
+		return locations;
 	}
 	
 	private String getStringSessionAttribute(String attributeName, HttpServletRequest request) {

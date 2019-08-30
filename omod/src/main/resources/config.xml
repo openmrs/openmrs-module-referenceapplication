@@ -67,7 +67,17 @@
 				
 	</mappingFiles>
 
-	<!-- Internationalization -->
+    <filter>
+        <filter-name>${project.parent.artifactId}RequireLoginLocationFilter</filter-name>
+        <filter-class>${project.parent.groupId}.${project.parent.artifactId}.filter.RequireLoginLocationFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>${project.parent.artifactId}RequireLoginLocationFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+	Internationalization -->
 	<!-- All message codes should start with ${project.parent.artifactId}. -->
 	<messages>
 		<lang>en</lang>
