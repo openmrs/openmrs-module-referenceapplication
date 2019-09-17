@@ -18,6 +18,10 @@ hr.separator {
   }
 }
 
+.app {
+  -webkit-appearance: unset !important;
+}
+
 .homeList a  {
   font-size: unset;
   white-space: normal;
