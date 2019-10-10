@@ -43,7 +43,7 @@
                 ${ui.message("referenceapplication.app.appId.label")} (${ ui.message("emr.formValidation.messages.requiredField.label") })
             </span>
         </label>
-        <input class="form-control form-control-sm form-control-lg form-control-md" id="appId-field" type="text" class="required" name="appId" value="${userApp.appId ? ui.escapeJs(ui.escapeHtml(userApp.appId)) : ""}" size="80" placeholder="${ ui.message("referenceapplication.app.definition.placeholder") }" />
+        <input class="form-control form-control-sm form-control-lg form-control-md required" id="appId-field" type="text" name="appId" value="${userApp.appId ? ui.escapeJs(ui.escapeHtml(userApp.appId)) : ""}" size="80" placeholder="${ ui.message("referenceapplication.app.definition.placeholder") }" />
         <%}%>
     </p>
     <p>
@@ -52,7 +52,7 @@
             ${ui.message("referenceapplication.app.definition.label")} (${ ui.message("emr.formValidation.messages.requiredField.label") })
             </span>
         </label>
-        <textarea class="form-control form-control-sm form-control-lg form-control-md" id="json-field" class="required" name="json" rows="15" cols="80">${userApp.json ? userApp.json : ""}</textarea>
+        <textarea class="form-control form-control-sm form-control-lg form-control-md required" id="json-field" name="json" rows="15" cols="80">${userApp.json ? userApp.json : ""}</textarea>
     </p>
 
     <input type="button" class="cancel" value="${ ui.message("general.cancel") }" onclick="javascript:window.location='/${ contextPath }/referenceapplication/manageApps.page'" />

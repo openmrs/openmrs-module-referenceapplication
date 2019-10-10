@@ -3,7 +3,7 @@ var timeout;
 var action;
 
 jq(function(){
-    jq('.required').keyup(function() {
+    jq('.required').on("keyup",function() {
         if(timeout){
             clearTimeout(timeout);
         }
