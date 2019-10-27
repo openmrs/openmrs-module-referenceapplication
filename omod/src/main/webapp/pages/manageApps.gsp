@@ -5,6 +5,7 @@
 
     ui.includeCss("referenceapplication", "manageApps.css");
 
+    ui.includeJavascript("appui", "jquery-3.4.1.min.js")
 %>
 
 <script type="text/javascript">
