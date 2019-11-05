@@ -72,3 +72,9 @@ hr.separator {
     margin-left: unset !important;
   }
 } 
+
+@media only screen and (min-width : 991px)  {
+  .findPatient {
+    white-space: nowrap !important;
+  }
+}

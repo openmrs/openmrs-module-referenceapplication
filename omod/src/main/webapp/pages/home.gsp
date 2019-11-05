@@ -28,7 +28,7 @@
 <div class="row">
     <div  class="col-12 col-sm-12 col-md-12 col-lg-12 homeList" id="apps">
             <% extensions.each { ext -> %>
-                <a id="${ htmlSafeId(ext) }" href="/${ contextPath }/${ ext.url }" class="btn btn-default btn-lg button app big align-self-center" type="button">
+                <a id="${ htmlSafeId(ext) }" href="/${ contextPath }/${ ext.url }" class="btn btn-default btn-lg button app big align-self-center ${ ext.label.toString().split("\\.")[1] }" type="button">
                     <% if (ext.icon) { %>
                     <i class="${ ext.icon }"></i>
                     <% } %>
