@@ -1,6 +1,6 @@
 <%
     ui.includeFragment("appui", "standardEmrIncludes")
-    ui.includeJavascript("appui", "jquery.min.js")
+    ui.includeJavascript("appui", "jquery-3.4.1.min.js")
     ui.includeJavascript("appui", "popper.min.js")
     ui.includeJavascript("appui", "bootstrap.min.js")
 %>

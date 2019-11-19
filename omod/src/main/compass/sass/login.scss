@@ -15,3 +15,17 @@
 	font-size: 1.1em;
 	font-style: italic;
 }
+
+#loginButton {
+  background-color: #88af28;
+  border: #88af28 1px solid;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #a1d030), color-stop(100%, #88af28));
+  background: -webkit-linear-gradient(top, #a1d030, #88af28);
+  border-radius: 3px;
+  color: white;
+}
+
+#loginButton:hover {
+  background: #8eb82a;
+  border-color: #779b23;
+}
