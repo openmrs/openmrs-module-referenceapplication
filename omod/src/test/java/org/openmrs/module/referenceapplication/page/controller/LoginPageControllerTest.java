@@ -21,6 +21,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.Whitebox;
 import org.openmrs.Location;
+import org.openmrs.LocationTag;
 import org.openmrs.User;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.LocationService;
@@ -51,6 +52,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -59,6 +61,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.openmrs.module.referenceapplication.ReferenceApplicationWebConstants.REQUEST_PARAMETER_NAME_REDIRECT_URL;
 import static org.openmrs.module.referenceapplication.ReferenceApplicationWebConstants.SESSION_ATTRIBUTE_REDIRECT_URL;
@@ -314,9 +318,8 @@ public class LoginPageControllerTest {
 	}
 	
 	/**
-	 * @see LoginPageController#post(String, String, Integer, org.openmrs.api.LocationService,
-	 *      org.openmrs.api.AdministrationService, org.openmrs.ui.framework.UiUtils,
-	 *      org.openmrs.ui.framework.page.PageRequest, org.openmrs.module.appui.UiSessionContext)
+	 * @see LoginPageController#post(String, String, Integer, LocationService, AdministrationService,
+	 *      UiUtils, AppFrameworkService, PageRequest, UiSessionContext)
 	 */
 	@Test
 	@Verifies(value = "should redirect user to home after manual logout and login", method = "get(String,String,UiUtils,PageRequest)")
@@ -342,9 +345,8 @@ public class LoginPageControllerTest {
 	}
 	
 	/**
-	 * @see LoginPageController#post(String, String, Integer, org.openmrs.api.LocationService,
-	 *      org.openmrs.api.AdministrationService, org.openmrs.ui.framework.UiUtils,
-	 *      org.openmrs.ui.framework.page.PageRequest, org.openmrs.module.appui.UiSessionContext)
+	 * @see LoginPageController#post(String, String, Integer, LocationService, AdministrationService,
+	 *      UiUtils, AppFrameworkService, PageRequest, UiSessionContext)
 	 */
 	@Test
 	@Verifies(value = "should redirect new user to home", method = "post(String,String,UiUtils,PageRequest)")
@@ -364,13 +366,12 @@ public class LoginPageControllerTest {
 		mockAuthenticatedUser();
 		
 		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID, locationService,
-		    administrationService, uiUtils, pageRequest, sessionContext));
+		    administrationService, uiUtils, null, pageRequest, sessionContext));
 	}
 	
 	/**
-	 * @see LoginPageController#post(String, String, Integer, org.openmrs.api.LocationService,
-	 *      org.openmrs.api.AdministrationService, org.openmrs.ui.framework.UiUtils,
-	 *      org.openmrs.ui.framework.page.PageRequest, org.openmrs.module.appui.UiSessionContext)
+	 * @see LoginPageController#post(String, String, Integer, LocationService, AdministrationService,
+	 *      UiUtils, AppFrameworkService, PageRequest, UiSessionContext)
 	 */
 	@Test
 	@Verifies(value = "should redirect old user to page requested in redirectUrl param", method = "post(String,String,UiUtils,PageRequest)")
@@ -388,13 +389,12 @@ public class LoginPageControllerTest {
 		mockAuthenticatedUser();
 		
 		assertEquals("redirect:" + redirectUrl, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID,
-		    locationService, administrationService, uiUtils, pageRequest, sessionContext));
+		    locationService, administrationService, uiUtils, null, pageRequest, sessionContext));
 	}
 	
 	/**
-	 * @see LoginPageController#post(String, String, Integer, org.openmrs.api.LocationService,
-	 *      org.openmrs.api.AdministrationService, org.openmrs.ui.framework.UiUtils,
-	 *      org.openmrs.ui.framework.page.PageRequest, org.openmrs.module.appui.UiSessionContext)
+	 * @see LoginPageController#post(String, String, Integer, LocationService, AdministrationService,
+	 *      UiUtils, AppFrameworkService, PageRequest, UiSessionContext)
 	 */
 	@Test
 	@Verifies(value = "should redirect the user to the home page if the redirectUrl is the login page", method = "post(String,String,UiUtils,PageRequest)")
@@ -411,7 +411,7 @@ public class LoginPageControllerTest {
 		mockAuthenticatedUser();
 		
 		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID, locationService,
-		    administrationService, uiUtils, pageRequest, sessionContext));
+		    administrationService, uiUtils, null, pageRequest, sessionContext));
 		
 	}
 	
@@ -423,31 +423,33 @@ public class LoginPageControllerTest {
 	
 	/**
 	 * @verifies send the user back to the login page when authentication fails
-	 * @see LoginPageController#post(String, String, Integer, org.openmrs.api.LocationService,
-	 *      org.openmrs.api.AdministrationService, org.openmrs.ui.framework.UiUtils,
-	 *      org.openmrs.ui.framework.page.PageRequest, org.openmrs.module.appui.UiSessionContext)
+	 * @see LoginPageController#post(String, String, Integer, LocationService, AdministrationService,
+	 *      UiUtils, AppFrameworkService, PageRequest, UiSessionContext)
+	 *      org.openmrs.api.Administ(String, String, Integer, LocationService, AdministrationService,
+	 *      UiUtils, AppFrameworkService, PageRequest, UiSessionContext)
+	 *      org.openmrs.ui.framework(String, String, Integer, LocationService, AdministrationService,
+	 *      UiUtils, AppFrameworkService, PageRequest, UiSessionContext)
 	 */
 	@Test
 	public void post_shouldSendTheUserBackToTheLoginPageWhenAuthenticationFails() throws Exception {
 		when(Context.isAuthenticated()).thenReturn(false);
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		String page = new LoginPageController().post(null, null, SESSION_LOCATION_ID, locationService, administrationService,
-		    uiUtils, createPageRequest(request, null), sessionContext);
+		    uiUtils, appFrameworkService, createPageRequest(request, null), sessionContext);
 		assertEquals("redirect:" + uiUtils.pageLink("referenceapplication", "login"), page);
 	}
 	
 	/**
 	 * @verifies send the user back to the login page if an invalid location is selected
-	 * @see LoginPageController#post(String, String, Integer, org.openmrs.api.LocationService,
-	 *      org.openmrs.api.AdministrationService, org.openmrs.ui.framework.UiUtils,
-	 *      org.openmrs.ui.framework.page.PageRequest, org.openmrs.module.appui.UiSessionContext)
+	 * @see LoginPageController#post(String, String, Integer, LocationService, AdministrationService,
+	 *      UiUtils, AppFrameworkService, PageRequest, UiSessionContext)
 	 */
 	@Test
 	public void post_shouldSendTheUserBackToTheLoginPageIfAnInvalidLocationIsSelected() throws Exception {
 		setupMocksForSuccessfulAuthentication(false);
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		String page = new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID, locationService,
-		    administrationService, uiUtils, createPageRequest(request, null), sessionContext);
+		    administrationService, uiUtils, null, createPageRequest(request, null), sessionContext);
 		assertEquals("redirect:" + uiUtils.pageLink("referenceapplication", "login"), page);
 	}
 	
@@ -542,12 +544,12 @@ public class LoginPageControllerTest {
 		when(conversionService.convert(eq(true), eq(String.class))).thenReturn("true");
 		Whitebox.setInternalState(uiUtils, "conversionService", conversionService);
 		String page = new LoginPageController().post(USERNAME, PASSWORD, null, locationService, administrationService,
-		    uiUtils, createPageRequest(request, null), sessionContext);
+		    uiUtils, appFrameworkService, createPageRequest(request, null), sessionContext);
 		assertEquals(expectedPage, page);
 	}
 	
 	@Test
-	public void get_shouldScaleDownLoginLocationsToUserSpecificOnesInCaseMultipleLocationsAreConfigured() throws Exception {
+	public void get_shouldScaleDownLoginLocationsToUserSpecificOnesInCaseMultipleLocationsAreConfigured() {
 		when(Context.isAuthenticated()).thenReturn(true);
 		UserContext userContext = mock(UserContext.class);
 		when(Context.getUserContext()).thenReturn(userContext);
@@ -578,6 +580,26 @@ public class LoginPageControllerTest {
 		assertEquals(2, locations.size());
 		assertTrue(locations.contains(location1));
 		assertTrue(locations.contains(location2));
+	}
+	
+	@Test
+	public void post_shouldAutoSelectALocationAfterAuthenticationIfLoginLocationsSizeIsOne() throws Exception {
+		when(Context.isAuthenticated()).thenReturn(false).thenReturn(true);
+		when(Context.getAuthenticatedUser()).thenReturn(mock(User.class));
+		final int locationId = 1;
+		final String homeRedirect = "redirect:" + uiUtils.pageLink(ReferenceApplicationConstants.MODULE_ID, "home");
+		PageRequest pageRequest = createPageRequest(new MockHttpServletRequest(), null);
+		
+		Location location = new Location(locationId);
+		location.addTag(new LocationTag(EmrApiConstants.LOCATION_TAG_SUPPORTS_LOGIN, null));
+		when(appFrameworkService.getLoginLocations()).thenReturn(Collections.singletonList(location));
+		when(administrationService.getGlobalProperty(eq(ReferenceApplicationConstants.LOCATION_USER_PROPERTY_NAME)))
+		        .thenReturn("someValue");
+		
+		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, null, locationService,
+		    administrationService, uiUtils, appFrameworkService, pageRequest, sessionContext));
+		
+		verify(sessionContext, times(1)).setSessionLocation(eq(location));
 	}
 	
 }
