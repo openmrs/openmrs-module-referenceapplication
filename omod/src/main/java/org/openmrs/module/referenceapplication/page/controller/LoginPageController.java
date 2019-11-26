@@ -147,10 +147,8 @@ public class LoginPageController {
 	private boolean isLocationUserPropertyAvailable(AdministrationService administrationService) {
 		String locationUserPropertyName = administrationService
 		        .getGlobalProperty(ReferenceApplicationConstants.LOCATION_USER_PROPERTY_NAME);
-		if (StringUtils.isNotBlank(locationUserPropertyName)) {
-			return true;
-		}
-		return false;
+		
+		return StringUtils.isNotBlank(locationUserPropertyName);
 	}
 	
 	private boolean isUrlWithinOpenmrs(PageRequest pageRequest, String redirectUrl) {
@@ -229,7 +227,8 @@ public class LoginPageController {
 	                   @RequestParam(value = "sessionLocation", required = false) Integer sessionLocationId,
 	                   @SpringBean("locationService") LocationService locationService,
 	                   @SpringBean("adminService") AdministrationService administrationService, UiUtils ui,
-	                   PageRequest pageRequest, UiSessionContext sessionContext) {
+	                   @SpringBean("appFrameworkService") AppFrameworkService appFrameworkService, PageRequest pageRequest,
+	                   UiSessionContext sessionContext) {
 		
 		String redirectUrl = pageRequest.getRequest().getParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL);
 		redirectUrl = getRelativeUrl(redirectUrl, pageRequest);
@@ -252,12 +251,18 @@ public class LoginPageController {
 				Context.authenticate(username, password);
 				
 				if (isLocationUserPropertyAvailable(administrationService)) {
-					if (Context.isAuthenticated() && Context.getAuthenticatedUser() != null) {
-						List<Location> accessibleLocations = getUserLocations(administrationService, locationService);
-						if (accessibleLocations.size() == 1) {
-							sessionLocation = accessibleLocations.get(0);
-						} else if (accessibleLocations.size() > 1) {
-							return "redirect:" + ui.pageLink(ReferenceApplicationConstants.MODULE_ID, "login");
+					List<Location> accessibleLocations = getUserLocations(administrationService, locationService);
+					if (accessibleLocations.size() == 1) {
+						sessionLocation = accessibleLocations.get(0);
+					} else if (accessibleLocations.size() > 1) {
+						return "redirect:" + ui.pageLink(ReferenceApplicationConstants.MODULE_ID, "login");
+					}
+					
+					//If there is a single login location, default to that
+					if (sessionLocation == null) {
+						List<Location> loginLocations = appFrameworkService.getLoginLocations();
+						if (loginLocations.size() == 1) {
+							sessionLocation = loginLocations.get(0);
 						}
 					}
 					
@@ -287,7 +292,7 @@ public class LoginPageController {
 					pageRequest.getResponse().addCookie(cookie);
 					
 					// set the locale based on the user's default locale
-					Locale userLocale = GeneralUtils.getDefaultLocale(Context.getUserContext().getAuthenticatedUser());
+					Locale userLocale = GeneralUtils.getDefaultLocale(Context.getAuthenticatedUser());
 					if (userLocale != null) {
 						Context.getUserContext().setLocale(userLocale);
 						pageRequest.getResponse().setLocale(userLocale);
