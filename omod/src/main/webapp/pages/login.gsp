@@ -187,8 +187,7 @@
                             </p>
                             <% } %>
                         </fieldset>
-
-                        <input type="hidden" name="redirectUrl" value="${redirectUrl}" />
+                        <input type="hidden" name="redirectUrl" value="${ui.encodeHtmlAttribute(redirectUrl)}" />
 
                     </form>
                 </div>
