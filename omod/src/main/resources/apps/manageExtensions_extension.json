@@ -1,0 +1,12 @@
+[
+    {
+        "id": "${project.parent.artifactId}.manageExtensions",
+        "extensionPointId": "systemAdministration.apps",
+        "type": "link",
+        "label": "${project.parent.artifactId}.app.manageExtensions.title",
+        "url": "${project.parent.artifactId}/manageExtensions.page",
+        "icon": "icon-th-list",
+        "order": 0,
+        "requiredPrivilege": "App: ${project.parent.artifactId}.manageExtensions"
+    }
+]
