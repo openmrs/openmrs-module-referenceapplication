@@ -74,7 +74,8 @@
 
     <filter-mapping>
         <filter-name>${project.parent.artifactId}RequireLoginLocationFilter</filter-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/</url-pattern>
+        <url-pattern>*.page</url-pattern>
     </filter-mapping>
 
 	Internationalization -->

@@ -94,18 +94,14 @@ public class RequireLoginLocationFilter implements Filter {
 	}
 	
 	/**
-	 * Determines if the filter should be skipped for the specified request uri, typically all requests
-	 * for static content, non ref app pages, login and logout are be ignored.
+	 * Determines if the filter should be skipped for the specified request uri.
+	 * in config.xml file, the filter-mapping is configured to match *.page  and /
 	 * 
 	 * @param requestUri the request uri to check
 	 * @return true if the filter should be skipped otherwise false
 	 */
 	private boolean skipFilter(String requestUri) {
-		if (requestUri.endsWith(".page")) {
-			return ArrayUtils.indexOf(allowedRequestURIs, requestUri) > -1;
-		}
-		
-		return true;
+		return ArrayUtils.indexOf(allowedRequestURIs, requestUri) > -1;
 	}
 	
 	/**
