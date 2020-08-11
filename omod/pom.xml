@@ -81,18 +81,6 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>org.openmrs</groupId>
-			<artifactId>event-api-1.x</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.openmrs</groupId>
-			<artifactId>event-api-2.x</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		
-		<dependency>
             <groupId>org.openmrs.module</groupId>
             <artifactId>legacyui-omod</artifactId>
         </dependency>
