@@ -12,7 +12,6 @@ trans.es = api/src/main/resources/messages_es.properties
 trans.fa = api/src/main/resources/messages_fa.properties
 trans.si = api/src/main/resources/messages_si.properties
 trans.hi = api/src/main/resources/messages_hi.properties
-trans.ht = api/src/main/resources/messages_ht.properties
 trans.ar = api/src/main/resources/messages_ar.properties
 trans.pl = api/src/main/resources/messages_pl.properties
 trans.it = api/src/main/resources/messages_it.properties
