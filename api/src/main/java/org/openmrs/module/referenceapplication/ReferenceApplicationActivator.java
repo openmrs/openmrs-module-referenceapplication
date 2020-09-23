@@ -61,6 +61,7 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
 	/**
 	 * @see ModuleActivator#willRefreshContext()
 	 */
+	@Override
 	public void willRefreshContext() {
 		log.info("Refreshing Reference Application Module");
 	}
@@ -68,6 +69,7 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
 	/**
 	 * @see ModuleActivator#contextRefreshed()
 	 */
+	@Override
 	public void contextRefreshed() {
 		log.info("Reference Application Module refreshed");
 	}
@@ -75,6 +77,7 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
 	/**
 	 * @see ModuleActivator#willStart()
 	 */
+	@Override
 	public void willStart() {
 		log.info("Starting Reference Application Module");
 	}
@@ -82,6 +85,7 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
 	/**
 	 * @see ModuleActivator#started()
 	 */
+	@Override
 	public void started() {
 		try {
 	        AdministrationService administrationService = Context.getAdministrationService();
@@ -262,6 +266,7 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
     /**
 	 * @see ModuleActivator#willStop()
 	 */
+    @Override
 	public void willStop() {
 		log.info("Stopping Reference Application Module");
 	}
@@ -269,6 +274,7 @@ public class ReferenceApplicationActivator extends BaseModuleActivator {
 	/**
 	 * @see ModuleActivator#stopped()
 	 */
+	@Override
 	public void stopped() {
 		log.info("Reference Application Module stopped");
 
