@@ -14,14 +14,10 @@
 package org.openmrs.module.referenceapplication.page.controller;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.openmrs.Location;
 import org.openmrs.LocationTag;
-import org.openmrs.User;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.ProviderService;
-import org.openmrs.api.context.Context;
-import org.openmrs.api.context.UserContext;
 import org.openmrs.module.appframework.config.AppFrameworkConfig;
 import org.openmrs.module.appframework.domain.AppDescriptor;
 import org.openmrs.module.appframework.domain.Extension;
@@ -47,7 +43,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 public class HomePageControllerTest extends BaseModuleWebContextSensitiveTest {
 
