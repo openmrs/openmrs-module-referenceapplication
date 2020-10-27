@@ -175,7 +175,7 @@
                                     onclick="javascript:window.location = '/${ contextPath }/logout'"
                                     value="${ ui.message("general.cancel") }" />&nbsp;&nbsp;
                             <% } %>
-                                <input id="loginButton" class="confirm" type="submit"
+                                <input id="loginButton" class="btn ${ ui.message(selectLocation ? "btn-success" : "confirm") }" type="submit"
                                     value="${ ui.message(selectLocation ? "general.done" : "referenceapplication.login.button") }"/>
                             </p>
                             <% if(!selectLocation) {%>
