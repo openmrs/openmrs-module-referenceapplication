@@ -186,5 +186,10 @@
         <description>Able to manage app definitions</description>
     </privilege>
 
+	<privilege>
+		<name>App: referenceapplication.manageExtensions</name>
+		<description>Able to manage extension definitions</description>
+	</privilege>
+
 </module>
 
