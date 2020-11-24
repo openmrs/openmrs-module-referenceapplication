@@ -355,7 +355,7 @@ public class LoginPageController {
 	 * @return
 	 */
 	private boolean isSelectLocationRequest(boolean isUserLocPropEnabled) {
-		return (isUserLocPropEnabled && Context.isAuthenticated() && Context.getUserContext().getLocationId() == null);
+		return isUserLocPropEnabled && Context.isAuthenticated() && Context.getUserContext().getLocationId() == null;
 	}
 	
 	private boolean isSameUser(PageRequest pageRequest, String username) {
