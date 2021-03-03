@@ -40,7 +40,7 @@
         <%} else{%>
         <label for="appId-field">
             <span class="title">
-                ${ui.message("referenceapplication.app.appId.label")} (${ ui.message("emr.formValidation.messages.requiredField.label") })
+                ${ui.message("referenceapplication.app.appId.label")} (${ ui.message("coreapps.formValidation.messages.requiredField.label") })
             </span>
         </label>
         <input class="form-control form-control-sm form-control-lg form-control-md required" id="appId-field" type="text" name="appId" value="${userApp.appId ? ui.escapeJs(ui.escapeHtml(userApp.appId)) : ""}" size="80" placeholder="${ ui.message("referenceapplication.app.definition.placeholder") }" />
@@ -49,7 +49,7 @@
     <p>
         <label for="json-field">
             <span class="title">
-            ${ui.message("referenceapplication.app.definition.label")} (${ ui.message("emr.formValidation.messages.requiredField.label") })
+            ${ui.message("referenceapplication.app.definition.label")} (${ ui.message("coreapps.formValidation.messages.requiredField.label") })
             </span>
         </label>
         <textarea class="form-control form-control-sm form-control-lg form-control-md required" id="json-field" name="json" rows="15" cols="80">${userApp.json ? userApp.json : ""}</textarea>
