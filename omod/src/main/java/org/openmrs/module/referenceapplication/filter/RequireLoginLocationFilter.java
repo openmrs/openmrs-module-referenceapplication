@@ -76,8 +76,7 @@ public class RequireLoginLocationFilter implements Filter {
 		}
 		
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
-		if (!skipFilter(httpRequest.getRequestURI())) {
-			if (Context.isAuthenticated() && Context.getUserContext().getLocationId() == null) {
+		if (!skipFilter(httpRequest.getRequestURI()) && Context.isAuthenticated() && Context.getUserContext().getLocationId() == null) {
 				if (logger.isDebugEnabled()) {
 					logger.debug("Redirecting user to location selection page");
 				}
@@ -87,9 +86,7 @@ public class RequireLoginLocationFilter implements Filter {
 				resp.setStatus(HttpStatus.OK.value());
 				resp.sendRedirect(loginRequestUri);
 				return;
-			}
-		}
-		
+			}	
 		chain.doFilter(request, response);
 	}
 	
