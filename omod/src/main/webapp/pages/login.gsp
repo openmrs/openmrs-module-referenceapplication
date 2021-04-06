@@ -109,8 +109,8 @@
 
 <script type="text/javascript">
     jq(document).ready(function () {
-        if(jq("#client-timezone").length){
-            jq("#client-timezone").val(Intl.DateTimeFormat().resolvedOptions().timeZone)
+        if(jq("#clientTimezone").length){
+            jq("#clientTimezone").val(Intl.DateTimeFormat().resolvedOptions().timeZone)
         }
     });
 </script>
@@ -171,7 +171,7 @@
                                     <% } %>
                                 </ul>
                             <% if(ui.convertTimezones()) { %>
-                                <input type="hidden" id="client-timezone" name="client-timezone">
+                                <input type="hidden" id="clientTimezone" name="clientTimezone">
                             <%} %>
                             </p>
 

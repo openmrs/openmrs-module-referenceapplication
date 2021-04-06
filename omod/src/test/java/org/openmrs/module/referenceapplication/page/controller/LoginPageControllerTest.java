@@ -599,7 +599,7 @@ public class LoginPageControllerTest {
 		when(administrationService.getGlobalProperty(eq(ReferenceApplicationConstants.LOCATION_USER_PROPERTY_NAME)))
 		        .thenReturn("someValue");
 		
-		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, null,null, locationService,
+		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, null, null, locationService,
 		    administrationService, uiUtils, appFrameworkService, pageRequest, sessionContext));
 		
 		verify(sessionContext, times(1)).setSessionLocation(eq(location));

@@ -230,7 +230,7 @@ public class LoginPageController {
 	public String post(@RequestParam(value = "username", required = false) String username,
 	                   @RequestParam(value = "password", required = false) String password,
 	                   @RequestParam(value = "sessionLocation", required = false) Integer sessionLocationId,
-					   @RequestParam(value = "client-timezone", required = false) String clientTimezone,
+					   @RequestParam(value = "clientTimezone", required = false) String clientTimezone,
 	                   @SpringBean("locationService") LocationService locationService,
 	                   @SpringBean("adminService") AdministrationService administrationService, UiUtils ui,
 	                   @SpringBean("appFrameworkService") AppFrameworkService appFrameworkService, PageRequest pageRequest,
@@ -241,7 +241,7 @@ public class LoginPageController {
 		Location sessionLocation = null;
 		if (sessionLocationId != null) {
 			try {
-				if(StringUtils.isNotEmpty(clientTimezone)){
+				if (StringUtils.isNotEmpty(clientTimezone)) {
 					ui.setClientTimezoneProprerty(clientTimezone);
 				}
 				// TODO as above, grant this privilege to Anonymous instead of using a proxy privilege
@@ -268,14 +268,14 @@ public class LoginPageController {
 					}
 					
 					//If there is a single login location, default to that
-					Boolean clientTimezonePropriety = false;
+					boolean clientTimezoneProperty = false;
 					if(Context.isAuthenticated()){
-						clientTimezonePropriety = StringUtils.isBlank(Context.getAuthenticatedUser().getUserProperty("clientTimezone"));
+						clientTimezoneProperty = StringUtils.isBlank(Context.getAuthenticatedUser().getUserProperty("clientTimezone"));
 					}
 					if (sessionLocation == null) {
 						List<Location> loginLocations = appFrameworkService.getLoginLocations();
 						if (loginLocations.size() == 1) {
-							if(!ui.convertTimezones() || (ui.convertTimezones() && !clientTimezonePropriety)){
+							if(!ui.convertTimezones() || (ui.convertTimezones() && !clientTimezoneProperty)){
 								sessionLocation = loginLocations.get(0);
 							}
 
