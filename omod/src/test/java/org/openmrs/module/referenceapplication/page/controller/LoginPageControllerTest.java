@@ -93,7 +93,9 @@ public class LoginPageControllerTest {
 	private static final String VIEW_LOCATIONS = "View Locations";
 	
 	private final UiUtils uiUtils = new UiUtils() {
-		
+		@Override
+		public boolean convertTimezones() {return  false;}
+
 		@Override
 		public String pageLink(String providerName, String pageName) {
 			return new BasicUiUtils().pageLink(providerName, pageName);
@@ -114,6 +116,7 @@ public class LoginPageControllerTest {
 	@Before
 	public void setup() {
 		mockStatic(Context.class);
+
 		locationService = mock(LocationService.class);
 		sessionContext = mock(UiSessionContext.class);
 		appFrameworkService = mock(AppFrameworkService.class);
@@ -365,7 +368,7 @@ public class LoginPageControllerTest {
 		
 		mockAuthenticatedUser();
 		
-		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID, locationService,
+		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID, null,locationService,
 		    administrationService, uiUtils, null, pageRequest, sessionContext));
 	}
 	
@@ -389,7 +392,7 @@ public class LoginPageControllerTest {
 		mockAuthenticatedUser();
 		
 		assertEquals("redirect:" + redirectUrl, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID,
-		    locationService, administrationService, uiUtils, null, pageRequest, sessionContext));
+				null, locationService, administrationService, uiUtils, null, pageRequest, sessionContext));
 	}
 	
 	/**
@@ -410,8 +413,8 @@ public class LoginPageControllerTest {
 		
 		mockAuthenticatedUser();
 		
-		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID, locationService,
-		    administrationService, uiUtils, null, pageRequest, sessionContext));
+		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID, null,locationService,
+				 administrationService, uiUtils, null, pageRequest, sessionContext));
 		
 	}
 	
@@ -434,7 +437,7 @@ public class LoginPageControllerTest {
 	public void post_shouldSendTheUserBackToTheLoginPageWhenAuthenticationFails() throws Exception {
 		when(Context.isAuthenticated()).thenReturn(false);
 		MockHttpServletRequest request = new MockHttpServletRequest();
-		String page = new LoginPageController().post(null, null, SESSION_LOCATION_ID, locationService, administrationService,
+		String page = new LoginPageController().post(null, null, SESSION_LOCATION_ID, null, locationService,  administrationService,
 		    uiUtils, appFrameworkService, createPageRequest(request, null), sessionContext);
 		assertEquals("redirect:" + uiUtils.pageLink("referenceapplication", "login"), page);
 	}
@@ -448,7 +451,7 @@ public class LoginPageControllerTest {
 	public void post_shouldSendTheUserBackToTheLoginPageIfAnInvalidLocationIsSelected() throws Exception {
 		setupMocksForSuccessfulAuthentication(false);
 		MockHttpServletRequest request = new MockHttpServletRequest();
-		String page = new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID, locationService,
+		String page = new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID, null, locationService,
 		    administrationService, uiUtils, null, createPageRequest(request, null), sessionContext);
 		assertEquals("redirect:" + uiUtils.pageLink("referenceapplication", "login"), page);
 	}
@@ -543,7 +546,7 @@ public class LoginPageControllerTest {
 		ConversionService conversionService = mock(ConversionService.class);
 		when(conversionService.convert(eq(true), eq(String.class))).thenReturn("true");
 		Whitebox.setInternalState(uiUtils, "conversionService", conversionService);
-		String page = new LoginPageController().post(USERNAME, PASSWORD, null, locationService, administrationService,
+		String page = new LoginPageController().post(USERNAME, PASSWORD, null, null, locationService, administrationService,
 		    uiUtils, appFrameworkService, createPageRequest(request, null), sessionContext);
 		assertEquals(expectedPage, page);
 	}
@@ -596,7 +599,7 @@ public class LoginPageControllerTest {
 		when(administrationService.getGlobalProperty(eq(ReferenceApplicationConstants.LOCATION_USER_PROPERTY_NAME)))
 		        .thenReturn("someValue");
 		
-		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, null, locationService,
+		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, null,null, locationService,
 		    administrationService, uiUtils, appFrameworkService, pageRequest, sessionContext));
 		
 		verify(sessionContext, times(1)).setSessionLocation(eq(location));
