@@ -368,7 +368,7 @@ public class LoginPageControllerTest {
 		
 		mockAuthenticatedUser();
 		
-		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID, null,locationService,
+		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID, null, locationService,
 		    administrationService, uiUtils, null, pageRequest, sessionContext));
 	}
 	
@@ -413,7 +413,7 @@ public class LoginPageControllerTest {
 		
 		mockAuthenticatedUser();
 		
-		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID, null,locationService,
+		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID, null, locationService,
 				 administrationService, uiUtils, null, pageRequest, sessionContext));
 		
 	}

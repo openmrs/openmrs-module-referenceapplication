@@ -170,7 +170,7 @@
                                     <li id="${ui.encodeHtml(it.name)}" tabindex="0"  value="${it.id}">${ui.encodeHtmlContent(ui.format(it))}</li>
                                     <% } %>
                                 </ul>
-                            <% if(ui.convertTimezones()) { %>
+                            <% if (ui.convertTimezones()) { %>
                                 <input type="hidden" id="clientTimezone" name="clientTimezone">
                             <%} %>
                             </p>

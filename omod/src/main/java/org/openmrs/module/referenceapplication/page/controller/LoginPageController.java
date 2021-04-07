@@ -269,13 +269,13 @@ public class LoginPageController {
 					
 					//If there is a single login location, default to that
 					boolean clientTimezoneProperty = false;
-					if(Context.isAuthenticated()){
+					if (Context.isAuthenticated()) {
 						clientTimezoneProperty = StringUtils.isBlank(Context.getAuthenticatedUser().getUserProperty("clientTimezone"));
 					}
 					if (sessionLocation == null) {
 						List<Location> loginLocations = appFrameworkService.getLoginLocations();
 						if (loginLocations.size() == 1) {
-							if(!ui.convertTimezones() || (ui.convertTimezones() && !clientTimezoneProperty)){
+							if (!ui.convertTimezones() || (ui.convertTimezones() && !clientTimezoneProperty)) {
 								sessionLocation = loginLocations.get(0);
 							}
 
