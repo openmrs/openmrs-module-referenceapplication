@@ -242,7 +242,7 @@ public class LoginPageController {
 		if (sessionLocationId != null) {
 			try {
 				if (StringUtils.isNotEmpty(clientTimezone)) {
-					ui.setClientTimezoneProperty(clientTimezone);
+					ui.setClientTimezone(clientTimezone);
 				}
 				// TODO as above, grant this privilege to Anonymous instead of using a proxy privilege
 				Context.addProxyPrivilege(VIEW_LOCATIONS);
