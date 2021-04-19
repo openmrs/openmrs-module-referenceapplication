@@ -15,6 +15,7 @@ package org.openmrs.module.referenceapplication.page.controller;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -52,27 +53,28 @@ public class UserAppPageController {
 	public String post(PageModel model, @ModelAttribute(value = "appId") @BindParams UserApp userApp,
 	                   @RequestParam("action") String action,
 	                   @SpringBean("appFrameworkService") AppFrameworkService service, HttpSession session, UiUtils ui) {
-		
+
+		String htmlSafeAppId = StringEscapeUtils.escapeHtml(userApp.getAppId());
 		try {
 			AppDescriptor descriptor = mapper.readValue(userApp.getJson(), AppDescriptor.class);
-			if (!userApp.getAppId().equals(descriptor.getId())) {
+			if (!htmlSafeAppId.equals(descriptor.getId())) {
 				session.setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
 				    ui.message("referenceapplication.app.errors.IdsShouldMatch"));
-			} else if ("add".equals(action) && service.getUserApp(userApp.getAppId()) != null) {
+			} else if ("add".equals(action) && service.getUserApp(htmlSafeAppId) != null) {
 				session.setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
 				    ui.message("referenceapplication.app.errors.duplicateAppId"));
 			} else {
 				service.saveUserApp(userApp);
 				
 				InfoErrorMessageUtil.flashInfoMessage(session,
-				    ui.message("referenceapplication.app.userApp.save.success", userApp.getAppId()));
+				    ui.message("referenceapplication.app.userApp.save.success", htmlSafeAppId));
 				
 				return "redirect:/referenceapplication/manageApps.page";
 			}
 		}
 		catch (Exception e) {
 			session.setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
-			    ui.message("referenceapplication.app.userApp.save.fail", userApp.getAppId()));
+			    ui.message("referenceapplication.app.userApp.save.fail", htmlSafeAppId));
 		}
 		
 		model.addAttribute("userApp", userApp);
