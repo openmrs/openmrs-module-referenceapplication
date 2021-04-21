@@ -54,27 +54,26 @@ public class UserAppPageController {
 	                   @RequestParam("action") String action,
 	                   @SpringBean("appFrameworkService") AppFrameworkService service, HttpSession session, UiUtils ui) {
 
-		String htmlSafeAppId = StringEscapeUtils.escapeHtml(userApp.getAppId());
 		try {
 			AppDescriptor descriptor = mapper.readValue(userApp.getJson(), AppDescriptor.class);
-			if (!htmlSafeAppId.equals(descriptor.getId())) {
+			if (!userApp.getAppId().equals(descriptor.getId())) {
 				session.setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
 				    ui.message("referenceapplication.app.errors.IdsShouldMatch"));
-			} else if ("add".equals(action) && service.getUserApp(htmlSafeAppId) != null) {
+			} else if ("add".equals(action) && service.getUserApp(userApp.getAppId()) != null) {
 				session.setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
 				    ui.message("referenceapplication.app.errors.duplicateAppId"));
 			} else {
 				service.saveUserApp(userApp);
 				
 				InfoErrorMessageUtil.flashInfoMessage(session,
-				    ui.message("referenceapplication.app.userApp.save.success", htmlSafeAppId));
+				    ui.message("referenceapplication.app.userApp.save.success", StringEscapeUtils.escapeHtml(userApp.getAppId())));
 				
 				return "redirect:/referenceapplication/manageApps.page";
 			}
 		}
 		catch (Exception e) {
 			session.setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
-			    ui.message("referenceapplication.app.userApp.save.fail", htmlSafeAppId));
+			    ui.message("referenceapplication.app.userApp.save.fail", StringEscapeUtils.escapeHtml(userApp.getAppId())));
 		}
 		
 		model.addAttribute("userApp", userApp);
