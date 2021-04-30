@@ -315,9 +315,7 @@ public class LoginPageController {
 						new CookieLocaleResolver().setDefaultLocale(userLocale);
 					}
 					
-					if (StringUtils.isNotBlank(redirectUrl)) {
-						//don't redirect back to the login page on success nor an external url
-						if (isUrlWithinOpenmrs(pageRequest, redirectUrl)) {
+					if (StringUtils.isNotBlank(redirectUrl) && isUrlWithinOpenmrs(pageRequest, redirectUrl)) {
 							if (!redirectUrl.contains("login.") && isSameUser(pageRequest, username)) {
 								if (log.isDebugEnabled())
 									log.debug("Redirecting user to " + redirectUrl);
@@ -325,8 +323,7 @@ public class LoginPageController {
 							} else {
 								if (log.isDebugEnabled())
 									log.debug("Redirect contains 'login.', redirecting to home page");
-							}
-						}
+							}	
 					}
 					
 					return "redirect:" + ui.pageLink(ReferenceApplicationConstants.MODULE_ID, "home");
