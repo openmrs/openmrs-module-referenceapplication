@@ -107,6 +107,14 @@
     });
 </script>
 
+<script type="text/javascript">
+    jq(document).ready(function () {
+        if(jq("#clientTimezone").length){
+            jq("#clientTimezone").val(Intl.DateTimeFormat().resolvedOptions().timeZone)
+        }
+    });
+</script>
+
 <div id="content" class="container-fluid">
     <div class= "row">
         <div class="col-12 col-sm-12 col-md-12 col-lg-12">
@@ -162,6 +170,9 @@
                                     <li id="${ui.encodeHtml(it.name)}" tabindex="0"  value="${it.id}">${ui.encodeHtmlContent(ui.format(it))}</li>
                                     <% } %>
                                 </ul>
+                            <% if (ui.convertTimezones()) { %>
+                                <input type="hidden" id="clientTimezone" name="clientTimezone">
+                            <%} %>
                             </p>
 
                             <input type="hidden" id="sessionLocationInput" name="sessionLocation"

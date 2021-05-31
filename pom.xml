@@ -52,7 +52,7 @@
 		<metadatasharingVersion>1.2.2</metadatasharingVersion>
 		<emrapiVersion>1.21.0</emrapiVersion>
 		<providermanagementVersion>2.5.0</providermanagementVersion>
-		<uiframeworkVersion>3.9</uiframeworkVersion>
+		<uiframeworkVersion>3.21.0-SNAPSHOT</uiframeworkVersion>
 		<appuiVersion>1.7</appuiVersion>
 		<atlasVersion>2.2</atlasVersion>
 		<eventVersion>2.8.0</eventVersion>

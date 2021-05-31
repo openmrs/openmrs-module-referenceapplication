@@ -92,13 +92,30 @@ public class LoginPageControllerTest {
 	
 	private static final String VIEW_LOCATIONS = "View Locations";
 	
-	private final UiUtils uiUtils = new UiUtils() {
-		
+	private final UiUtils uiUtilsWithoutTimezones = new UiUtils() {
+		@Override
+		public boolean convertTimezones() {return  false;}
+
 		@Override
 		public String pageLink(String providerName, String pageName) {
 			return new BasicUiUtils().pageLink(providerName, pageName);
 		}
 		
+		@Override
+		public String message(String code, Object... args) {
+			return null;
+		}
+	};
+
+	private final UiUtils uiUtilsWithTimezone = new UiUtils() {
+		@Override
+		public boolean convertTimezones() {return  true;}
+
+		@Override
+		public String pageLink(String providerName, String pageName) {
+			return new BasicUiUtils().pageLink(providerName, pageName);
+		}
+
 		@Override
 		public String message(String code, Object... args) {
 			return null;
@@ -114,6 +131,7 @@ public class LoginPageControllerTest {
 	@Before
 	public void setup() {
 		mockStatic(Context.class);
+
 		locationService = mock(LocationService.class);
 		sessionContext = mock(UiSessionContext.class);
 		appFrameworkService = mock(AppFrameworkService.class);
@@ -169,8 +187,8 @@ public class LoginPageControllerTest {
 	    throws Exception {
 		when(Context.isAuthenticated()).thenReturn(true);
 		when(Context.getUserContext()).thenReturn(mock(UserContext.class));
-		String homeRedirect = "redirect:" + uiUtils.pageLink(ReferenceApplicationConstants.MODULE_ID, "home");
-		assertEquals(homeRedirect, new LoginPageController().get(null, uiUtils, createPageRequest(null, null), null, null,
+		String homeRedirect = "redirect:" + uiUtilsWithoutTimezones.pageLink(ReferenceApplicationConstants.MODULE_ID, "home");
+		assertEquals(homeRedirect, new LoginPageController().get(null, uiUtilsWithoutTimezones, createPageRequest(null, null), null, null,
 		    appFrameworkService, administrationService));
 	}
 	
@@ -185,7 +203,7 @@ public class LoginPageControllerTest {
 	@Verifies(value = "should show the user the login page if they are not authenticated", method = "get(PageModel,UiUtils,PageRequest)")
 	public void get_shouldShowTheUserTheLoginPageIfTheyAreNotAuthenticated() throws Exception {
 		when(Context.isAuthenticated()).thenReturn(false);
-		assertNull(new LoginPageController().get(new PageModel(), uiUtils, createPageRequest(null, null), null, null,
+		assertNull(new LoginPageController().get(new PageModel(), uiUtilsWithoutTimezones, createPageRequest(null, null), null, null,
 		    appFrameworkService, administrationService));
 	}
 	
@@ -207,7 +225,7 @@ public class LoginPageControllerTest {
 		request.addParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL, redirectUrl);
 		PageModel pageModel = new PageModel();
 		
-		new LoginPageController().get(pageModel, uiUtils, createPageRequest(request, null), null, null, appFrameworkService,
+		new LoginPageController().get(pageModel, uiUtilsWithoutTimezones, createPageRequest(request, null), null, null, appFrameworkService,
 		    administrationService);
 		
 		assertEquals(redirectUrl, pageModel.get(REQUEST_PARAMETER_NAME_REDIRECT_URL));
@@ -231,7 +249,7 @@ public class LoginPageControllerTest {
 		request.addHeader("Referer", refererUrl);
 		PageModel pageModel = new PageModel();
 		
-		new LoginPageController().get(pageModel, uiUtils, createPageRequest(request, null), null, null, appFrameworkService,
+		new LoginPageController().get(pageModel, uiUtilsWithoutTimezones, createPageRequest(request, null), null, null, appFrameworkService,
 		    administrationService);
 		
 		assertEquals(refererUrl, pageModel.get(REQUEST_PARAMETER_NAME_REDIRECT_URL));
@@ -258,7 +276,7 @@ public class LoginPageControllerTest {
 		request.setSession(httpSession);
 		
 		PageModel pageModel = new PageModel();
-		new LoginPageController().get(pageModel, uiUtils, pageRequest, null, null, appFrameworkService,
+		new LoginPageController().get(pageModel, uiUtilsWithoutTimezones, pageRequest, null, null, appFrameworkService,
 		    administrationService);
 		
 		assertEquals(redirectUrl, pageModel.get(REQUEST_PARAMETER_NAME_REDIRECT_URL));
@@ -286,7 +304,7 @@ public class LoginPageControllerTest {
 		
 		PageModel pageModel = new PageModel();
 		
-		assertEquals("redirect:" + redirectUrl, new LoginPageController().get(pageModel, uiUtils, pageRequest, null, null,
+		assertEquals("redirect:" + redirectUrl, new LoginPageController().get(pageModel, uiUtilsWithoutTimezones, pageRequest, null, null,
 		    appFrameworkService, administrationService));
 	}
 	
@@ -313,7 +331,7 @@ public class LoginPageControllerTest {
 		
 		PageModel pageModel = new PageModel();
 		
-		assertNotEquals("redirect:" + redirectUrl, new LoginPageController().get(pageModel, uiUtils, pageRequest, null, null,
+		assertNotEquals("redirect:" + redirectUrl, new LoginPageController().get(pageModel, uiUtilsWithoutTimezones, pageRequest, null, null,
 		    appFrameworkService, administrationService));
 	}
 	
@@ -326,7 +344,7 @@ public class LoginPageControllerTest {
 	public void get_shouldNotSetRedirectUrlParamAfterManualLogout() throws Exception {
 		when(Context.isAuthenticated()).thenReturn(false);
 		
-		final String homeRedirect = "redirect:" + uiUtils.pageLink(ReferenceApplicationConstants.MODULE_ID, "home");
+		final String homeRedirect = "redirect:" + uiUtilsWithoutTimezones.pageLink(ReferenceApplicationConstants.MODULE_ID, "home");
 		
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.addHeader("Referer", "somePage/weDont/wantTo/beRedirected");
@@ -337,7 +355,7 @@ public class LoginPageControllerTest {
 		
 		PageModel pageModel = new PageModel();
 		
-		new LoginPageController().get(pageModel, uiUtils, pageRequest, null, null, appFrameworkService,
+		new LoginPageController().get(pageModel, uiUtilsWithoutTimezones, pageRequest, null, null, appFrameworkService,
 		    administrationService);
 		
 		assertEquals("", pageModel.getAttribute(ReferenceApplicationWebConstants.REQUEST_PARAMETER_NAME_REDIRECT_URL));
@@ -353,7 +371,7 @@ public class LoginPageControllerTest {
 	public void post_shouldRedirectNewUserToHome() throws Exception {
 		setupMocksForSuccessfulAuthentication(true);
 		
-		final String homeRedirect = "redirect:" + uiUtils.pageLink(ReferenceApplicationConstants.MODULE_ID, "home");
+		final String homeRedirect = "redirect:" + uiUtilsWithoutTimezones.pageLink(ReferenceApplicationConstants.MODULE_ID, "home");
 		String redirectUrl = TEST_CONTEXT_PATH + "/referenceapplication/patient.page";
 		
 		MockHttpServletRequest request = new MockHttpServletRequest();
@@ -365,8 +383,8 @@ public class LoginPageControllerTest {
 		
 		mockAuthenticatedUser();
 		
-		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID, locationService,
-		    administrationService, uiUtils, null, pageRequest, sessionContext));
+		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID, null, locationService,
+		    administrationService, uiUtilsWithoutTimezones, null, pageRequest, sessionContext));
 	}
 	
 	/**
@@ -389,7 +407,7 @@ public class LoginPageControllerTest {
 		mockAuthenticatedUser();
 		
 		assertEquals("redirect:" + redirectUrl, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID,
-		    locationService, administrationService, uiUtils, null, pageRequest, sessionContext));
+				null, locationService, administrationService, uiUtilsWithoutTimezones, null, pageRequest, sessionContext));
 	}
 	
 	/**
@@ -401,8 +419,8 @@ public class LoginPageControllerTest {
 	public void post_shouldRedirectTheUserToTheHomePageIfTheRedirectUrlIsTheLoginPage() throws Exception {
 		setupMocksForSuccessfulAuthentication(true);
 		
-		final String redirectUrl = uiUtils.pageLink(ReferenceApplicationConstants.MODULE_ID, "login");
-		final String homeRedirect = "redirect:" + uiUtils.pageLink(ReferenceApplicationConstants.MODULE_ID, "home");
+		final String redirectUrl = uiUtilsWithoutTimezones.pageLink(ReferenceApplicationConstants.MODULE_ID, "login");
+		final String homeRedirect = "redirect:" + uiUtilsWithoutTimezones.pageLink(ReferenceApplicationConstants.MODULE_ID, "home");
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setContextPath("/openmrs");
 		request.setParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL, redirectUrl);
@@ -410,8 +428,8 @@ public class LoginPageControllerTest {
 		
 		mockAuthenticatedUser();
 		
-		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID, locationService,
-		    administrationService, uiUtils, null, pageRequest, sessionContext));
+		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID, null, locationService,
+				 administrationService, uiUtilsWithoutTimezones, null, pageRequest, sessionContext));
 		
 	}
 	
@@ -434,9 +452,9 @@ public class LoginPageControllerTest {
 	public void post_shouldSendTheUserBackToTheLoginPageWhenAuthenticationFails() throws Exception {
 		when(Context.isAuthenticated()).thenReturn(false);
 		MockHttpServletRequest request = new MockHttpServletRequest();
-		String page = new LoginPageController().post(null, null, SESSION_LOCATION_ID, locationService, administrationService,
-		    uiUtils, appFrameworkService, createPageRequest(request, null), sessionContext);
-		assertEquals("redirect:" + uiUtils.pageLink("referenceapplication", "login"), page);
+		String page = new LoginPageController().post(null, null, SESSION_LOCATION_ID, null, locationService,  administrationService,
+				uiUtilsWithoutTimezones, appFrameworkService, createPageRequest(request, null), sessionContext);
+		assertEquals("redirect:" + uiUtilsWithoutTimezones.pageLink("referenceapplication", "login"), page);
 	}
 	
 	/**
@@ -448,9 +466,9 @@ public class LoginPageControllerTest {
 	public void post_shouldSendTheUserBackToTheLoginPageIfAnInvalidLocationIsSelected() throws Exception {
 		setupMocksForSuccessfulAuthentication(false);
 		MockHttpServletRequest request = new MockHttpServletRequest();
-		String page = new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID, locationService,
-		    administrationService, uiUtils, null, createPageRequest(request, null), sessionContext);
-		assertEquals("redirect:" + uiUtils.pageLink("referenceapplication", "login"), page);
+		String page = new LoginPageController().post(USERNAME, PASSWORD, SESSION_LOCATION_ID, null, locationService,
+		    administrationService, uiUtilsWithoutTimezones, null, createPageRequest(request, null), sessionContext);
+		assertEquals("redirect:" + uiUtilsWithoutTimezones.pageLink("referenceapplication", "login"), page);
 	}
 	
 	/**
@@ -468,7 +486,7 @@ public class LoginPageControllerTest {
 		request.setContextPath(TEST_CONTEXT_PATH);
 		request.addHeader("Referer", refererUrl);
 		PageModel pageModel = new PageModel();
-		new LoginPageController().get(pageModel, uiUtils, createPageRequest(request, null), null, null, appFrameworkService,
+		new LoginPageController().get(pageModel, uiUtilsWithoutTimezones, createPageRequest(request, null), null, null, appFrameworkService,
 		    administrationService);
 		
 		assertEquals("", pageModel.get(REQUEST_PARAMETER_NAME_REDIRECT_URL));
@@ -490,7 +508,7 @@ public class LoginPageControllerTest {
 		request.setContextPath(TEST_CONTEXT_PATH);
 		request.addHeader("Referer", refererUrl);
 		PageModel pageModel = new PageModel();
-		new LoginPageController().get(pageModel, uiUtils, createPageRequest(request, null), null, null, appFrameworkService,
+		new LoginPageController().get(pageModel, uiUtilsWithoutTimezones, createPageRequest(request, null), null, null, appFrameworkService,
 		    administrationService);
 		
 		assertEquals(redirectUrl, pageModel.get(REQUEST_PARAMETER_NAME_REDIRECT_URL));
@@ -521,7 +539,7 @@ public class LoginPageControllerTest {
 		
 		PageModel pageModel = new PageModel();
 		
-		assertEquals("redirect:" + redirectUrl, new LoginPageController().get(pageModel, uiUtils, pageRequest, null, null,
+		assertEquals("redirect:" + redirectUrl, new LoginPageController().get(pageModel, uiUtilsWithoutTimezones, pageRequest, null, null,
 		    appFrameworkService, administrationService));
 	}
 	
@@ -542,9 +560,9 @@ public class LoginPageControllerTest {
 		final String expectedPage = "redirect:/openmrs/" + ReferenceApplicationConstants.MODULE_ID + "/login.page";
 		ConversionService conversionService = mock(ConversionService.class);
 		when(conversionService.convert(eq(true), eq(String.class))).thenReturn("true");
-		Whitebox.setInternalState(uiUtils, "conversionService", conversionService);
-		String page = new LoginPageController().post(USERNAME, PASSWORD, null, locationService, administrationService,
-		    uiUtils, appFrameworkService, createPageRequest(request, null), sessionContext);
+		Whitebox.setInternalState(uiUtilsWithoutTimezones, "conversionService", conversionService);
+		String page = new LoginPageController().post(USERNAME, PASSWORD, null, null, locationService, administrationService,
+				uiUtilsWithoutTimezones, appFrameworkService, createPageRequest(request, null), sessionContext);
 		assertEquals(expectedPage, page);
 	}
 	
@@ -574,7 +592,7 @@ public class LoginPageControllerTest {
 		PageRequest pageRequest = createPageRequest(request, null);
 		PageModel pageModel = new PageModel();
 		
-		assertNull(new LoginPageController().get(pageModel, uiUtils, pageRequest, null, locationService, appFrameworkService,
+		assertNull(new LoginPageController().get(pageModel, uiUtilsWithoutTimezones, pageRequest, null, locationService, appFrameworkService,
 		    administrationService));
 		List<Location> locations = (List) pageModel.getAttribute("locations");
 		assertEquals(2, locations.size());
@@ -587,7 +605,7 @@ public class LoginPageControllerTest {
 		when(Context.isAuthenticated()).thenReturn(false).thenReturn(true);
 		when(Context.getAuthenticatedUser()).thenReturn(mock(User.class));
 		final int locationId = 1;
-		final String homeRedirect = "redirect:" + uiUtils.pageLink(ReferenceApplicationConstants.MODULE_ID, "home");
+		final String homeRedirect = "redirect:" + uiUtilsWithoutTimezones.pageLink(ReferenceApplicationConstants.MODULE_ID, "home");
 		PageRequest pageRequest = createPageRequest(new MockHttpServletRequest(), null);
 		
 		Location location = new Location(locationId);
@@ -596,10 +614,29 @@ public class LoginPageControllerTest {
 		when(administrationService.getGlobalProperty(eq(ReferenceApplicationConstants.LOCATION_USER_PROPERTY_NAME)))
 		        .thenReturn("someValue");
 		
-		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, null, locationService,
-		    administrationService, uiUtils, appFrameworkService, pageRequest, sessionContext));
+		assertEquals(homeRedirect, new LoginPageController().post(USERNAME, PASSWORD, null, null, locationService,
+		    administrationService, uiUtilsWithoutTimezones, appFrameworkService, pageRequest, sessionContext));
 		
 		verify(sessionContext, times(1)).setSessionLocation(eq(location));
 	}
-	
+
+	@Test
+	public void post_shouldNotAutoSelectALocationAfterAuthenticationIfLoginLocationsSizeIsOneAndUsingTimezonesWithoutClientTimezone() throws Exception {
+		when(Context.isAuthenticated()).thenReturn(false).thenReturn(true);
+		when(Context.getAuthenticatedUser()).thenReturn(mock(User.class));
+		final int LOCATION_ID = 1;
+		final String LOCATION_SELECTION_PAGE = "redirect:/openmrs/" + ReferenceApplicationConstants.MODULE_ID + "/login.page";
+		PageRequest pageRequest = createPageRequest(new MockHttpServletRequest(), null);
+
+		Location location = new Location(LOCATION_ID);
+		location.addTag(new LocationTag(EmrApiConstants.LOCATION_TAG_SUPPORTS_LOGIN, null));
+		when(appFrameworkService.getLoginLocations()).thenReturn(Collections.singletonList(location));
+		when(administrationService.getGlobalProperty(eq(ReferenceApplicationConstants.LOCATION_USER_PROPERTY_NAME)))
+				.thenReturn("someValue");
+
+		assertEquals(LOCATION_SELECTION_PAGE, new LoginPageController().post(USERNAME, PASSWORD, null, null, locationService,
+				administrationService, uiUtilsWithTimezone, appFrameworkService, pageRequest, sessionContext));
+
+	}
+
 }
