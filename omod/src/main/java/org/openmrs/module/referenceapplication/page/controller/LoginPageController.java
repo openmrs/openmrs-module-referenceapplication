@@ -162,7 +162,7 @@ public class LoginPageController {
 				try {
 					URL url = new URL(redirectUrl);
 					String urlPath = url.getFile();
-					String urlContextPath = urlPath.substring(0, urlPath.indexOf('/', 1));
+					String urlContextPath = urlPath.substring(1).contains("/") ? urlPath.substring(0, urlPath.indexOf('/', 1)) : urlPath;
 					if (StringUtils.equals(pageRequest.getRequest().getContextPath(), urlContextPath)) {
 						return true;
 					}
