@@ -348,10 +348,11 @@ public class LoginPageControllerTest {
 		when(Context.isAuthenticated()).thenReturn(true);
 		when(Context.getUserContext()).thenReturn(mock(UserContext.class));
 
+		String redirectFullUrl = "http://openmrs.org/openmrs";
 		String redirectUrl = "/openmrs";
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setContextPath(TEST_CONTEXT_PATH);
-		request.setParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL, redirectUrl);
+		request.setParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL, redirectFullUrl);
 		PageRequest pageRequest = createPageRequest(request, null);
 		HttpSession httpSession = new MockHttpSession();
 		request.setSession(httpSession);
