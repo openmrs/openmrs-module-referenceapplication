@@ -43,7 +43,7 @@
                 ${ui.message("referenceapplication.app.appId.label")} (${ ui.message("coreapps.formValidation.messages.requiredField.label") })
             </span>
         </label>
-        <input class="form-control form-control-sm form-control-lg form-control-md required" id="appId-field" type="text" name="appId" value="${userApp.appId ? ui.escapeJs(ui.escapeHtml(userApp.appId)) : ""}" size="80" placeholder="${ ui.message("referenceapplication.app.definition.placeholder") }" />
+        <input class="form-control form-control-sm form-control-lg form-control-md required" id="appId-field" type="text" name="appId" value="${userApp.appId ? ui.encodeJavaScript(ui.escapeHtml(userApp.appId)) : ""}" size="80" placeholder="${ ui.message("referenceapplication.app.definition.placeholder") }" />
         <%}%>
     </p>
     <p>
