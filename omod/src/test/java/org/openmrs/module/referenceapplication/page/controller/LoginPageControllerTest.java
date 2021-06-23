@@ -348,17 +348,17 @@ public class LoginPageControllerTest {
 		when(Context.isAuthenticated()).thenReturn(true);
 		when(Context.getUserContext()).thenReturn(mock(UserContext.class));
 
-		String redirectFullUrl = "http://openmrs.org/openmrs";
-		String redirectUrl = "/openmrs";
+		final String REDIRECT_FULL_URL = "http://openmrs.org/openmrs";
+		final String REDIRECT_URL_TO_OPENMRS = "/openmrs";
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setContextPath(TEST_CONTEXT_PATH);
-		request.setParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL, redirectFullUrl);
+		request.setParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL, REDIRECT_FULL_URL);
 		PageRequest pageRequest = createPageRequest(request, null);
 		HttpSession httpSession = new MockHttpSession();
 		request.setSession(httpSession);
 
 		PageModel pageModel = new PageModel();
-		assertEquals("redirect:" + redirectUrl, new LoginPageController().get(pageModel, uiUtilsWithoutTimezones, pageRequest, null, null,
+		assertEquals("redirect:" + REDIRECT_URL_TO_OPENMRS, new LoginPageController().get(pageModel, uiUtilsWithoutTimezones, pageRequest, null, null,
 				appFrameworkService, administrationService));
 	}
 	
