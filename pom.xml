@@ -17,7 +17,7 @@
 	
 	<organization>
 		<name>OpenMRS</name>
-		<url>http://openmrs.org</url>
+		<url>https://openmrs.org</url>
 	</organization>
 
 	<scm>
@@ -619,11 +619,11 @@
 		<repository>
 			<id>openmrs-repo</id>
 			<name>OpenMRS Nexus Repository</name>
-			<url>http://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
+			<url>https://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
 		</repository>
 		<repository>
 	           <id>rubygems-releases</id>
-	           <url>http://rubygems-proxy.torquebox.org/releases</url>
+	           <url>https://rubygems-proxy.torquebox.org/releases</url>
 		</repository>
 	</repositories>
 
@@ -631,7 +631,7 @@
 		<pluginRepository>
 			<id>openmrs-repo</id>
 			<name>OpenMRS Nexus Repository</name>
-			<url>http://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
+			<url>https://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
@@ -642,12 +642,12 @@
 		<repository>
 			<id>openmrs-repo-modules</id>
 			<name>Modules</name>
-			<url>http://mavenrepo.openmrs.org/nexus/content/repositories/modules</url>
+			<url>https://mavenrepo.openmrs.org/nexus/content/repositories/modules</url>
 		</repository>
         <snapshotRepository>
             <id>openmrs-repo-snapshots</id>
             <name>OpenMRS Snapshots</name>
-            <url>http://mavenrepo.openmrs.org/nexus/content/repositories/snapshots</url>
+            <url>https://mavenrepo.openmrs.org/nexus/content/repositories/snapshots</url>
         </snapshotRepository>
 	</distributionManagement>
 
