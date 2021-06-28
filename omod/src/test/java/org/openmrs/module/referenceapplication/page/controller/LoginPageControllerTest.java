@@ -344,7 +344,7 @@ public class LoginPageControllerTest {
 	 */
 	@Test
 	@Verifies(value = "should redirect user to home when user is authenticated if ? redirectUrl is for openrms, even if only have  '/openrms'", method = "get(PageModel,UiUtils,PageRequest)")
-	public void get_shouldRedirectUserToHomeIfAuthenticatedAndPathForOpenmrsWasGivenOnUrl() throws Exception {
+	public void get_shouldRedirectUserToHomeIfAuthenticatedAndURLPathAreInOpenmrsScope() throws Exception {
 		when(Context.isAuthenticated()).thenReturn(true);
 		when(Context.getUserContext()).thenReturn(mock(UserContext.class));
 
