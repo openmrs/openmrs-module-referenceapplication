@@ -334,6 +334,33 @@ public class LoginPageControllerTest {
 		assertNotEquals("redirect:" + redirectUrl, new LoginPageController().get(pageModel, uiUtilsWithoutTimezones, pageRequest, null, null,
 		    appFrameworkService, administrationService));
 	}
+
+	/**
+	 * @see LoginPageController#get(org.openmrs.ui.framework.page.PageModel,
+	 *      org.openmrs.ui.framework.UiUtils, org.openmrs.ui.framework.page.PageRequest, String,
+	 *      org.openmrs.api.LocationService,
+	 *      org.openmrs.module.appframework.service.AppFrameworkService,
+	 *      org.openmrs.api.AdministrationService)
+	 */
+	@Test
+	@Verifies(value = "should redirect user to home when user is authenticated if ? redirectUrl is for openrms, even if only have  '/openrms'", method = "get(PageModel,UiUtils,PageRequest)")
+	public void get_shouldRedirectUserToHomeIfAuthenticatedAndURLPathAreInOpenmrsScope() throws Exception {
+		when(Context.isAuthenticated()).thenReturn(true);
+		when(Context.getUserContext()).thenReturn(mock(UserContext.class));
+
+		final String REDIRECT_FULL_URL = "http://openmrs.org/openmrs";
+		final String REDIRECT_URL_TO_OPENMRS = "/openmrs";
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		request.setContextPath(TEST_CONTEXT_PATH);
+		request.setParameter(REQUEST_PARAMETER_NAME_REDIRECT_URL, REDIRECT_FULL_URL);
+		PageRequest pageRequest = createPageRequest(request, null);
+		HttpSession httpSession = new MockHttpSession();
+		request.setSession(httpSession);
+
+		PageModel pageModel = new PageModel();
+		assertEquals("redirect:" + REDIRECT_URL_TO_OPENMRS, new LoginPageController().get(pageModel, uiUtilsWithoutTimezones, pageRequest, null, null,
+				appFrameworkService, administrationService));
+	}
 	
 	/**
 	 * @see LoginPageController#post(String, String, Integer, LocationService, AdministrationService,
