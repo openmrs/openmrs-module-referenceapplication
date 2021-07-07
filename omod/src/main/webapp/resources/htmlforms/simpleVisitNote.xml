@@ -43,16 +43,16 @@
     <ifMode mode="VIEW" include="false">
         <h2><uimessage code="referenceapplication.visitNote.title"/></h2>
 
-        <div id="who-when-where">
+        <div id="who-where-when">
             <p id="who">
                 <label><uimessage code="coreapps.patientDashBoard.provider"/></label>
                 <span><encounterProvider default="currentUser" required="true"  /></span>
             </p>
-            <p id="when">
+            <p id="where">
                 <label><uimessage code="coreapps.patientDashBoard.location"/></label>
                 <span><encounterLocation default="SessionAttribute:emrContext.sessionLocationId"/></span>
             </p>
-            <p id="where">
+            <p id="when">
                 <label><uimessage code="coreapps.patientDashBoard.date"/></label>
                 <span><encounterDate id="encounterDate" default="now" /></span>
             </p>
