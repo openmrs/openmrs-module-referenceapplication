@@ -8,6 +8,7 @@ import org.hamcrest.Description;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.openmrs.scheduler.SchedulerService;
@@ -47,16 +48,11 @@ public class ReferenceApplicationActivatorTest {
 		
 		new ReferenceApplicationActivator().setupHL7ProcessingTask(schedulerService);
 		
-		verify(schedulerService).saveTaskDefinition(Matchers.argThat(new BaseMatcher<TaskDefinition>() {
+		verify(schedulerService).saveTaskDefinition(Matchers.argThat(new ArgumentMatcher<TaskDefinition>() {
 			
 			@Override
-			public boolean matches(Object obj) {
-				return obj instanceof TaskDefinition
-				        && ProcessHL7InQueueTask.class.getName().equals(((TaskDefinition) obj).getTaskClass());
-			}
-			
-			@Override
-			public void describeTo(Description description) {				
+			public boolean matches(TaskDefinition obj) {
+				return ProcessHL7InQueueTask.class.getName().equals(obj.getTaskClass());
 			}
 		}));
 		

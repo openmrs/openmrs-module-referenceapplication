@@ -188,6 +188,7 @@
                             <% } %>
                                 <input id="loginButton" class="btn ${ ui.message(selectLocation ? "btn-success" : "confirm") }" type="submit"
                                     value="${ ui.message(selectLocation ? "general.done" : "referenceapplication.login.button") }"/>
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                             </p>
                             <% if(!selectLocation) {%>
                             <p>
