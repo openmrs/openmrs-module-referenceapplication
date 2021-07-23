@@ -1,0 +1,11 @@
+{
+  "name": "${project.parent.artifactId}",
+  "version": "${project.parent.version}",
+  "scripts": {
+    "build": "sass src/main/resources/styles/:target/classes/web/module/resources/styles/ -Isrc/main/webapp/resources/styles -Itarget/sass/lib/uicommons-scss -Inode_modules/compass-mixins/lib"
+  },
+  "dependencies": {
+    "compass-mixins": "^0.12.10",
+    "sass": "^1.35.2"
+  }
+}
