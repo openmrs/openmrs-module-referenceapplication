@@ -7,6 +7,12 @@
     input[type=text], input[type=password] {
       width: 405px;
     }
+    #togglePassword{
+      position: relative;
+      margin: -50px 10px;
+      float: right;
+      cursor: pointer;
+    }
   }
 }
 

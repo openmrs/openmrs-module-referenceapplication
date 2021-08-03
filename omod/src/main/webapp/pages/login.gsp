@@ -14,6 +14,7 @@
     <!-- Latest compiled and minified CSS -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <% ui.includeCss("appui", "bootstrap.min.css") %>
+    <% ui.includeCss("login.css") %>
     ${ ui.resourceLinks() }
 </head>
 <body>
@@ -21,6 +22,16 @@
     var OPENMRS_CONTEXT_PATH = '${ ui.contextPath() }';
 </script>
 
+<script type="text/javascript">
+    jQuery(function () {
+        jQuery("#togglePassword").click(function () {
+            var pwdIcon = jQuery(this);
+            pwdIcon.toggleClass("fa-eye fa-eye-slash");
+            var type = pwdIcon.hasClass("fa-eye-slash") ? "text" : "password";
+            jQuery("#password").attr("type", type);
+        });
+    });
+</script>
 
 <% if(showSessionLocations) { %>
 <script type="text/javascript">
@@ -157,6 +168,7 @@
                                     ${ ui.message("referenceapplication.login.password") }:
                                 </label>
                                 <input class="form-control form-control-sm form-control-lg form-control-md" id="password" type="password" name="password" placeholder="${ ui.message("referenceapplication.login.password.placeholder") }"/>
+                                <i class="fa fa-eye" id="togglePassword"></i>
                             </p>
                             <% } %>
 
