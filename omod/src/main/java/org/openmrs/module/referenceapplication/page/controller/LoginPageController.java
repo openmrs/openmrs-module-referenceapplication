@@ -261,7 +261,7 @@ public class LoginPageController {
 				
 				if (isLocationUserPropertyAvailable(administrationService)) {
 					List<Location> accessibleLocations = getUserLocations(administrationService, locationService);
-					if (accessibleLocations.size() == 1) {
+					if (accessibleLocations.size() == 1 && !ui.convertTimezones()) {
 						sessionLocation = accessibleLocations.get(0);
 					} else if (accessibleLocations.size() > 1) {
 						return "redirect:" + ui.pageLink(ReferenceApplicationConstants.MODULE_ID, "login");
