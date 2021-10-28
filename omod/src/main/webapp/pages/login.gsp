@@ -108,7 +108,9 @@
                 }
             }
         });
-        
+        jQuery('form').on('submit', function() {
+            jQuery('#loginButton').prop( "disabled", true );
+        });
 		jQuery('#username').focus();
         jQuery('a#cantLogin').click(function() {
             cannotLoginController.show();
