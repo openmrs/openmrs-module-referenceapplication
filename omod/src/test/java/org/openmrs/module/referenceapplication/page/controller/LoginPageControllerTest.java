@@ -647,23 +647,4 @@ public class LoginPageControllerTest {
 		verify(sessionContext, times(1)).setSessionLocation(eq(location));
 	}
 
-	@Test
-	public void post_shouldNotAutoSelectALocationAfterAuthenticationIfLoginLocationsSizeIsOneAndUsingTimezonesWithoutClientTimezone() throws Exception {
-		when(Context.isAuthenticated()).thenReturn(false).thenReturn(true);
-		when(Context.getAuthenticatedUser()).thenReturn(mock(User.class));
-		final int LOCATION_ID = 1;
-		final String LOCATION_SELECTION_PAGE = "redirect:/openmrs/" + ReferenceApplicationConstants.MODULE_ID + "/login.page";
-		PageRequest pageRequest = createPageRequest(new MockHttpServletRequest(), null);
-
-		Location location = new Location(LOCATION_ID);
-		location.addTag(new LocationTag(EmrApiConstants.LOCATION_TAG_SUPPORTS_LOGIN, null));
-		when(appFrameworkService.getLoginLocations()).thenReturn(Collections.singletonList(location));
-		when(administrationService.getGlobalProperty(eq(ReferenceApplicationConstants.LOCATION_USER_PROPERTY_NAME)))
-				.thenReturn("someValue");
-
-		assertEquals(LOCATION_SELECTION_PAGE, new LoginPageController().post(USERNAME, PASSWORD, null, null, locationService,
-				administrationService, uiUtilsWithTimezone, appFrameworkService, pageRequest, sessionContext));
-
-	}
-
 }

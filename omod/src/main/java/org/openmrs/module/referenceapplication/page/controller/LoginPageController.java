@@ -275,10 +275,7 @@ public class LoginPageController {
 					if (sessionLocation == null) {
 						List<Location> loginLocations = appFrameworkService.getLoginLocations();
 						if (loginLocations.size() == 1) {
-							if (!ui.convertTimezones() || (ui.convertTimezones() && !clientTimezoneProperty)) {
-								sessionLocation = loginLocations.get(0);
-							}
-
+							sessionLocation = loginLocations.get(0);
 						}
 					}
 					
