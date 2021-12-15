@@ -16,6 +16,7 @@
     <% ui.includeCss("appui", "bootstrap.min.css") %>
     <% ui.includeCss("login.css") %>
     ${ ui.resourceLinks() }
+    <script src="/${ui.contextPath()}/csrfguard" type="text/javascript"></script>
 </head>
 <body>
 <script type="text/javascript">
