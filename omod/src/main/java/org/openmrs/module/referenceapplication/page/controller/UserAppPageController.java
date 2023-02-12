@@ -82,7 +82,7 @@ public class UserAppPageController {
 	}
 	
 	@ResponseBody
-	@RequestMapping("/referenceapplication/verifyJson")
+	@RequestMapping("/referenceapplication/verifyJson.htm")
 	public SimpleObject verifyJson(@RequestParam("json") String json) {
 		SimpleObject so = new SimpleObject();
 		try {
