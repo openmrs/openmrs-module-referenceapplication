@@ -83,6 +83,26 @@
                             ]
                         }
                     ]
+                },
+                {
+                    "id": "profile-picture",
+                    "label": "registrationapp.person.picture",
+                    "questions": [
+                        {
+                            "legend": "registrationapp.person.profile.picture.label",
+                            "header": "registrationapp.person.profile.picture.question",
+                            "fields": [
+                                {
+                                    "type": "personPicture",
+                                    "formFieldName": "personPicture",
+                                    "widget": {
+                                        "providerName": "registrationapp",
+                                        "fragmentId": "field/personPicture"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         }
