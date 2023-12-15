@@ -13,6 +13,7 @@
  */
 package org.openmrs.module.referenceapplication.page.controller;
 
+import javax.validation.Validator;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -162,9 +163,13 @@ public class LoginPageController {
 				try {
 					URL url = new URL(redirectUrl);
 					String urlPath = url.getFile();
-					String urlContextPath = urlPath.substring(1).contains("/") ? urlPath.substring(0, urlPath.indexOf('/', 1)) : urlPath;
-					if (StringUtils.equals(pageRequest.getRequest().getContextPath(), urlContextPath)) {
-						return true;
+					if(StringUtils.isNotEmpty(urlPath)) {
+						String urlContextPath =
+								urlPath.substring(1).contains("/") ? urlPath.substring(0, urlPath.indexOf('/', 1))
+										: urlPath;
+						if (StringUtils.equals(pageRequest.getRequest().getContextPath(), urlContextPath)) {
+							return true;
+						}
 					}
 				}
 				catch (MalformedURLException e) {
